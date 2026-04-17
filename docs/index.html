@@ -23,24 +23,6 @@
 
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    window.onerror = function(msg, url, line, col, error) {
-      fetch('http://localhost:8001/log', { method: 'POST', body: 'ERROR: ' + msg + ' LINE: ' + line + ' COL: ' + col });
-    };
-    window.addEventListener('unhandledrejection', function(event) {
-      fetch('http://localhost:8001/log', { method: 'POST', body: 'UNHANDLED PROMISE: ' + event.reason });
-    });
-    const oldLog = console.log;
-    const oldErr = console.error;
-    console.log = function(...args) {
-      fetch('http://localhost:8001/log', { method: 'POST', body: 'LOG: ' + JSON.stringify(args) });
-      oldLog(...args);
-    };
-    console.error = function(...args) {
-      fetch('http://localhost:8001/log', { method: 'POST', body: 'CONSOLE.ERROR: ' + JSON.stringify(args) });
-      oldErr(...args);
-    };
-  </script>
 
   <!-- Tailwind CSS v3 -->
   <script src="https://cdn.tailwindcss.com"></script>
