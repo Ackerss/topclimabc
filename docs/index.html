@@ -870,6 +870,7 @@
 
   // ━━━ PREVISÃO ━━━
   let STATE_PREV_DIAS = 5;
+  let STATE_PREV_DATA_SEL = null; // data selecionada na linha do tempo
 
   function setPrevDias(n) {
     STATE_PREV_DIAS = n;
@@ -882,11 +883,62 @@
     renderPrevisao();
   }
 
+  function selecionarDataPrevisao(data) {
+    STATE_PREV_DATA_SEL = data;
+
+    const rawLoc = STATE._dadosRaw?.locais?.[STATE.local];
+    if (!rawLoc) return;
+    const previsoes = rawLoc.previsoes || {};
+
+    function mmColor(mm) {
+      if (mm === 0) return 'text-yellow-300';
+      if (mm < 2) return 'text-sky-300';
+      if (mm < 8) return 'text-blue-400';
+      if (mm < 20) return 'text-indigo-400';
+      return 'text-purple-400';
+    }
+    function formatDDMM(dateStr) {
+      const [y, m, dd] = dateStr.split('-');
+      return `${dd}/${m}`;
+    }
+
+    // Atualiza visual dos dias clicáveis (highlight no selecionado)
+    document.querySelectorAll('.prev-dia-col').forEach(el => {
+      const d = el.dataset.data;
+      const isHoje = d === new Date().toISOString().split('T')[0];
+      const isSel = d === data;
+      el.classList.toggle('ring-2', isSel);
+      el.classList.toggle('ring-sky-400', isSel);
+      el.classList.toggle('bg-sky-500/20', isSel);
+      el.classList.toggle('bg-sky-500/10', isHoje && !isSel);
+      el.classList.toggle('bg-transparent', !isHoje && !isSel);
+    });
+
+    // Atualiza o detalhe de períodos em cada card
+    const modelosOrdem = ['ecmwf_ifs025', 'gfs_seamless', 'icon_seamless', 'best_match', 'openweathermap'];
+    modelosOrdem.forEach(modeloId => {
+      const modData = previsoes[data]?.[modeloId] || {};
+      const labelEl = document.getElementById(`prev-label-${modeloId}`);
+      const gridEl = document.getElementById(`prev-grid-${modeloId}`);
+      if (!labelEl || !gridEl) return;
+
+      labelEl.textContent = `Detalhe de ${formatDDMM(data)} por período`;
+
+      gridEl.innerHTML = PERIODOS.map(p => {
+        const mm = modData[p] || 0;
+        const mmR = Math.round(mm * 10) / 10;
+        return `<div class="flex flex-col items-center gap-0.5">
+          <span class="text-[10px] text-slate-500">${LABEL_PERIODO[p]}</span>
+          <span class="text-xs font-semibold ${mmColor(mm)}">${mmR > 0 ? mmR + 'mm' : '—'}</span>
+        </div>`;
+      }).join('');
+    });
+  }
+
   function renderPrevisao() {
     const container = document.getElementById('lista-previsao');
     if (!container) return;
 
-    // Busca previsoes do JSON original (STATE._dadosRaw)
     const rawLoc = STATE._dadosRaw?.locais?.[STATE.local];
     if (!rawLoc) {
       container.innerHTML = '<p class="text-slate-500 text-sm text-center py-6">Sem dados de previsão disponíveis.</p>';
@@ -896,8 +948,8 @@
     const previsoes = rawLoc.previsoes || {};
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
+    const hojeStr = new Date().toISOString().split('T')[0];
 
-    // Coleta e ordena apenas datas de hoje em diante
     const datasOrdenadas = Object.keys(previsoes)
       .filter(d => new Date(d + 'T00:00:00') >= hoje)
       .sort()
@@ -908,7 +960,10 @@
       return;
     }
 
-    // Helpers locais
+    // Reseta seleção para hoje ao re-renderizar
+    STATE_PREV_DATA_SEL = STATE_PREV_DATA_SEL && datasOrdenadas.includes(STATE_PREV_DATA_SEL)
+      ? STATE_PREV_DATA_SEL : hojeStr;
+
     function mmEmoji(mm) {
       if (mm === 0) return '☀️';
       if (mm < 2) return '🌤️';
@@ -933,65 +988,61 @@
       return `${dd}/${m}`;
     }
 
-    // Descobre quais modelos existem
     const todosModelos = new Set();
     datasOrdenadas.forEach(d => Object.keys(previsoes[d] || {}).forEach(m => todosModelos.add(m)));
     const modelosOrdem = ['ecmwf_ifs025', 'gfs_seamless', 'icon_seamless', 'best_match', 'openweathermap']
       .filter(m => todosModelos.has(m));
 
-    // Cores de fundo por modelo
     const modeloCores = {
-      'ecmwf_ifs025':    { bg: 'from-sky-900/60 to-sky-950/80', borda: 'border-sky-600/50', icone: '🛰️' },
-      'gfs_seamless':    { bg: 'from-emerald-900/60 to-emerald-950/80', borda: 'border-emerald-600/50', icone: '🌍' },
-      'icon_seamless':   { bg: 'from-violet-900/60 to-violet-950/80', borda: 'border-violet-600/50', icone: '🇩🇪' },
-      'best_match':      { bg: 'from-amber-900/60 to-amber-950/80', borda: 'border-amber-600/50', icone: '⭐' },
-      'openweathermap':  { bg: 'from-orange-900/60 to-orange-950/80', borda: 'border-orange-600/50', icone: '☁️' },
+      'ecmwf_ifs025':   { borda: 'border-sky-600/50',     icone: '🛰️' },
+      'gfs_seamless':   { borda: 'border-emerald-600/50', icone: '🌍' },
+      'icon_seamless':  { borda: 'border-violet-600/50',  icone: '🇩🇪' },
+      'best_match':     { borda: 'border-amber-600/50',   icone: '⭐' },
+      'openweathermap': { borda: 'border-orange-600/50',  icone: '☁️' },
     };
 
-    // Montar HTML por modelo
     const html = modelosOrdem.map(modeloId => {
-      const c = modeloCores[modeloId] || { bg: 'from-slate-900/60 to-slate-950/80', borda: 'border-slate-600/50', icone: '📡' };
+      const c = modeloCores[modeloId] || { borda: 'border-slate-600/50', icone: '📡' };
       const nomeDisplay = NOMES_MODELOS[modeloId] || modeloId;
       const apps = APPS_MODELOS[modeloId] || [];
 
-      // Cabeçalho do card
       const headerHTML = `
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xl">${c.icone}</span>
-            <div>
-              <p class="text-sm font-bold text-white">${nomeDisplay}</p>
-              ${apps.length ? `<p class="text-xs text-slate-400">${apps.join(' · ')}</p>` : ''}
-            </div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-xl">${c.icone}</span>
+          <div>
+            <p class="text-sm font-bold text-white">${nomeDisplay}</p>
+            ${apps.length ? `<p class="text-xs text-slate-400">${apps.join(' · ')}</p>` : ''}
           </div>
         </div>`;
 
-      // Dias em coluna scrollável
+      // Dias clicáveis
       const diasCols = datasOrdenadas.map(data => {
         const modData = previsoes[data]?.[modeloId] || {};
         const totalMm = (modData.madrugada || 0) + (modData.manha || 0) + (modData.tarde || 0) + (modData.noite || 0);
         const totalRound = Math.round(totalMm * 10) / 10;
-        const isHoje = data === new Date().toISOString().split('T')[0];
-        const emoji = mmEmoji(totalMm);
-        const cor = mmColor(totalMm);
+        const isHoje = data === hojeStr;
+        const isSel = data === STATE_PREV_DATA_SEL;
+        const bgClass = isSel ? 'bg-sky-500/20 ring-2 ring-sky-400' : (isHoje ? 'bg-sky-500/10' : 'hover:bg-slate-700/40');
+        const labelColor = isHoje ? 'text-sky-400' : (isSel ? 'text-sky-300' : 'text-slate-400');
         return `
-          <div class="flex-shrink-0 flex flex-col items-center gap-1 min-w-[56px] ${isHoje ? 'bg-sky-500/10 rounded-lg' : ''} px-1 py-1.5">
-            <span class="text-xs font-bold ${isHoje ? 'text-sky-400' : 'text-slate-400'}">${formatDiaSemana(data)}</span>
+          <div class="prev-dia-col flex-shrink-0 flex flex-col items-center gap-1 min-w-[58px] rounded-xl px-1 py-2 cursor-pointer transition-all duration-150 ${bgClass}"
+               data-data="${data}"
+               onclick="selecionarDataPrevisao('${data}')">
+            <span class="text-xs font-bold ${labelColor}">${formatDiaSemana(data)}</span>
             <span class="text-[11px] text-slate-500">${formatDDMM(data)}</span>
-            <span class="text-xl leading-none">${emoji}</span>
-            <span class="text-xs font-semibold ${cor}">${totalRound > 0 ? totalRound + 'mm' : 'Seco'}</span>
+            <span class="text-xl leading-none">${mmEmoji(totalMm)}</span>
+            <span class="text-xs font-semibold ${mmColor(totalMm)}">${totalRound > 0 ? totalRound + 'mm' : 'Seco'}</span>
           </div>`;
       }).join('');
 
-      // Detalhe de períodos para o 1º dia (hoje/amanhã)
-      const primData = datasOrdenadas[0];
-      const primMod = previsoes[primData]?.[modeloId] || {};
+      // Detalhe do dia selecionado
+      const selMod = previsoes[STATE_PREV_DATA_SEL]?.[modeloId] || {};
       const periodosDetalhe = PERIODOS.map(p => {
-        const mm = primMod[p] || 0;
+        const mm = selMod[p] || 0;
         const mmR = Math.round(mm * 10) / 10;
         return `<div class="flex flex-col items-center gap-0.5">
           <span class="text-[10px] text-slate-500">${LABEL_PERIODO[p]}</span>
-          <span class="text-xs font-semibold ${mmColor(mm)}">${mmR > 0 ? mmR+'mm' : '—'}</span>
+          <span class="text-xs font-semibold ${mmColor(mm)}">${mmR > 0 ? mmR + 'mm' : '—'}</span>
         </div>`;
       }).join('');
 
@@ -999,14 +1050,12 @@
         <div class="rounded-2xl border ${c.borda} overflow-hidden" style="background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(15,23,42,0.85));">
           <div class="p-4">
             ${headerHTML}
-            <!-- Linha do tempo horizontal -->
             <div class="overflow-x-auto pb-1">
               <div class="flex gap-1">${diasCols}</div>
             </div>
-            <!-- Detalhe do primeiro dia por período -->
             <div class="mt-3 pt-3 border-t border-slate-700/50">
-              <p class="text-[10px] text-slate-500 mb-2 uppercase tracking-wide">Detalhe de hoje por período (${formatDDMM(primData)})</p>
-              <div class="grid grid-cols-4 gap-2 bg-slate-900/40 rounded-xl p-2">${periodosDetalhe}</div>
+              <p id="prev-label-${modeloId}" class="text-[10px] text-slate-500 mb-2 uppercase tracking-wide">Detalhe de ${formatDDMM(STATE_PREV_DATA_SEL)} por período</p>
+              <div id="prev-grid-${modeloId}" class="grid grid-cols-4 gap-2 bg-slate-900/40 rounded-xl p-2">${periodosDetalhe}</div>
             </div>
           </div>
         </div>`;
@@ -1014,7 +1063,6 @@
 
     container.innerHTML = html || '<p class="text-slate-500 text-sm text-center py-6">Nenhum modelo disponível.</p>';
 
-    // Atualiza timestamp
     const atualEl = document.getElementById('previsao-atualizado');
     if (atualEl && STATE._dadosRaw?.atualizado_em) atualEl.textContent = '🕐 ' + STATE._dadosRaw.atualizado_em;
   }
