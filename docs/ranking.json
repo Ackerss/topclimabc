@@ -1,4 +1,262 @@
 {
-  "balneario_camboriu": {},
-  "itajai": {}
+  "balneario_camboriu": {
+    "1_dia": [
+      {
+        "modelo": "ecmwf_ifs025",
+        "nome": "ECMWF IFS",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "gfs_seamless",
+        "nome": "GFS NCEP",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "icon_seamless",
+        "nome": "ICON DWD",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "openweathermap",
+        "nome": "OpenWeatherMap",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "best_match",
+        "nome": "Open-Meteo Best",
+        "score": 0,
+        "amostras": 0
+      }
+    ],
+    "3_dias": [
+      {
+        "modelo": "ecmwf_ifs025",
+        "nome": "ECMWF IFS",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "gfs_seamless",
+        "nome": "GFS NCEP",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "icon_seamless",
+        "nome": "ICON DWD",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "openweathermap",
+        "nome": "OpenWeatherMap",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "best_match",
+        "nome": "Open-Meteo Best",
+        "score": 0,
+        "amostras": 0
+      }
+    ],
+    "7_dias": [
+      {
+        "modelo": "ecmwf_ifs025",
+        "nome": "ECMWF IFS",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "gfs_seamless",
+        "nome": "GFS NCEP",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "icon_seamless",
+        "nome": "ICON DWD",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "openweathermap",
+        "nome": "OpenWeatherMap",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "best_match",
+        "nome": "Open-Meteo Best",
+        "score": 0,
+        "amostras": 0
+      }
+    ],
+    "15_dias": [
+      {
+        "modelo": "ecmwf_ifs025",
+        "nome": "ECMWF IFS",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "gfs_seamless",
+        "nome": "GFS NCEP",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "icon_seamless",
+        "nome": "ICON DWD",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "openweathermap",
+        "nome": "OpenWeatherMap",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "best_match",
+        "nome": "Open-Meteo Best",
+        "score": 0,
+        "amostras": 0
+      }
+    ]
+  },
+  "itajai": {
+    "1_dia": [
+      {
+        "modelo": "ecmwf_ifs025",
+        "nome": "ECMWF IFS",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "gfs_seamless",
+        "nome": "GFS NCEP",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "icon_seamless",
+        "nome": "ICON DWD",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "openweathermap",
+        "nome": "OpenWeatherMap",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "best_match",
+        "nome": "Open-Meteo Best",
+        "score": 0,
+        "amostras": 0
+      }
+    ],
+    "3_dias": [
+      {
+        "modelo": "ecmwf_ifs025",
+        "nome": "ECMWF IFS",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "gfs_seamless",
+        "nome": "GFS NCEP",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "icon_seamless",
+        "nome": "ICON DWD",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "openweathermap",
+        "nome": "OpenWeatherMap",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "best_match",
+        "nome": "Open-Meteo Best",
+        "score": 0,
+        "amostras": 0
+      }
+    ],
+    "7_dias": [
+      {
+        "modelo": "ecmwf_ifs025",
+        "nome": "ECMWF IFS",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "gfs_seamless",
+        "nome": "GFS NCEP",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "icon_seamless",
+        "nome": "ICON DWD",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "openweathermap",
+        "nome": "OpenWeatherMap",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "best_match",
+        "nome": "Open-Meteo Best",
+        "score": 0,
+        "amostras": 0
+      }
+    ],
+    "15_dias": [
+      {
+        "modelo": "ecmwf_ifs025",
+        "nome": "ECMWF IFS",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "gfs_seamless",
+        "nome": "GFS NCEP",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "icon_seamless",
+        "nome": "ICON DWD",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "openweathermap",
+        "nome": "OpenWeatherMap",
+        "score": 0,
+        "amostras": 0
+      },
+      {
+        "modelo": "best_match",
+        "nome": "Open-Meteo Best",
+        "score": 0,
+        "amostras": 0
+      }
+    ]
+  }
 }

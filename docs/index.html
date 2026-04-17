@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 <head>
-  <!-- v4.0 - fix renderCardsModelos syntax 2026-04-17 -->
+  <!-- v5.0 - Manual integrado + pipeline fixes 2026-04-17 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="TOPCLIMABC — Auditoria de previsões de chuva para Balneário Camboriú e Itajaí. Descubra qual app meteorológico é mais confiável." />
@@ -124,11 +124,19 @@
   <!-- ═══ HEADER ═══ -->
   <header class="header-gradient sticky top-0 z-40 px-4 py-3">
     <div class="max-w-lg mx-auto flex items-center justify-between">
-      <div>
-        <h1 class="text-lg font-bold text-white flex items-center gap-2">
-          <span class="text-sky-400">🌧️</span> TOPCLIMABC
-        </h1>
-        <p class="text-xs text-slate-400 mt-0.5">Auditoria de previsões • BC & Itajaí</p>
+      <div class="flex items-center gap-3">
+        <div>
+          <h1 class="text-lg font-bold text-white flex items-center gap-2">
+            <span class="text-sky-400">🌧️</span> TOPCLIMABC
+          </h1>
+          <p class="text-xs text-slate-400 mt-0.5">Auditoria de previsões • BC & Itajaí</p>
+        </div>
+        <!-- Botão Manual -->
+        <button onclick="abrirManual()" title="Como funciona?"
+          class="flex items-center gap-1.5 bg-slate-700/80 hover:bg-sky-600/80 border border-slate-600 hover:border-sky-500 text-slate-300 hover:text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-200">
+          <i class="fa-solid fa-book text-sky-400"></i>
+          <span class="hidden sm:inline">Manual</span>
+        </button>
       </div>
       <!-- Toggle Local -->
       <div class="flex bg-slate-800 rounded-lg p-1 gap-1">
@@ -274,6 +282,312 @@
     Registrar Clima
   </button>
 
+  <!-- ═══ MODAL MANUAL ═══ -->
+  <div id="manual-overlay" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div class="glass rounded-2xl w-full max-w-lg max-h-[90vh] overflow-hidden animate-slide-up flex flex-col" style="border: 1px solid rgba(14,165,233,0.3);">
+      <!-- Header do manual -->
+      <div class="flex items-center justify-between px-5 py-4 border-b border-slate-700 flex-shrink-0" style="background: linear-gradient(135deg, #0f2744 0%, #0f172a 100%);">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center">
+            <i class="fa-solid fa-book text-sky-400"></i>
+          </div>
+          <div>
+            <h2 class="font-black text-white text-base">Manual do TOPCLIMABC</h2>
+            <p class="text-xs text-slate-400">Como o sistema funciona</p>
+          </div>
+        </div>
+        <button onclick="fecharManual()" class="text-slate-400 hover:text-white hover:bg-slate-700 w-8 h-8 rounded-lg flex items-center justify-center transition-all">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Tabs do manual -->
+      <div class="flex bg-slate-900/80 border-b border-slate-700 flex-shrink-0">
+        <button onclick="switchManualTab('oque')" id="mtab-oque" class="manual-tab flex-1 text-xs font-semibold py-2.5 px-1 text-sky-400 border-b-2 border-sky-500 transition-all">O Que É?</button>
+        <button onclick="switchManualTab('modelos')" id="mtab-modelos" class="manual-tab flex-1 text-xs font-semibold py-2.5 px-1 text-slate-400 border-b-2 border-transparent transition-all">Modelos</button>
+        <button onclick="switchManualTab('score')" id="mtab-score" class="manual-tab flex-1 text-xs font-semibold py-2.5 px-1 text-slate-400 border-b-2 border-transparent transition-all">Score</button>
+        <button onclick="switchManualTab('periodos')" id="mtab-periodos" class="manual-tab flex-1 text-xs font-semibold py-2.5 px-1 text-slate-400 border-b-2 border-transparent transition-all">Períodos</button>
+        <button onclick="switchManualTab('faq')" id="mtab-faq" class="manual-tab flex-1 text-xs font-semibold py-2.5 px-1 text-slate-400 border-b-2 border-transparent transition-all">FAQ</button>
+      </div>
+
+      <!-- Conteúdo do manual -->
+      <div class="overflow-y-auto flex-1 px-5 py-4 space-y-4 text-sm" id="manual-content">
+
+        <!-- Tab: O Que É? -->
+        <div id="mcontent-oque">
+          <div class="bg-sky-500/10 border border-sky-500/30 rounded-xl p-4 mb-4">
+            <p class="font-bold text-sky-300 mb-1">🎯 O que é o TOPCLIMABC?</p>
+            <p class="text-slate-300 text-xs leading-relaxed">O TOPCLIMABC é um <strong class="text-white">auditor independente de previsões meteorológicas</strong>. Todos os dias ele coleta automaticamente o que cada modelo previu e compara com o que realmente aconteceu — medido pelos pluviômetros do <strong class="text-emerald-400">CEMADEN</strong> e da reanálise do <strong class="text-emerald-400">ERA5/Open-Meteo</strong>.</p>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-lg bg-purple-500/20 border border-purple-500/30 flex items-center justify-center flex-shrink-0"><span class="text-sm">1️⃣</span></div>
+              <div>
+                <p class="font-bold text-white text-xs mb-0.5">Coleta de Previsões (🕗 08h todo dia)</p>
+                <p class="text-slate-400 text-xs leading-relaxed">O backend Python consulta Open-Meteo (ECMWF, GFS, ICON, Best Match) e OpenWeatherMap, armazenando o que cada modelo prevê para os próximos 16 dias, dividido por período do dia.</p>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center flex-shrink-0"><span class="text-sm">2️⃣</span></div>
+              <div>
+                <p class="font-bold text-white text-xs mb-0.5">Coleta da Realidade (🌧️ Ontem)</p>
+                <p class="text-slate-400 text-xs leading-relaxed">Coleta os dados reais de precipitação de ontem, usando o <strong class="text-white">Open-Meteo Historical</strong> (reanálise ERA5 — a mesma usada pela comunidade científica). Os dados são separados por período: Madrugada, Manhã, Tarde e Noite.</p>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-lg bg-yellow-500/20 border border-yellow-500/30 flex items-center justify-center flex-shrink-0"><span class="text-sm">3️⃣</span></div>
+              <div>
+                <p class="font-bold text-white text-xs mb-0.5">Auditoria e Score (🏆 Quem acertou?)</p>
+                <p class="text-slate-400 text-xs leading-relaxed">O sistema compara o previsto com o real e calcula um <strong class="text-white">score de 0 a 100</strong> para cada modelo, cruzando a concordância de <strong class="text-yellow-400">classe de chuva (60%)</strong> com a <strong class="text-yellow-400">proximidade de volume em mm (40%)</strong>.</p>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center flex-shrink-0"><span class="text-sm">4️⃣</span></div>
+              <div>
+                <p class="font-bold text-white text-xs mb-0.5">Publicação Automática (🌐 GitHub Pages)</p>
+                <p class="text-slate-400 text-xs leading-relaxed">Todo esse processo roda automaticamente via GitHub Actions e publica os resultados neste site. Nenhuma intervenção humana é necessária para atualizar os dados diariamente.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Modelos -->
+        <div id="mcontent-modelos" class="hidden">
+          <p class="text-slate-400 text-xs mb-4 leading-relaxed">Estes são os <strong class="text-white">modelos numéricos de previsão</strong> monitorados. São os mesmos dados que alimentam os apps de clima que você usa no celular.</p>
+          <div class="space-y-3">
+            <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-700">
+              <div class="flex items-start gap-2">
+                <span class="text-xl">🌍</span>
+                <div>
+                  <p class="font-bold text-white text-xs">ECMWF IFS <span class="text-sky-400 font-normal">(ecmwf_ifs025)</span></p>
+                  <p class="text-slate-400 text-xs mt-0.5 leading-relaxed">Modelo do Centro Europeu de Previsões Meteorológicas. Resolução de 0.25°. Considerado o <strong class="text-emerald-400">modelo mais preciso do mundo</strong> para previsões de médio prazo.</p>
+                  <p class="text-xs mt-1"><span class="bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded-full">📱 Windy · Apple Weather</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-700">
+              <div class="flex items-start gap-2">
+                <span class="text-xl">🇺🇸</span>
+                <div>
+                  <p class="font-bold text-white text-xs">GFS NCEP <span class="text-sky-400 font-normal">(gfs_seamless)</span></p>
+                  <p class="text-slate-400 text-xs mt-0.5 leading-relaxed">Global Forecast System — modelo americano criado pelo NCEP/NOAA. Uma das fontes de dados gratuitas mais usadas do mundo.</p>
+                  <p class="text-xs mt-1"><span class="bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded-full">📱 Weather.com · The Weather Channel</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-700">
+              <div class="flex items-start gap-2">
+                <span class="text-xl">🇩🇪</span>
+                <div>
+                  <p class="font-bold text-white text-xs">ICON DWD <span class="text-sky-400 font-normal">(icon_seamless)</span></p>
+                  <p class="text-slate-400 text-xs mt-0.5 leading-relaxed">Icosahedral Nonhydrostatic model — modelo alemão do Serviço Meteorológico Alemão (Deutscher Wetterdienst). Excelente para previsões de curto prazo.</p>
+                  <p class="text-xs mt-1"><span class="bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded-full">📱 Bright Sky · Windy (alt)</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-700">
+              <div class="flex items-start gap-2">
+                <span class="text-xl">🤖</span>
+                <div>
+                  <p class="font-bold text-white text-xs">Open-Meteo Best Match <span class="text-sky-400 font-normal">(best_match)</span></p>
+                  <p class="text-slate-400 text-xs mt-0.5 leading-relaxed">Seleção inteligente do Open-Meteo — escolhe automaticamente o melhor modelo disponível para cada localização geográfica e prazo.</p>
+                  <p class="text-xs mt-1"><span class="bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded-full">📱 Open-Meteo App</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-700">
+              <div class="flex items-start gap-2">
+                <span class="text-xl">🗺️</span>
+                <div>
+                  <p class="font-bold text-white text-xs">OpenWeatherMap <span class="text-sky-400 font-normal">(openweathermap)</span></p>
+                  <p class="text-slate-400 text-xs mt-0.5 leading-relaxed">API comercial muito popular. Usa modelo próprio + dados de estações. Disponível apenas para os próximos 5 dias.</p>
+                  <p class="text-xs mt-1"><span class="bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded-full">📱 OWM App</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Score -->
+        <div id="mcontent-score" class="hidden">
+          <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mb-4">
+            <p class="font-bold text-yellow-300 mb-1">🏆 Como o Score é calculado?</p>
+            <p class="text-slate-300 text-xs leading-relaxed">O score vai de <strong class="text-white">0 a 100</strong> para cada período do dia (Madrugada, Manhã, Tarde, Noite). O score final do dia é a <strong class="text-white">média dos 4 períodos</strong>.</p>
+          </div>
+
+          <div class="space-y-3 mb-4">
+            <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-700">
+              <p class="font-bold text-yellow-400 text-xs mb-2">📊 Acerto de Classe (60% do score)</p>
+              <p class="text-slate-400 text-xs leading-relaxed mb-3">Compara a <strong class="text-white">categoria de intensidade</strong> prevista com a real:</p>
+              <div class="space-y-1.5">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs text-white">☀️ Acerto exato de classe</span>
+                  <span class="text-emerald-400 font-bold text-xs">100 pts</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-xs text-white">🌦️ Erro de 1 degrau (Seco↔Garoa)</span>
+                  <span class="text-yellow-400 font-bold text-xs">50 pts</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-xs text-white">⛈️ Erro grave (Seco vs Forte)</span>
+                  <span class="text-rose-400 font-bold text-xs">0 pts</span>
+                </div>
+              </div>
+            </div>
+            <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-700">
+              <p class="font-bold text-sky-400 text-xs mb-2">📏 Proximidade de Volume (40% do score)</p>
+              <p class="text-slate-400 text-xs leading-relaxed mb-2">Compara os milímetros previstos com os reais. <strong class="text-white">A cada 1mm de diferença, perde 10 pontos</strong> de volume. Com 10mm de diferença, esse score vai a zero.</p>
+              <div class="bg-slate-900/50 rounded-lg p-2 font-mono text-xs text-center text-sky-300">
+                score_volume = max(0, 100 − (diferença_mm × 10))
+              </div>
+            </div>
+          </div>
+
+          <p class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Tabela de Classificação Final:</p>
+          <div class="space-y-2">
+            <div class="flex items-center gap-3 bg-emerald-900/20 rounded-lg p-2.5 border border-emerald-800/40">
+              <span class="text-lg w-6 text-center">✅</span>
+              <div class="flex-1">
+                <p class="text-xs font-bold text-emerald-300">85 — 100 pts: Excelente</p>
+                <p class="text-[10px] text-slate-400 mt-0.5">Acertou a categoria e o volume muito bem. Modelo confiável para esse prazo.</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 bg-green-900/20 rounded-lg p-2.5 border border-green-800/40">
+              <span class="text-lg w-6 text-center">🟢</span>
+              <div class="flex-1">
+                <p class="text-xs font-bold text-green-300">70 — 84 pts: Bom</p>
+                <p class="text-[10px] text-slate-400 mt-0.5">Acertou a essência mas errou um pouco o volume ou ficou 1 degrau acima/abaixo.</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 bg-yellow-900/20 rounded-lg p-2.5 border border-yellow-800/40">
+              <span class="text-lg w-6 text-center">🟡</span>
+              <div class="flex-1">
+                <p class="text-xs font-bold text-yellow-300">50 — 69 pts: Médio</p>
+                <p class="text-[10px] text-slate-400 mt-0.5">Acertou a existência de chuva mas errou intensidade ou timing significativo.</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 bg-orange-900/20 rounded-lg p-2.5 border border-orange-800/40">
+              <span class="text-lg w-6 text-center">🟠</span>
+              <div class="flex-1">
+                <p class="text-xs font-bold text-orange-300">30 — 49 pts: Ruim</p>
+                <p class="text-[10px] text-slate-400 mt-0.5">Errou gravemente. Previu chuva e ficou seco, ou vice-versa com diferença grande de volume.</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 bg-rose-900/20 rounded-lg p-2.5 border border-rose-800/40">
+              <span class="text-lg w-6 text-center">❌</span>
+              <div class="flex-1">
+                <p class="text-xs font-bold text-rose-300">0 — 29 pts: Péssimo</p>
+                <p class="text-[10px] text-slate-400 mt-0.5">Falhou completamente. Previu sol e choveu muito, ou previu tempestade e ficou seco.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Períodos -->
+        <div id="mcontent-periodos" class="hidden">
+          <p class="text-slate-400 text-xs mb-4 leading-relaxed">O dia é dividido em <strong class="text-white">4 períodos</strong> para análise mais detalhada. Isso permite ver se um modelo errou especificamente a tempestade da tarde, por exemplo.</p>
+          <div class="space-y-3">
+            <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-700 flex items-start gap-3">
+              <span class="text-2xl">🌙</span>
+              <div>
+                <p class="font-bold text-white text-xs">Madrugada <span class="text-slate-400 font-normal">(00h — 05h59)</span></p>
+                <p class="text-slate-400 text-xs mt-1 leading-relaxed">Chuvas noturnas e de madrugada. Geralmente ligadas a sistemas frontais e instabilidade de alta altitude. As menos impactantes no dia-a-dia.</p>
+              </div>
+            </div>
+            <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-700 flex items-start gap-3">
+              <span class="text-2xl">🌅</span>
+              <div>
+                <p class="font-bold text-white text-xs">Manhã <span class="text-slate-400 font-normal">(06h — 11h59)</span></p>
+                <p class="text-slate-400 text-xs mt-1 leading-relaxed">Chuvas da manhã em BC/Itajaí são frequentes no verão (orografia da Serra do Mar). Impactam o deslocamento matinal.</p>
+              </div>
+            </div>
+            <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-700 flex items-start gap-3">
+              <span class="text-2xl">☀️</span>
+              <div>
+                <p class="font-bold text-white text-xs">Tarde <span class="text-slate-400 font-normal">(12h — 17h59)</span></p>
+                <p class="text-slate-400 text-xs mt-1 leading-relaxed"><strong class="text-yellow-400">Período mais crítico!</strong> No verão catarinense, as tempestades convectivas mais fortes acontecem entre 14h e 17h. Prever corretamente essa janela é o maior desafio dos modelos.</p>
+              </div>
+            </div>
+            <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-700 flex items-start gap-3">
+              <span class="text-2xl">🌆</span>
+              <div>
+                <p class="font-bold text-white text-xs">Noite <span class="text-slate-400 font-normal">(18h — 23h59)</span></p>
+                <p class="text-slate-400 text-xs mt-1 leading-relaxed">Chuvas noturnas — sistemas que se intensificam ao anoitecer. Comuns em episódios de ZCAS (Zona de Convergência do Atlântico Sul).</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 bg-sky-900/20 border border-sky-700/30 rounded-xl p-3">
+            <p class="font-bold text-sky-300 text-xs mb-2">📏 Régua de Intensidade de Chuva</p>
+            <div class="space-y-1.5">
+              <div class="flex justify-between"><span class="text-xs">☀️ Sem chuva</span><span class="text-xs text-slate-400">0 — 0.5 mm</span></div>
+              <div class="flex justify-between"><span class="text-xs">🌦️ Fraca / Garoa</span><span class="text-xs text-slate-400">0.5 — 5 mm</span></div>
+              <div class="flex justify-between"><span class="text-xs">🌧️ Moderada</span><span class="text-xs text-slate-400">5 — 15 mm</span></div>
+              <div class="flex justify-between"><span class="text-xs">🌧️🌧️ Forte</span><span class="text-xs text-slate-400">15 — 40 mm</span></div>
+              <div class="flex justify-between"><span class="text-xs">⛈️ Muito Forte</span><span class="text-xs text-slate-400">> 40 mm</span></div>
+            </div>
+            <p class="text-[10px] text-slate-500 mt-2">Valores acumulados no período de 6 horas.</p>
+          </div>
+        </div>
+
+        <!-- Tab: FAQ -->
+        <div id="mcontent-faq" class="hidden">
+          <div class="space-y-3">
+            <details class="bg-slate-800/60 rounded-xl border border-slate-700 overflow-hidden">
+              <summary class="cursor-pointer p-3 text-xs font-bold text-white hover:bg-slate-700/40 transition-all">❓ Por que os cards aparecem vazios na aba Hoje?</summary>
+              <div class="px-3 pb-3 pt-1 text-xs text-slate-400 leading-relaxed border-t border-slate-700">
+                A aba <strong class="text-sky-400">Hoje</strong> mostra previsões do dia atual — que ainda não foram auditadas porque o dia não terminou. Os scores (<strong class="text-white">%</strong>) ficarão em branco até amanhã, quando o sistema pode comparar com a realidade. <br/><br/>Os dados de chuva prevista (mm) por período <strong>já estão visíveis</strong> nos cards como indicação do que cada modelo espera para hoje.
+              </div>
+            </details>
+            <details class="bg-slate-800/60 rounded-xl border border-slate-700 overflow-hidden">
+              <summary class="cursor-pointer p-3 text-xs font-bold text-white hover:bg-slate-700/40 transition-all">❓ Por que o Ranking começa zerado?</summary>
+              <div class="px-3 pb-3 pt-1 text-xs text-slate-400 leading-relaxed border-t border-slate-700">
+                O Ranking acumula dados ao longo do tempo. No primeiro dia de funcionamento, ainda não existem amostras suficientes para calcular médias. <strong class="text-white">Aguarde alguns dias</strong> e o ranking será populado automaticamente pelo GitHub Actions.
+              </div>
+            </details>
+            <details class="bg-slate-800/60 rounded-xl border border-slate-700 overflow-hidden">
+              <summary class="cursor-pointer p-3 text-xs font-bold text-white hover:bg-slate-700/40 transition-all">❓ De onde vêm os dados reais?</summary>
+              <div class="px-3 pb-3 pt-1 text-xs text-slate-400 leading-relaxed border-t border-slate-700">
+                Os dados de realidade vêm do <strong class="text-emerald-400">Open-Meteo Historical</strong> — uma API que combina a reanálise ERA5 do ECMWF com dados observacionais. É o mesmo padrão usado pela comunidade científica global. Fica disponível 1-2 dias após o dia encerrar.
+              </div>
+            </details>
+            <details class="bg-slate-800/60 rounded-xl border border-slate-700 overflow-hidden">
+              <summary class="cursor-pointer p-3 text-xs font-bold text-white hover:bg-slate-700/40 transition-all">❓ O que é a "Linha da Persistência"?</summary>
+              <div class="px-3 pb-3 pt-1 text-xs text-slate-400 leading-relaxed border-t border-slate-700">
+                A <strong class="text-rose-400">Persistência</strong> é uma previsão ingênua: "amanhã vai ser igual a hoje". Se um modelo meteorológico perder para a Persistência, significa que ele é <strong class="text-white">inútil</strong> — você estaria melhor olhando pela janela do que usando o app.
+              </div>
+            </details>
+            <details class="bg-slate-800/60 rounded-xl border border-slate-700 overflow-hidden">
+              <summary class="cursor-pointer p-3 text-xs font-bold text-white hover:bg-slate-700/40 transition-all">❓ Com que frequência atualiza?</summary>
+              <div class="px-3 pb-3 pt-1 text-xs text-slate-400 leading-relaxed border-t border-slate-700">
+                <strong class="text-white">Uma vez por dia</strong>, automaticamente, via GitHub Actions. O pipeline roda às 8h (UTC-3) e segue 4 etapas: coleta de previsões → coleta da realidade → auditoria → publicação no site.
+              </div>
+            </details>
+            <details class="bg-slate-800/60 rounded-xl border border-slate-700 overflow-hidden">
+              <summary class="cursor-pointer p-3 text-xs font-bold text-white hover:bg-slate-700/40 transition-all">❓ Para que serve o botão "Registrar Clima"?</summary>
+              <div class="px-3 pb-3 pt-1 text-xs text-slate-400 leading-relaxed border-t border-slate-700">
+                Permite que qualquer pessoa em BC ou Itajaí registre manualmente o clima do momento via Supabase. Esses registros ficam visíveis no Feed em Tempo Real e complementam os dados automáticos com observações humanas.
+              </div>
+            </details>
+            <details class="bg-slate-800/60 rounded-xl border border-slate-700 overflow-hidden">
+              <summary class="cursor-pointer p-3 text-xs font-bold text-white hover:bg-slate-700/40 transition-all">❓ O que são os 4 prazos: 1d, 3d, 7d, 15d?</summary>
+              <div class="px-3 pb-3 pt-1 text-xs text-slate-400 leading-relaxed border-t border-slate-700">
+                Cada prazo representa <strong class="text-white">quantos dias antes a previsão foi feita</strong>. Um score de <strong class="text-sky-400">95% em 1 dia</strong> significa que o modelo acertou 95% quando previu 1 dia antes. O mesmo modelo pode ter <strong class="text-rose-400">40% em 7 dias</strong>, mostrando que perde confiabilidade com o tempo.
+              </div>
+            </details>
+          </div>
+
+          <div class="mt-4 bg-slate-800/50 rounded-xl p-3 border border-slate-700 text-center">
+            <p class="text-xs text-slate-400">🛠️ Projeto open-source desenvolvido por <strong class="text-white">Ackerss</strong></p>
+            <p class="text-xs text-slate-500 mt-1">Dados automáticos • Sem intervenção humana • 100% transparente</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ MODAL DE VALIDAÇÃO ═══ -->
   <div id="modal-overlay" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
     <div class="glass rounded-2xl w-full max-w-sm p-5 animate-slide-up">
@@ -365,7 +679,7 @@
   // ━━━ ESTADO GLOBAL ━━━
   let STATE = {
     local: 'balneario_camboriu',
-    diaIndex: 0,        // 0 = Hoje, 1 = Ontem, etc.
+    diaIndex: 1,        // 0 = Hoje, 1 = Ontem (padrão: mostra ontem pois tem audit completa)
     tabAtual: 'auditoria',
     prazoRanking: '1_dia',
     modalLocal: 'balneario_camboriu',
@@ -431,9 +745,10 @@
   // ━━━ CARREGAR DADOS ━━━
   async function carregarDados() {
     try {
-      const respDados = await fetch('dados.json').then(x => x.json());
-      const respRanking = await fetch('ranking.json').then(x => x.json());
-      const respEstacoes = await fetch('estacoes.json').then(x => x.json());
+      const cacheBust = new Date().getTime();
+      const respDados = await fetch('dados.json?v=' + cacheBust).then(x => x.json());
+      const respRanking = await fetch('ranking.json?v=' + cacheBust).then(x => x.json());
+      const respEstacoes = await fetch('estacoes.json?v=' + cacheBust).then(x => x.json());
       
       // Adaptar o formato do backend (Python) para o formato esperado pela UI
       let adaptado = { dias: [] };
@@ -452,7 +767,7 @@
         let prevHj = jsonLoc.previsoes?.[hojeStr] || {};
         let modHj = {};
         for(let m in prevHj) {
-           modHj[m] = { score_1d: null, nome_display: NOMES_MODELOS[m] || m, apps_relacionados: APPS_MODELOS[m] || [], periodos_score: {} };
+           modHj[m] = { score_1d: prevHj[m].score_1d || null, nome_display: NOMES_MODELOS[m] || m, apps_relacionados: APPS_MODELOS[m] || [], periodos_score: {} };
            PERIODOS.forEach(p => { modHj[m].periodos_score[p] = { mm: prevHj[m][p] || 0, score: null, classificacao: formatClass(prevHj[m][p] || 0) } });
         }
         diaHoje.locais[loc] = { realidade: { status: 'parcial', periodos: {} }, modelos: modHj };
@@ -460,7 +775,7 @@
         let prevOnt = jsonLoc.previsoes?.[ontemStr] || {};
         let modOnt = {};
         for(let m in prevOnt) {
-           modOnt[m] = { score_1d: null, nome_display: NOMES_MODELOS[m] || m, apps_relacionados: APPS_MODELOS[m] || [], periodos_score: {} };
+           modOnt[m] = { score_1d: prevOnt[m].score_1d || null, nome_display: NOMES_MODELOS[m] || m, apps_relacionados: APPS_MODELOS[m] || [], periodos_score: {} };
            PERIODOS.forEach(p => { modOnt[m].periodos_score[p] = { mm: prevOnt[m][p] || 0, score: null, classificacao: formatClass(prevOnt[m][p] || 0) } });
         }
         
@@ -1023,6 +1338,39 @@
   // ━━━ FECHAR MODAL AO CLICAR FORA ━━━
   document.getElementById('modal-overlay').addEventListener('click', function(e) {
     if (e.target === this) fecharModal();
+  });
+
+  // ━━━ MANUAL ━━━
+  function abrirManual() {
+    const el = document.getElementById('manual-overlay');
+    el.classList.remove('hidden');
+    el.classList.add('flex');
+    switchManualTab('oque'); // sempre abre na primeira aba
+  }
+  function fecharManual() {
+    const el = document.getElementById('manual-overlay');
+    el.classList.add('hidden');
+    el.classList.remove('flex');
+  }
+  function switchManualTab(tab) {
+    const tabs = ['oque', 'modelos', 'score', 'periodos', 'faq'];
+    tabs.forEach(t => {
+      const btn = document.getElementById('mtab-' + t);
+      const content = document.getElementById('mcontent-' + t);
+      if (t === tab) {
+        btn.classList.remove('text-slate-400', 'border-transparent');
+        btn.classList.add('text-sky-400', 'border-sky-500');
+        content.classList.remove('hidden');
+      } else {
+        btn.classList.remove('text-sky-400', 'border-sky-500');
+        btn.classList.add('text-slate-400', 'border-transparent');
+        content.classList.add('hidden');
+      }
+    });
+  }
+  // Fechar manual ao clicar fora
+  document.getElementById('manual-overlay').addEventListener('click', function(e) {
+    if (e.target === this) fecharManual();
   });
 
   // ━━━ INIT ━━━

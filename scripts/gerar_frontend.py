@@ -62,6 +62,8 @@ def main():
     
     # Busca snapshot de hoje para as previsões futuras
     snap_hoje = carregar_json(PREVISOES_DIR / f"snapshot_{data_hoje}.json")
+    # Busca snapshot de ontem para as previsões antigas (as que foram auditadas hoje)
+    snap_ontem = carregar_json(PREVISOES_DIR / f"snapshot_{data_ontem}.json")
     
     dados_frontend = {
         "atualizado_em": datetime.now().strftime("%Y-%m-%d %H:%M"),
@@ -69,9 +71,27 @@ def main():
     }
     
     for local_id in LOCAIS:
+        previsoes_hoje = snap_hoje.get("locais", {}).get(local_id, {})
+        previsoes_ontem = snap_ontem.get("locais", {}).get(local_id, {})
+        
+        previsoes_combinadas = {}
+        # Previsões de ontem (apenas o node de ontem)
+        if data_ontem in previsoes_ontem:
+            previsoes_combinadas[data_ontem] = previsoes_ontem[data_ontem]
+            
+            # Injeta score_1d
+            if data_ontem in historico.get(local_id, {}):
+                scores_1d = historico[local_id][data_ontem].get("1_dia", {})
+                for m_id, model_data in previsoes_combinadas[data_ontem].items():
+                    if m_id in scores_1d:
+                        model_data["score_1d"] = scores_1d[m_id]
+
+        # Adiciona previsões de hoje e futuro
+        previsoes_combinadas.update(previsoes_hoje)
+
         dados_frontend["locais"][local_id] = {
             "realidade": realidade_ontem.get(local_id, {}),
-            "previsoes": snap_hoje.get("locais", {}).get(local_id, {})
+            "previsoes": previsoes_combinadas
         }
 
     # 4. Salvar arquivos na pasta docs/
