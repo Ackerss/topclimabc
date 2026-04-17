@@ -23,6 +23,24 @@
 
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    window.onerror = function(msg, url, line, col, error) {
+      fetch('http://localhost:8001/log', { method: 'POST', body: 'ERROR: ' + msg + ' LINE: ' + line + ' COL: ' + col });
+    };
+    window.addEventListener('unhandledrejection', function(event) {
+      fetch('http://localhost:8001/log', { method: 'POST', body: 'UNHANDLED PROMISE: ' + event.reason });
+    });
+    const oldLog = console.log;
+    const oldErr = console.error;
+    console.log = function(...args) {
+      fetch('http://localhost:8001/log', { method: 'POST', body: 'LOG: ' + JSON.stringify(args) });
+      oldLog(...args);
+    };
+    console.error = function(...args) {
+      fetch('http://localhost:8001/log', { method: 'POST', body: 'CONSOLE.ERROR: ' + JSON.stringify(args) });
+      oldErr(...args);
+    };
+  </script>
 
   <!-- Tailwind CSS v3 -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -674,7 +692,7 @@
   // ━━━ SUPABASE INIT ━━━
   const supabaseUrl = 'https://jfjrzkjzfxnyhexwhoby.supabase.co';
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmanJ6a2p6ZnhueWhleHdob2J5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0MDY4NTksImV4cCI6MjA5MDk4Mjg1OX0.hqeNEOTh5AVBwyR42JMVtm0t3dw4ghkQZPqfpmG-s48';
-  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+  const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
   // ━━━ ESTADO GLOBAL ━━━
   let STATE = {
@@ -1264,7 +1282,7 @@
       data: agora.toISOString().split('T')[0]
     };
 
-    const { error } = await supabase.from('topclimabc_validacoes').insert([dataObj]);
+    const { error } = await supabaseClient.from('topclimabc_validacoes').insert([dataObj]);
 
     document.getElementById('btn-salvar-modal').disabled = false;
     document.getElementById('btn-salvar-modal').innerHTML = '<i class="fa-solid fa-check mr-2"></i>Registrar';
@@ -1290,7 +1308,7 @@
     lista.innerHTML = '<div class="text-xs text-sky-400 text-center py-2"><i class="fa-solid fa-circle-notch fa-spin"></i> Atualizando...</div>';
 
     const hoje = new Date().toISOString().split('T')[0];
-    const { data: registros, error } = await supabase
+    const { data: registros, error } = await supabaseClient
       .from('topclimabc_validacoes')
       .select('*')
       .eq('data', hoje)
