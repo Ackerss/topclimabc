@@ -929,7 +929,7 @@
         const mmR = Math.round(mm * 10) / 10;
         return `<div class="flex flex-col items-center gap-0.5">
           <span class="text-[10px] text-slate-500">${LABEL_PERIODO[p]}</span>
-          <span class="text-xs font-semibold ${mmColor(mm)}">${mmR > 0 ? mmR + 'mm' : '—'}</span>
+          <span class="text-xs font-semibold ${mm > 0 ? mmColor(mm) : 'text-slate-400'}">${mmR > 0 ? mmR + 'mm' : '☀️ Seco'}</span>
         </div>`;
       }).join('');
     });
@@ -1042,7 +1042,7 @@
         const mmR = Math.round(mm * 10) / 10;
         return `<div class="flex flex-col items-center gap-0.5">
           <span class="text-[10px] text-slate-500">${LABEL_PERIODO[p]}</span>
-          <span class="text-xs font-semibold ${mmColor(mm)}">${mmR > 0 ? mmR + 'mm' : '—'}</span>
+          <span class="text-xs font-semibold ${mm > 0 ? mmColor(mm) : 'text-slate-400'}">${mmR > 0 ? mmR + 'mm' : '☀️ Seco'}</span>
         </div>`;
       }).join('');
 
