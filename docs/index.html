@@ -734,21 +734,30 @@
   const LABEL_PERIODO = { madrugada: 'Madrug.', manha: 'Manhã', tarde: 'Tarde', noite: 'Noite' };
 
   // Mapeamento de IDs do backend para nomes bonitos
+  // Mapeamento de IDs do backend para nomes bonitos
   const NOMES_MODELOS = {
-    'ecmwf_ifs025': 'ECMWF IFS (Windy)',
-    'gfs_seamless': 'GFS (Weather.com)',
-    'icon_seamless': 'ICON (DWD)',
-    'best_match': 'Open-Meteo Best Match',
-    'openweathermap': 'OpenWeatherMap',
+    'ecmwf_ifs025': 'ECMWF IFS',
+    'gfs_seamless': 'GFS NCEP',
+    'icon_seamless': 'ICON DWD',
+    'best_match': 'Open-Meteo AI',
+    'openweathermap': 'OWM',
     'persistencia': 'Persistência'
   };
   const APPS_MODELOS = {
-    'ecmwf_ifs025': ['Windy'],
-    'gfs_seamless': ['Weather.com', 'AccuWeather'],
+    'ecmwf_ifs025': ['Climatempo', 'Windy', 'Yr.no'],
+    'gfs_seamless': ['Climatempo', 'Weather.com', 'Apple App'],
     'icon_seamless': ['Bright Sky'],
-    'best_match': ['Open-Meteo'],
-    'openweathermap': ['OWM'],
-    'persistencia': []
+    'best_match': ['Inteligência Artificial'],
+    'openweathermap': ['App Próprio / ML'],
+    'persistencia': ['(Apenas Estatística)']
+  };
+  const INFO_MODELOS = {
+    'ecmwf_ifs025': 'Modelo Europeu supercomputadorizado. Considerado pela maioria dos especialistas como o mais letal e preciso do mundo.',
+    'gfs_seamless': 'Modelo Americano do governo (NOAA). Muito popular e rápido, serve de base para grande parte dos portais.',
+    'icon_seamless': 'Modelo Alemão oficial. Alta resolução e confiabilidade regional no continente europeu, com cobertura global.',
+    'best_match': 'Robô AI do Open-Meteo que funde dados de tempo real com os melhores modelos.',
+    'openweathermap': 'Empresa que cruza dezenas de radares, satélites e Inteligência Artificial proprietária num pacote comercial híbrido.',
+    'persistencia': 'A "linha de corte". Assume cegamente que amanhã será igual a hoje. Usado em meteorologia apenas para provar se os satélites de fato têm inteligência preditiva.'
   };
 
   // ━━━ SCORE HELPERS ━━━
@@ -1005,13 +1014,19 @@
       const c = modeloCores[modeloId] || { borda: 'border-slate-600/50', icone: '📡' };
       const nomeDisplay = NOMES_MODELOS[modeloId] || modeloId;
       const apps = APPS_MODELOS[modeloId] || [];
+      const infoMsg = INFO_MODELOS[modeloId] || 'Previsão do modelo ' + nomeDisplay;
 
       const headerHTML = `
         <div class="flex items-center gap-2 mb-3">
           <span class="text-xl">${c.icone}</span>
-          <div>
-            <p class="text-sm font-bold text-white">${nomeDisplay}</p>
-            ${apps.length ? `<p class="text-xs text-slate-400">${apps.join(' · ')}</p>` : ''}
+          <div class="flex-1">
+            <div class="flex items-center gap-1.5">
+              <p class="text-sm font-bold text-white">${nomeDisplay}</p>
+              <div class="cursor-help" title="${infoMsg}">
+                <i class="fa-solid fa-circle-info text-slate-500 hover:text-sky-400 transition-colors text-xs"></i>
+              </div>
+            </div>
+            ${apps.length ? `<p class="text-xs text-slate-400 mt-0.5">${apps.join(' · ')}</p>` : ''}
           </div>
         </div>`;
 
@@ -1243,10 +1258,16 @@
         </div>`;
       }
 
+      const infoMsg = INFO_MODELOS[id] || 'Previsão calculada do modelo';
       return `<div class="glass rounded-2xl overflow-hidden mb-5 border ${isBaseline ? 'border-amber-500/30 opacity-80' : 'border-slate-700/80'} shadow-md">
         <div class="bg-slate-800/60 px-4 py-2.5 border-b border-slate-700/80 flex justify-between items-center">
             <div>
-               <span class="font-extrabold text-white text-[15px] tracking-tight">${modelo.nome_display || NOMES_MODELOS[id] || id}</span>
+               <div class="flex items-center gap-1.5">
+                 <span class="font-extrabold text-white text-[15px] tracking-tight">${modelo.nome_display || NOMES_MODELOS[id] || id}</span>
+                 <div class="cursor-help" title="${infoMsg}">
+                   <i class="fa-solid fa-circle-info text-slate-500 hover:text-sky-400 transition-colors text-xs" style="margin-top: 2px;"></i>
+                 </div>
+               </div>
                ${apps}
             </div>
             <span class="text-[9px] font-bold text-sky-300 bg-sky-900/30 px-2 py-1 rounded uppercase tracking-widest border border-sky-700/50 shadow-sm whitespace-nowrap ml-2 text-center leading-tight">PREVISÃO<br class="sm:hidden"> 1 DIA ANTES</span>
@@ -1301,6 +1322,7 @@
       const isBaseline = item.modelo === 'persistencia';
       const nomeDisplay = item.nome || NOMES_MODELOS[item.modelo] || item.modelo;
       const scoreVal = item.score || 0;
+      const infoMsg = INFO_MODELOS[item.modelo] || 'Dados do modelo';
 
       const isTopCard = posicao <= 3 && !isBaseline;
       const cardClass = isTopCard
@@ -1314,7 +1336,12 @@
           <div class="flex items-center gap-3">
             <div class="text-2xl w-8 text-center">${medalha}</div>
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-bold text-white truncate">${nomeDisplay}</p>
+              <div class="flex items-center gap-1.5">
+                <p class="text-sm font-bold text-white truncate">${nomeDisplay}</p>
+                <div class="cursor-help" title="${infoMsg}">
+                  <i class="fa-solid fa-circle-info text-slate-500 hover:text-sky-400 transition-colors text-[10px]"></i>
+                </div>
+              </div>
               ${appsHTML}
               <p class="text-xs text-slate-500 mt-0.5">${item.amostras || 0} avaliações</p>
             </div>
