@@ -412,19 +412,67 @@
   // ━━━ CARREGAR DADOS ━━━
   async function carregarDados() {
     try {
-      const [d, r, e] = await Promise.all([
-        fetch('dados.json').then(x => x.json()),
-        fetch('ranking.json').then(x => x.json()),
-        fetch('estacoes.json').then(x => x.json())
-      ]);
-      STATE.dados = d;
-      STATE.ranking = r;
-      STATE.estacoes = e;
+      const respDados = await fetch('dados.json').then(x => x.json());
+      const respRanking = await fetch('ranking.json').then(x => x.json());
+      const respEstacoes = await fetch('estacoes.json').then(x => x.json());
+      
+      // Adaptar o formato do backend (Python) para o formato esperado pela UI
+      let adaptado = { dias: [] };
+      let hojeStr = new Date().toISOString().split('T')[0];
+      let ontemTime = new Date(); ontemTime.setDate(ontemTime.getDate() - 1);
+      let ontemStr = ontemTime.toISOString().split('T')[0];
+
+      // Dia 0: Hoje
+      let diaHoje = { data: hojeStr, label: 'Hoje', locais: {} };
+      // Dia 1: Ontem
+      let diaOntem = { data: ontemStr, label: 'Ontem', locais: {} };
+
+      ['balneario_camboriu', 'itajai'].forEach(loc => {
+        let jsonLoc = respDados.locais?.[loc] || {};
+        
+        let prevHj = jsonLoc.previsoes?.[hojeStr] || {};
+        let modHj = {};
+        for(let m in prevHj) {
+           modHj[m] = { score_1d: null, apps_relacionados: m==='openweathermap'?['OWM']:[], periodos_score: {} };
+           PERIODOS.forEach(p => { modHj[m].periodos_score[p] = { mm: prevHj[m][p], score: null, classificacao: formatClass(prevHj[m][p]) } });
+        }
+        diaHoje.locais[loc] = { realidade: { status: 'parcial', periodos: {} }, modelos: modHj };
+
+        let prevOnt = jsonLoc.previsoes?.[ontemStr] || {};
+        let modOnt = {};
+        for(let m in prevOnt) {
+           modOnt[m] = { score_1d: null, apps_relacionados: [], periodos_score: {} };
+           PERIODOS.forEach(p => { modOnt[m].periodos_score[p] = { mm: prevOnt[m][p], score: null, classificacao: formatClass(prevOnt[m][p]) } });
+        }
+        
+        // Formatar realidade para matching de icones (sem_chuva -> seco)
+        let realOntem = JSON.parse(JSON.stringify(jsonLoc.realidade || {}));
+        if(realOntem.periodos) {
+            Object.values(realOntem.periodos).forEach(p => { if(p.classificacao === 'sem_chuva') p.classificacao = 'seco'; });
+        }
+        diaOntem.locais[loc] = { realidade: realOntem, modelos: modOnt };
+      });
+
+      adaptado.dias.push(diaHoje);
+      if(respDados.locais && Object.keys(respDados.locais).length > 0) adaptado.dias.push(diaOntem);
+
+      STATE.dados = adaptado;
+      STATE.ranking = respRanking;
+      STATE.estacoes = respEstacoes;
       renderizar();
     } catch(err) {
+      console.error(err);
       document.getElementById('card-realidade').innerHTML =
-        `<div class="text-rose-400 text-sm p-2"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Erro ao carregar dados. Tente recarregar.</div>`;
+        `<div class="text-rose-400 text-sm p-2"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Erro ao carregar dados.</div>`;
     }
+  }
+
+  function formatClass(mm) {
+     if(mm === 0) return 'seco';
+     if(mm <= 2.5) return 'garoa';
+     if(mm <= 10) return 'moderada';
+     if(mm <= 25) return 'forte';
+     return 'intensa';
   }
 
   // ━━━ TABS ━━━
@@ -502,20 +550,20 @@
 
   function renderAuditoriaRankingFlash() {
     if (!STATE.ranking) return;
-    const local = STATE.ranking.locais?.[STATE.local];
-    const top3 = local?.prazos?.['1_dia']?.ranking?.filter(r => !r.is_baseline).slice(0, 3);
+    const arrayRanking = STATE.ranking[STATE.local]?.['1_dia'] || [];
+    const top3 = arrayRanking.filter(r => r.modelo !== 'persistencia').slice(0, 3);
     
     if (!top3 || top3.length === 0) {
-      document.getElementById('resumo-ranking-auditoria').innerHTML = `<span class="text-slate-500 text-xs text-center w-full block">Acumulando...</span>`;
+      document.getElementById('resumo-ranking-auditoria').innerHTML = `<span class="text-slate-500 text-xs text-center w-full block">Nenhum ranking consolidado ainda...</span>`;
       return;
     }
 
-    const html = top3.map(item => {
-      let icon = item.posicao === 1 ? '🥇' : item.posicao === 2 ? '🥈' : '🥉';
+    const html = top3.map((item, idx) => {
+      let icon = idx === 0 ? '🥇' : idx === 1 ? '🥈' : '🥉';
       return `<div class="flex flex-col items-center">
         <span class="text-2xl drop-shadow-md">${icon}</span>
-        <span class="font-bold text-sky-400 text-[11px] mt-1 truncate max-w-[80px]" title="${item.nome_display}">${item.nome_display}</span>
-        <span class="text-emerald-400 font-extrabold text-sm">${item.score_medio.toFixed(0)}%</span>
+        <span class="font-bold text-sky-400 text-[11px] mt-1 truncate max-w-[80px]" title="${item.nome}">${item.nome}</span>
+        <span class="text-emerald-400 font-extrabold text-sm">${item.score.toFixed(0)}%</span>
       </div>`;
     }).join('');
 
@@ -594,13 +642,6 @@
             if (!pd) return `<div class="p-2"><p class="text-[10px] text-slate-500 uppercase font-bold">${LABEL_PERIODO[p]}</p><p class="text-xs text-slate-600 mt-2">—</p></div>`;
             
             let sitLabel = ''; let sitClass = ''; let bgClass = '';
-            if (pd.score >= 80) { sitLabel = 'ACERTOU ✅'; sitClass = 'text-emerald-400'; bgClass = 'bg-emerald-950/20'; }
-            else if (pd.score >= 50) { sitLabel = 'QUASE 🟡'; sitClass = 'text-yellow-400'; bgClass = 'bg-yellow-950/10'; }
-            else { sitLabel = 'ERROU ❌'; sitClass = 'text-rose-400'; bgClass = 'bg-rose-950/20'; }
-
-            return `<div class="p-2 flex flex-col items-center ${bgClass} transition-colors">
-              <p class="text-[9px] text-slate-400 uppercase font-bold tracking-wider">${LABEL_PERIODO[p]}</p>
-              <span class="text-xl my-1.5 drop-shadow-md">${ICONES[pd.prev_class] || '—'}</span>
               <p class="font-bold text-[11px] text-white capitalize">${pd.prev_class}</p>
               <p class="text-[9px] font-black mt-1.5 ${sitClass} tracking-wide">${sitLabel}</p>
             </div>`;
