@@ -1,0 +1,149 @@
+{
+  "meta": {
+    "atualizado_em": "2026-04-15T09:00:00-03:00",
+    "fonte": "CEMADEN PED API",
+    "nota": "Dados de pluviômetros físicos instalados nos bairros"
+  },
+  "locais": {
+    "balneario_camboriu": {
+      "nome": "Balneário Camboriú",
+      "estacoes": [
+        {
+          "id": "G2-4202008001A",
+          "nome": "Nações",
+          "bairro": "Nações",
+          "lat": -26.985,
+          "lon": -48.632,
+          "status": "operacional",
+          "ultima_atualizacao": "2026-04-15T11:50:00-03:00",
+          "hoje": {
+            "madrugada": { "mm": 0.0, "classificacao": "seco" },
+            "manha":     { "mm": 1.8, "classificacao": "garoa" },
+            "tarde":     { "mm": null, "classificacao": null },
+            "noite":     { "mm": null, "classificacao": null },
+            "total_parcial": 1.8
+          },
+          "ontem": {
+            "madrugada": { "mm": 0.0, "classificacao": "seco" },
+            "manha":     { "mm": 3.2, "classificacao": "moderada" },
+            "tarde":     { "mm": 27.8, "classificacao": "intensa" },
+            "noite":     { "mm": 8.5, "classificacao": "moderada" },
+            "total_dia": 39.5
+          }
+        },
+        {
+          "id": "G2-4202008002A",
+          "nome": "Barra Sul",
+          "bairro": "Barra Sul",
+          "lat": -26.997,
+          "lon": -48.628,
+          "status": "operacional",
+          "ultima_atualizacao": "2026-04-15T11:50:00-03:00",
+          "hoje": {
+            "madrugada": { "mm": 0.0, "classificacao": "seco" },
+            "manha":     { "mm": 2.1, "classificacao": "garoa" },
+            "tarde":     { "mm": null, "classificacao": null },
+            "noite":     { "mm": null, "classificacao": null },
+            "total_parcial": 2.1
+          },
+          "ontem": {
+            "madrugada": { "mm": 0.0, "classificacao": "seco" },
+            "manha":     { "mm": 3.0, "classificacao": "moderada" },
+            "tarde":     { "mm": 25.5, "classificacao": "intensa" },
+            "noite":     { "mm": 7.9, "classificacao": "moderada" },
+            "total_dia": 36.4
+          }
+        },
+        {
+          "id": "G2-4202008003A",
+          "nome": "Agronomica",
+          "bairro": "Agronômica",
+          "lat": -26.972,
+          "lon": -48.641,
+          "status": "offline",
+          "ultima_atualizacao": "2026-04-14T20:10:00-03:00",
+          "hoje": null,
+          "ontem": null,
+          "nota_status": "Sem comunicação desde 20h de ontem — excluída do consenso"
+        }
+      ],
+      "consenso_hoje": {
+        "metodo": "mediana",
+        "estacoes_usadas": ["G2-4202008001A", "G2-4202008002A"],
+        "estacoes_excluidas": ["G2-4202008003A"],
+        "motivo_exclusao": ["offline"],
+        "resultado": {
+          "madrugada": { "mm": 0.0, "classificacao": "seco" },
+          "manha":     { "mm": 1.95, "classificacao": "garoa" },
+          "tarde":     { "mm": null, "classificacao": null },
+          "noite":     { "mm": null, "classificacao": null }
+        }
+      },
+      "consenso_ontem": {
+        "metodo": "mediana",
+        "estacoes_usadas": ["G2-4202008001A", "G2-4202008002A"],
+        "estacoes_excluidas": ["G2-4202008003A"],
+        "motivo_exclusao": ["offline"],
+        "resultado": {
+          "madrugada": { "mm": 0.0, "classificacao": "seco" },
+          "manha":     { "mm": 3.1, "classificacao": "moderada" },
+          "tarde":     { "mm": 26.65, "classificacao": "intensa" },
+          "noite":     { "mm": 8.2, "classificacao": "moderada" }
+        }
+      }
+    },
+    "itajai": {
+      "nome": "Itajaí",
+      "estacoes": [
+        {
+          "id": "G2-4208203001A",
+          "nome": "Fazenda",
+          "bairro": "Fazenda",
+          "lat": -26.908,
+          "lon": -48.662,
+          "status": "operacional",
+          "ultima_atualizacao": "2026-04-15T11:50:00-03:00",
+          "hoje": {
+            "madrugada": { "mm": 0.0, "classificacao": "seco" },
+            "manha":     { "mm": 2.5, "classificacao": "garoa" },
+            "tarde":     { "mm": null, "classificacao": null },
+            "noite":     { "mm": null, "classificacao": null },
+            "total_parcial": 2.5
+          },
+          "ontem": {
+            "madrugada": { "mm": 0.0, "classificacao": "seco" },
+            "manha":     { "mm": 4.1, "classificacao": "moderada" },
+            "tarde":     { "mm": 31.5, "classificacao": "intensa" },
+            "noite":     { "mm": 9.2, "classificacao": "moderada" },
+            "total_dia": 44.8,
+            "alerta": "⚠️ Praia Brava registrou alagamento no período da tarde"
+          }
+        },
+        {
+          "id": "G2-4208203002A",
+          "nome": "Praia Brava (Área de Risco)",
+          "bairro": "Praia Brava",
+          "lat": -26.930,
+          "lon": -48.662,
+          "status": "operacional",
+          "ultima_atualizacao": "2026-04-15T11:50:00-03:00",
+          "hoje": {
+            "madrugada": { "mm": 0.0, "classificacao": "seco" },
+            "manha":     { "mm": 3.0, "classificacao": "moderada" },
+            "tarde":     { "mm": null, "classificacao": null },
+            "noite":     { "mm": null, "classificacao": null },
+            "total_parcial": 3.0
+          },
+          "ontem": {
+            "madrugada": { "mm": 0.0, "classificacao": "seco" },
+            "manha":     { "mm": 5.2, "classificacao": "moderada" },
+            "tarde":     { "mm": 38.7, "classificacao": "intensa" },
+            "noite":     { "mm": 11.0, "classificacao": "forte" },
+            "total_dia": 54.9,
+            "alerta": "🚨 ALAGAMENTO CONFIRMADO — volume crítico ultrapassou 25mm/6h"
+          }
+        }
+      ]
+    }
+  }
+}

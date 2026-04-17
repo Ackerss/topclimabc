@@ -1,0 +1,47 @@
+name: "📊 Coleta Diária TOPCLIMABC"
+
+on:
+  schedule:
+    # 12:00 UTC = 09:00 BRT (Opcional alterar depois para 06:00 UTC = 03:00 BRT)
+    - cron: '0 6 * * *'
+  workflow_dispatch:  # Permite rodar botão manual no painel do github
+
+permissions:
+  contents: write
+
+env:
+  OWM_API_KEY: ${{ secrets.OWM_API_KEY }}
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Instalar dependências
+        run: pip install -r scripts/requirements.txt
+
+      - name: "Passo 1: Coletar Previsões"
+        run: python -m scripts.coletar_previsoes
+
+      - name: "Passo 2: Coletar Realidade (CEMADEN)"
+        run: python -m scripts.coletar_realidade
+
+      - name: "Passo 3: Auditar (Score)"
+        run: python -m scripts.auditar
+
+      - name: "Passo 4: Gerar JSONs para Frontend"
+        run: python -m scripts.gerar_frontend
+
+      - name: "Commit e Push automatico"
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "📊 Atualização diária automática [skip ci]"
+          file_pattern: "data/**/*.json docs/*.json"
