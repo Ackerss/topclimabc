@@ -39,6 +39,7 @@ from scripts.config import (
     OPEN_METEO_ARCHIVE, OPEN_METEO_HIST, OM_ARCHIVE_MODEL
 )
 from scripts.utils.classificacao import classificar_chuva
+from scripts.utils.supabase_api import buscar_overrides_manuais
 
 
 def get_periodo(hora_int):
@@ -238,6 +239,26 @@ def coletar_e_salvar(local_id, data_iso):
             realidade = criar_realidade_sem_dados(
                 motivo="Archive e Historical Forecast falharam"
             )
+
+    # --- Aplica overrides manuais (prioridade absoluta) ---
+    overrides = buscar_overrides_manuais(data_iso)
+    override_local = overrides.get(local_id, {})
+    if override_local:
+        for periodo, override_data in override_local.items():
+            realidade["periodos"][periodo] = {
+                "mm": override_data["mm"],
+                "classificacao": override_data["classificacao"],
+                "fonte_periodo": "manual",
+                "override": True,
+                "nota": override_data.get("nota"),
+            }
+        # Recalcula total_dia após sobrescrever períodos
+        realidade["total_dia"] = round(
+            sum(v.get("mm", 0) for v in realidade["periodos"].values() if v.get("mm") is not None), 1
+        )
+        # Marca o status do dia como contendo dado manual
+        realidade["tem_override_manual"] = True
+        print(f"  [Override] {len(override_local)} período(s) sobrescrito(s) manualmente para {local_id}/{data_iso}.")
 
     # Salva no arquivo diário
     caminho = REALIDADE_DIR / f"realidade_{data_iso}.json"

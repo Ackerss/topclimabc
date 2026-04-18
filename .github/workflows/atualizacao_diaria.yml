@@ -5,12 +5,16 @@ on:
     # 12:00 UTC = 09:00 BRT — garante que ERA5 Archive tenha dado de ontem disponível
     - cron: '0 12 * * *'
   workflow_dispatch:  # Permite rodar botão manual no painel do github
+  repository_dispatch:
+    types: [forcar_recalculo_manual]
 
 permissions:
   contents: write
 
 env:
   OWM_API_KEY: ${{ secrets.OWM_API_KEY }}
+  SUPABASE_URL: "https://jfjrzkjzfxnyhexwhoby.supabase.co"
+  SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
 jobs:
   pipeline:
