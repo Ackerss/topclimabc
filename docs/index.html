@@ -793,6 +793,7 @@
       const respDados = await fetch('dados.json?v=' + cacheBust).then(x => x.json());
       const respRanking = await fetch('ranking.json?v=' + cacheBust).then(x => x.json());
       const respEstacoes = await fetch('estacoes.json?v=' + cacheBust).then(x => x.json());
+      const respRealidades = await fetch('todas_realidades.json?v=' + cacheBust).then(x => x.json()).catch(() => ({}));
       
       // Adaptar o formato do backend (Python) para o formato esperado pela UI
       let adaptado = { dias: [] };
@@ -837,6 +838,7 @@
       STATE.dados = adaptado;
       STATE.ranking = respRanking;
       STATE.estacoes = respEstacoes;
+      STATE._todasRealidades = respRealidades;
       STATE._dadosRaw = respDados;  // JSON bruto para a aba Previsão
       renderizar();
     } catch(err) {

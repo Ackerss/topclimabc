@@ -159,7 +159,15 @@ def main():
     # 4. Gerar estacoes.json (sem dados mockados)
     estacoes = gerar_estacoes_json(realidade_ontem)
 
+    # 4.5 Gerar todas_realidades.json (lendo todos os historicos reais)
+    todas_realidades = {}
+    for filepath in REALIDADE_DIR.glob("realidade_*.json"):
+        data_str = filepath.stem.replace("realidade_", "")
+        todas_realidades[data_str] = carregar_json(filepath)
+
     # 5. Salvar arquivos na pasta docs/
+    with open(DOCS_DIR / "todas_realidades.json", "w", encoding="utf-8") as f:
+        json.dump(todas_realidades, f, indent=2, ensure_ascii=False)
     with open(DOCS_DIR / "ranking.json", "w", encoding="utf-8") as f:
         json.dump(ranking, f, indent=2, ensure_ascii=False)
 
