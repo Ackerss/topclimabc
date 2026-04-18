@@ -1,6 +1,6 @@
 {
   "meta": {
-    "atualizado_em": "2026-04-18T13:33:25-03:00",
+    "atualizado_em": "2026-04-18T13:42:08-03:00",
     "fonte": "Open-Meteo Archive (Best Match)",
     "nota": "Dados climáticos apurados com modelo que combina diversas fontes (ERA5-Land, radar e estações físicas locais) para precisão de ponta.",
     "aviso": "✔️ Dados de alta confiabilidade! O modelo best_match agrupa a melhor reanálise global (ERA5-Land) com observações em solo local (como INMET) chegando a precisões de ~9km.",
@@ -15,24 +15,24 @@
       "status_cemaden": "indisponivel",
       "ontem": {
         "status_fonte": "completo",
-        "fonte": "ERA5 Archive (ECMWF) + Open-Meteo Historical (distribuição horária)",
+        "fonte": "Open-Meteo Archive (best_match) — 2026-04-17",
         "total_dia": 6.9,
         "periodos": {
           "madrugada": {
-            "mm": 0.0,
+            "mm": 0.2,
             "classificacao": "sem_chuva"
           },
           "manha": {
-            "mm": 0.0,
+            "mm": 0.2,
             "classificacao": "sem_chuva"
           },
           "tarde": {
-            "mm": 2.9,
+            "mm": 1.4,
             "classificacao": "fraca"
           },
           "noite": {
-            "mm": 4.0,
-            "classificacao": "fraca"
+            "mm": 5.1,
+            "classificacao": "moderada"
           }
         }
       },
@@ -46,24 +46,24 @@
       "status_cemaden": "indisponivel",
       "ontem": {
         "status_fonte": "completo",
-        "fonte": "ERA5 Archive (ECMWF) + Open-Meteo Historical (distribuição horária)",
+        "fonte": "Open-Meteo Archive (best_match) — 2026-04-17",
         "total_dia": 6.6,
         "periodos": {
           "madrugada": {
-            "mm": 0.0,
+            "mm": 0.2,
             "classificacao": "sem_chuva"
           },
           "manha": {
-            "mm": 0.0,
+            "mm": 0.3,
             "classificacao": "sem_chuva"
           },
           "tarde": {
-            "mm": 2.7,
-            "classificacao": "fraca"
+            "mm": 0.5,
+            "classificacao": "sem_chuva"
           },
           "noite": {
-            "mm": 3.8,
-            "classificacao": "fraca"
+            "mm": 5.6,
+            "classificacao": "moderada"
           }
         }
       },
