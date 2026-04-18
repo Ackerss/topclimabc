@@ -2,8 +2,8 @@ import os
 import json
 import time
 from datetime import datetime, timedelta
-from config import REALIDADE_DIR, LOCAIS
-from coletar_realidade import coletar_archive_best_match
+from scripts.config import REALIDADE_DIR, LOCAIS
+from scripts.coletar_realidade import coletar_archive_best_match
 
 def main():
     print("--- Backfill History Reality ---")

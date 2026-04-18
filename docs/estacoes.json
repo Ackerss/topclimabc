@@ -1,6 +1,6 @@
 {
   "meta": {
-    "atualizado_em": "2026-04-18T13:51:37-03:00",
+    "atualizado_em": "2026-04-18T13:52:12-03:00",
     "fonte": "Open-Meteo Archive (Best Match)",
     "nota": "Dados climáticos apurados com modelo que combina diversas fontes (ERA5-Land, radar e estações físicas locais) para precisão de ponta.",
     "aviso": "✔️ Dados de alta confiabilidade! O modelo best_match agrupa a melhor reanálise global (ERA5-Land) com observações em solo local (como INMET) chegando a precisões de ~9km.",
