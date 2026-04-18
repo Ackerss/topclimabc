@@ -880,6 +880,15 @@
         }
         diaHoje.locais[loc] = { realidade: { status: 'parcial', periodos: {} }, modelos: modHj };
 
+        // Integra dados manuais na página de hoje logo no início
+        if (respRealidades && respRealidades[hojeStr] && respRealidades[hojeStr][loc]) {
+            let histHj = JSON.parse(JSON.stringify(respRealidades[hojeStr][loc]));
+            if(histHj.periodos) {
+                Object.values(histHj.periodos).forEach(p => { if(p.classificacao === 'sem_chuva') p.classificacao = 'seco'; });
+            }
+            diaHoje.locais[loc].realidade = histHj;
+        }
+
         let prevOnt = jsonLoc.previsoes?.[ontemStr] || {};
         let modOnt = {};
         for(let m in prevOnt) {
@@ -1696,7 +1705,7 @@
       obj.tem_override_manual = true;
       
       // Update the general dados memory
-      if (STATE.dados && STATE.dados.locais) {
+      if (STATE.dados && STATE.dados.dias) {
           // AUI A GENTE PRECISA CHECAR O DIA ATUAL DA TELA "HOJE" ou "ONTEM" (índice 0 e 1)
           for (let i = 0; i < STATE.dados.dias.length; i++) {
               if (STATE.dados.dias[i].data === data) {
@@ -1857,6 +1866,7 @@
       `<div class="flex items-center gap-2 text-xs bg-slate-800/80 border border-slate-700/50 rounded-lg px-2 py-2 shadow-sm animate-fade-in">
         <span class="text-lg">${ICONES[r.classificacao]}</span>
         <span class="font-bold text-white min-w-[36px]">${r.hora}</span>
+        <span class="text-[10px] font-bold text-slate-400 capitalize bg-slate-900/50 px-1.5 py-0.5 rounded border border-slate-700">${r.periodo}</span>
         <span class="text-[10px] font-bold uppercase tracking-wider text-sky-300 bg-sky-900/30 px-1.5 py-0.5 rounded border border-sky-800/50">${r.local === 'balneario_camboriu' ? 'BC' : 'ITJ'}</span>
         ${r.nota ? `<span class="text-slate-400 text-[10px] italic truncate">${r.nota}</span>` : ''}
       </div>`

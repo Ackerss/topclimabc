@@ -167,30 +167,43 @@ def main():
     for filepath in REALIDADE_DIR.glob("realidade_*.json"):
         data_str = filepath.stem.replace("realidade_", "")
         realidade_dia = carregar_json(filepath)
-        
-        # Aplica overrides manuais retroativos
-        overrides_do_dia = todos_overrides.get(data_str, {})
-        for local_id, periodos_override in overrides_do_dia.items():
-            if local_id in realidade_dia:
-                for periodo, override_data in periodos_override.items():
-                    # Força a existência de "periodos" para não dar erro
-                    if "periodos" not in realidade_dia[local_id]:
-                        realidade_dia[local_id]["periodos"] = {}
-                        
-                    realidade_dia[local_id]["periodos"][periodo] = {
-                        "mm": override_data["mm"],
-                        "classificacao": override_data["classificacao"],
-                        "fonte_periodo": "manual",
-                        "override": True,
-                        "nota": override_data.get("nota"),
-                    }
-                # Recalcula total_dia
-                realidade_dia[local_id]["total_dia"] = round(
-                    sum(v.get("mm", 0) for v in realidade_dia[local_id]["periodos"].values() if v.get("mm") is not None), 1
-                )
-                realidade_dia[local_id]["tem_override_manual"] = True
-        
         todas_realidades[data_str] = realidade_dia
+
+    # Garante que as datas com override existam (ex: hoje)
+    for data_str in todos_overrides.keys():
+        if data_str not in todas_realidades:
+            todas_realidades[data_str] = {}
+            for loc in LOCAIS:
+                todas_realidades[data_str][loc] = {
+                    "status": "provisorio", 
+                    "fonte": "Misto (Manual)", 
+                    "periodos": {}, 
+                    "total_dia": 0
+                }
+
+    # Aplica overrides manuais
+    for data_str, overrides_do_dia in todos_overrides.items():
+        if data_str in todas_realidades:
+            realidade_dia = todas_realidades[data_str]
+            for local_id, periodos_override in overrides_do_dia.items():
+                if local_id in realidade_dia:
+                    for periodo, override_data in periodos_override.items():
+                        # Força a existência de "periodos" para não dar erro
+                        if "periodos" not in realidade_dia[local_id]:
+                            realidade_dia[local_id]["periodos"] = {}
+                            
+                        realidade_dia[local_id]["periodos"][periodo] = {
+                            "mm": override_data["mm"],
+                            "classificacao": override_data["classificacao"],
+                            "fonte_periodo": "manual",
+                            "override": True,
+                            "nota": override_data.get("nota"),
+                        }
+                    # Recalcula total_dia
+                    realidade_dia[local_id]["total_dia"] = round(
+                        sum(v.get("mm", 0) for v in realidade_dia[local_id]["periodos"].values() if v.get("mm") is not None), 1
+                    )
+                    realidade_dia[local_id]["tem_override_manual"] = True
 
     # 5. Salvar arquivos na pasta docs/
     with open(DOCS_DIR / "todas_realidades.json", "w", encoding="utf-8") as f:
