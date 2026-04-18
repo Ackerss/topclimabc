@@ -185,14 +185,14 @@
 
       <!-- Seletor de dia -->
       <div class="flex items-center justify-between mb-4">
-        <button onclick="navegarDia(-1)" class="glass p-2.5 rounded-xl text-slate-400 hover:text-white hover:border-sky-500/50 transition-all shadow-md">
+        <button onclick="navegarDia(1)" id="btn-dia-anterior" class="glass p-2.5 rounded-xl text-slate-400 hover:text-white hover:border-sky-500/50 transition-all shadow-md">
           <i class="fa-solid fa-chevron-left text-sm"></i>
         </button>
         <div class="text-center">
           <p id="dia-label" class="text-sm font-bold text-sky-400"></p>
           <p id="dia-data" class="text-xs text-slate-500"></p>
         </div>
-        <button onclick="navegarDia(1)" id="btn-proximo-dia" class="glass p-2.5 rounded-xl text-slate-400 hover:text-white hover:border-sky-500/50 transition-all shadow-md">
+        <button onclick="navegarDia(-1)" id="btn-proximo-dia" class="glass p-2.5 rounded-xl text-slate-400 hover:text-white hover:border-sky-500/50 transition-all shadow-md">
           <i class="fa-solid fa-chevron-right text-sm"></i>
         </button>
       </div>
@@ -1115,8 +1115,16 @@
     // Navegação
     document.getElementById('dia-label').textContent = dia.label || dia.data;
     document.getElementById('dia-data').textContent = formatarData(dia.data);
+    
     document.getElementById('btn-proximo-dia').disabled = STATE.diaIndex === 0;
     document.getElementById('btn-proximo-dia').style.opacity = STATE.diaIndex === 0 ? '0.3' : '1';
+    
+    const maxIndex = (STATE.dados?.dias?.length || 1) - 1;
+    const btnAnt = document.getElementById('btn-dia-anterior');
+    if (btnAnt) {
+      btnAnt.disabled = STATE.diaIndex >= maxIndex;
+      btnAnt.style.opacity = STATE.diaIndex >= maxIndex ? '0.3' : '1';
+    }
 
     const localData = dia.locais?.[STATE.local];
     if (!localData) {
@@ -1401,7 +1409,7 @@
       }
       return `<div class="day-cell text-center" title="${title}">
         <div class="text-xl">${icone}</div>
-        <div class="text-xs text-slate-600 mt-0.5">${d.getDate()}</div>
+        <div class="text-xs text-sky-200/80 font-medium mt-0.5">${d.getDate()}</div>
       </div>`;
     }).join('');
     document.getElementById('historico-cells').innerHTML = cells30;
