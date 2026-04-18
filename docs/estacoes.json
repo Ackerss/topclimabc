@@ -1,149 +1,73 @@
 {
   "meta": {
-    "atualizado_em": "2026-04-15T09:00:00-03:00",
-    "fonte": "CEMADEN PED API",
-    "nota": "Dados de pluviômetros físicos instalados nos bairros"
+    "atualizado_em": "2026-04-18T00:45:44-03:00",
+    "fonte": "ERA5 Archive (ECMWF) via Open-Meteo",
+    "nota": "Dados de reanálise por ponto geográfico central de cada cidade. Pluviômetros físicos (CEMADEN) indisponíveis no momento — integração futura.",
+    "aviso": "⚠️ Estes dados são estimativas de reanálise, não medições de pluviômetros físicos. ERA5 Archive tem precisão de ~5-25km e delay de 2-5 dias para datas recentes.",
+    "status_cemaden": "indisponivel"
   },
   "locais": {
     "balneario_camboriu": {
       "nome": "Balneário Camboriú",
-      "estacoes": [
-        {
-          "id": "G2-4202008001A",
-          "nome": "Nações",
-          "bairro": "Nações",
-          "lat": -26.985,
-          "lon": -48.632,
-          "status": "operacional",
-          "ultima_atualizacao": "2026-04-15T11:50:00-03:00",
-          "hoje": {
-            "madrugada": { "mm": 0.0, "classificacao": "seco" },
-            "manha":     { "mm": 1.8, "classificacao": "garoa" },
-            "tarde":     { "mm": null, "classificacao": null },
-            "noite":     { "mm": null, "classificacao": null },
-            "total_parcial": 1.8
+      "lat": -26.9928,
+      "lon": -48.6354,
+      "fonte_dados": "ERA5 Archive (ECMWF)",
+      "status_cemaden": "indisponivel",
+      "ontem": {
+        "status_fonte": "completo",
+        "fonte": "ERA5 Archive (ECMWF) + Open-Meteo Historical (distribuição horária)",
+        "total_dia": 3.9,
+        "periodos": {
+          "madrugada": {
+            "mm": 0.0,
+            "classificacao": "sem_chuva"
           },
-          "ontem": {
-            "madrugada": { "mm": 0.0, "classificacao": "seco" },
-            "manha":     { "mm": 3.2, "classificacao": "moderada" },
-            "tarde":     { "mm": 27.8, "classificacao": "intensa" },
-            "noite":     { "mm": 8.5, "classificacao": "moderada" },
-            "total_dia": 39.5
-          }
-        },
-        {
-          "id": "G2-4202008002A",
-          "nome": "Barra Sul",
-          "bairro": "Barra Sul",
-          "lat": -26.997,
-          "lon": -48.628,
-          "status": "operacional",
-          "ultima_atualizacao": "2026-04-15T11:50:00-03:00",
-          "hoje": {
-            "madrugada": { "mm": 0.0, "classificacao": "seco" },
-            "manha":     { "mm": 2.1, "classificacao": "garoa" },
-            "tarde":     { "mm": null, "classificacao": null },
-            "noite":     { "mm": null, "classificacao": null },
-            "total_parcial": 2.1
+          "manha": {
+            "mm": 0.0,
+            "classificacao": "sem_chuva"
           },
-          "ontem": {
-            "madrugada": { "mm": 0.0, "classificacao": "seco" },
-            "manha":     { "mm": 3.0, "classificacao": "moderada" },
-            "tarde":     { "mm": 25.5, "classificacao": "intensa" },
-            "noite":     { "mm": 7.9, "classificacao": "moderada" },
-            "total_dia": 36.4
+          "tarde": {
+            "mm": 2.0,
+            "classificacao": "fraca"
+          },
+          "noite": {
+            "mm": 1.9,
+            "classificacao": "fraca"
           }
-        },
-        {
-          "id": "G2-4202008003A",
-          "nome": "Agronomica",
-          "bairro": "Agronômica",
-          "lat": -26.972,
-          "lon": -48.641,
-          "status": "offline",
-          "ultima_atualizacao": "2026-04-14T20:10:00-03:00",
-          "hoje": null,
-          "ontem": null,
-          "nota_status": "Sem comunicação desde 20h de ontem — excluída do consenso"
-        }
-      ],
-      "consenso_hoje": {
-        "metodo": "mediana",
-        "estacoes_usadas": ["G2-4202008001A", "G2-4202008002A"],
-        "estacoes_excluidas": ["G2-4202008003A"],
-        "motivo_exclusao": ["offline"],
-        "resultado": {
-          "madrugada": { "mm": 0.0, "classificacao": "seco" },
-          "manha":     { "mm": 1.95, "classificacao": "garoa" },
-          "tarde":     { "mm": null, "classificacao": null },
-          "noite":     { "mm": null, "classificacao": null }
         }
       },
-      "consenso_ontem": {
-        "metodo": "mediana",
-        "estacoes_usadas": ["G2-4202008001A", "G2-4202008002A"],
-        "estacoes_excluidas": ["G2-4202008003A"],
-        "motivo_exclusao": ["offline"],
-        "resultado": {
-          "madrugada": { "mm": 0.0, "classificacao": "seco" },
-          "manha":     { "mm": 3.1, "classificacao": "moderada" },
-          "tarde":     { "mm": 26.65, "classificacao": "intensa" },
-          "noite":     { "mm": 8.2, "classificacao": "moderada" }
-        }
-      }
+      "hoje": null
     },
     "itajai": {
       "nome": "Itajaí",
-      "estacoes": [
-        {
-          "id": "G2-4208203001A",
-          "nome": "Fazenda",
-          "bairro": "Fazenda",
-          "lat": -26.908,
-          "lon": -48.662,
-          "status": "operacional",
-          "ultima_atualizacao": "2026-04-15T11:50:00-03:00",
-          "hoje": {
-            "madrugada": { "mm": 0.0, "classificacao": "seco" },
-            "manha":     { "mm": 2.5, "classificacao": "garoa" },
-            "tarde":     { "mm": null, "classificacao": null },
-            "noite":     { "mm": null, "classificacao": null },
-            "total_parcial": 2.5
+      "lat": -26.9065,
+      "lon": -48.67,
+      "fonte_dados": "ERA5 Archive (ECMWF)",
+      "status_cemaden": "indisponivel",
+      "ontem": {
+        "status_fonte": "completo",
+        "fonte": "ERA5 Archive (ECMWF) + Open-Meteo Historical (distribuição horária)",
+        "total_dia": 3.2,
+        "periodos": {
+          "madrugada": {
+            "mm": 0.0,
+            "classificacao": "sem_chuva"
           },
-          "ontem": {
-            "madrugada": { "mm": 0.0, "classificacao": "seco" },
-            "manha":     { "mm": 4.1, "classificacao": "moderada" },
-            "tarde":     { "mm": 31.5, "classificacao": "intensa" },
-            "noite":     { "mm": 9.2, "classificacao": "moderada" },
-            "total_dia": 44.8,
-            "alerta": "⚠️ Praia Brava registrou alagamento no período da tarde"
-          }
-        },
-        {
-          "id": "G2-4208203002A",
-          "nome": "Praia Brava (Área de Risco)",
-          "bairro": "Praia Brava",
-          "lat": -26.930,
-          "lon": -48.662,
-          "status": "operacional",
-          "ultima_atualizacao": "2026-04-15T11:50:00-03:00",
-          "hoje": {
-            "madrugada": { "mm": 0.0, "classificacao": "seco" },
-            "manha":     { "mm": 3.0, "classificacao": "moderada" },
-            "tarde":     { "mm": null, "classificacao": null },
-            "noite":     { "mm": null, "classificacao": null },
-            "total_parcial": 3.0
+          "manha": {
+            "mm": 0.0,
+            "classificacao": "sem_chuva"
           },
-          "ontem": {
-            "madrugada": { "mm": 0.0, "classificacao": "seco" },
-            "manha":     { "mm": 5.2, "classificacao": "moderada" },
-            "tarde":     { "mm": 38.7, "classificacao": "intensa" },
-            "noite":     { "mm": 11.0, "classificacao": "forte" },
-            "total_dia": 54.9,
-            "alerta": "🚨 ALAGAMENTO CONFIRMADO — volume crítico ultrapassou 25mm/6h"
+          "tarde": {
+            "mm": 1.3,
+            "classificacao": "fraca"
+          },
+          "noite": {
+            "mm": 1.9,
+            "classificacao": "fraca"
           }
         }
-      ]
+      },
+      "hoje": null
     }
   }
 }

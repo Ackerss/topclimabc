@@ -2,8 +2,8 @@ name: "📊 Coleta Diária TOPCLIMABC"
 
 on:
   schedule:
-    # 12:00 UTC = 09:00 BRT (Opcional alterar depois para 06:00 UTC = 03:00 BRT)
-    - cron: '0 6 * * *'
+    # 12:00 UTC = 09:00 BRT — garante que ERA5 Archive tenha dado de ontem disponível
+    - cron: '0 12 * * *'
   workflow_dispatch:  # Permite rodar botão manual no painel do github
 
 permissions:

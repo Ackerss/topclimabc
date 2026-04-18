@@ -2,34 +2,34 @@
   "balneario_camboriu": {
     "1_dia": [
       {
-        "modelo": "ecmwf_ifs025",
-        "nome": "ECMWF IFS",
-        "score": 0,
-        "amostras": 0
-      },
-      {
         "modelo": "gfs_seamless",
         "nome": "GFS NCEP",
-        "score": 0,
-        "amostras": 0
-      },
-      {
-        "modelo": "icon_seamless",
-        "nome": "ICON DWD",
-        "score": 0,
-        "amostras": 0
+        "score": 97.5,
+        "amostras": 1
       },
       {
         "modelo": "openweathermap",
         "nome": "OpenWeatherMap",
-        "score": 0,
-        "amostras": 0
+        "score": 89.4,
+        "amostras": 1
+      },
+      {
+        "modelo": "ecmwf_ifs025",
+        "nome": "ECMWF IFS",
+        "score": 81.1,
+        "amostras": 1
       },
       {
         "modelo": "best_match",
         "nome": "Open-Meteo Best",
-        "score": 0,
-        "amostras": 0
+        "score": 81.1,
+        "amostras": 1
+      },
+      {
+        "modelo": "icon_seamless",
+        "nome": "ICON DWD",
+        "score": 81.0,
+        "amostras": 1
       }
     ],
     "3_dias": [
@@ -132,34 +132,34 @@
   "itajai": {
     "1_dia": [
       {
-        "modelo": "ecmwf_ifs025",
-        "nome": "ECMWF IFS",
-        "score": 0,
-        "amostras": 0
-      },
-      {
         "modelo": "gfs_seamless",
         "nome": "GFS NCEP",
-        "score": 0,
-        "amostras": 0
-      },
-      {
-        "modelo": "icon_seamless",
-        "nome": "ICON DWD",
-        "score": 0,
-        "amostras": 0
+        "score": 98.4,
+        "amostras": 1
       },
       {
         "modelo": "openweathermap",
         "nome": "OpenWeatherMap",
-        "score": 0,
-        "amostras": 0
+        "score": 89.7,
+        "amostras": 1
+      },
+      {
+        "modelo": "ecmwf_ifs025",
+        "nome": "ECMWF IFS",
+        "score": 81.8,
+        "amostras": 1
+      },
+      {
+        "modelo": "icon_seamless",
+        "nome": "ICON DWD",
+        "score": 81.8,
+        "amostras": 1
       },
       {
         "modelo": "best_match",
         "nome": "Open-Meteo Best",
-        "score": 0,
-        "amostras": 0
+        "score": 81.8,
+        "amostras": 1
       }
     ],
     "3_dias": [

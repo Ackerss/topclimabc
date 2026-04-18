@@ -89,13 +89,15 @@ def processar_dados_om(dados_om):
             periodo = get_periodo(dt.hour)
             v = chuvas[i] if i < len(chuvas) else 0.0
             mm = v if v is not None else 0.0
-            
+
             if data_iso not in processado: processado[data_iso] = {}
-            if m_id not in processado[data_iso]: 
+            if m_id not in processado[data_iso]:
                 processado[data_iso][m_id] = {p: 0.0 for p in PERIODOS}
-            
+
             if periodo:
-                processado[data_iso][m_id][periodo] += mm
+                processado[data_iso][m_id][periodo] = round(
+                    processado[data_iso][m_id][periodo] + mm, 1
+                )
 
     return processado
 
@@ -117,7 +119,9 @@ def processar_dados_owm(dados_owm):
         
         if periodo:
             # Como a leitura é 3h, distribuímos nos períodos correspondentes
-            processado[data_iso]["openweathermap"][periodo] += mm
+            processado[data_iso]["openweathermap"][periodo] = round(
+                processado[data_iso]["openweathermap"][periodo] + mm, 1
+            )
             
     return processado
 

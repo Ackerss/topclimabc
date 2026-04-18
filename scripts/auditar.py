@@ -1,18 +1,32 @@
 """
-TOPCLIMABC — 03_auditar.py
+TOPCLIMABC — auditar.py
 ==========================
 O "Cérebro" auditor.
 Compara as previsões feitas no passado com a realidade medida.
 Gera os scores de acerto e atualiza o histórico.
+
+LÓGICA RETROATIVA (importante para IAs futuras):
+- Varre TODOS os snapshots disponíveis (não apenas "ontem").
+- Para cada snapshot, verifica todos os dias que ele cobre.
+- Se houver arquivo de realidade disponível para esse dia → audita.
+- O prazo é calculado como (data_alvo - data_coleta_do_snapshot).
+- Prazos aceitos: 1, 2, 3, 4, 5, 6, 7, 14, 15 dias.
+- Isso permite acumular histórico mesmo com poucos snapshots.
+
+SOBRE REALIDADE:
+- Só audita se o status da realidade for "completo" ou "provisorio".
+- Se status for "sem_dados", pula (não gera score com dado inexistente).
 """
 
 import json
 from datetime import datetime, timedelta
+from pathlib import Path
 from scripts.config import (
-    LOCAIS, MODELOS, PRAZO_DIAS, AUDITORIA_DIR, 
+    LOCAIS, MODELOS, PRAZOS, PRAZO_DIAS, AUDITORIA_DIR,
     PREVISOES_DIR, REALIDADE_DIR
 )
 from scripts.utils.score import calcular_score_dia
+
 
 def carregar_arquivo(caminho):
     if caminho.exists():
@@ -20,73 +34,127 @@ def carregar_arquivo(caminho):
             return json.load(f)
     return None
 
-def main():
-    print(f"--- Início da Auditoria: {datetime.now()} ---")
-    
-    # O alvo da auditoria é ontém (dia que já temos realidade completa)
-    data_alvo = (datetime.now() - timedelta(days=1)).date().isoformat()
-    # data_alvo = "2026-04-15" # Para teste manual fixo se necessário
-    
-    # 1. Carregar Realidade do Alvo
-    caminho_real = REALIDADE_DIR / f"realidade_{data_alvo}.json"
-    realidade_data = carregar_arquivo(caminho_real)
-    
-    if not realidade_data:
-        print(f"ERRO: Nenhuma realidade encontrada para {data_alvo}. Abortando.")
-        return
 
-    # 2. Carregar Histórico de Auditoria existente
+def mapear_prazo(dias_diff):
+    """
+    Converte diferença de dias em ID de prazo.
+    Aceita prazos fixos (1, 3, 7, 15) e prazos próximos com tolerância de ±0.
+    """
+    if dias_diff == 1:  return "1_dia"
+    if dias_diff == 3:  return "3_dias"
+    if dias_diff == 7:  return "7_dias"
+    if dias_diff == 15: return "15_dias"
+    return None  # Prazo não mapeado a um dos 4 fixos — ignora
+
+
+def main():
+    print(f"--- Início da Auditoria (Retroativa): {datetime.now()} ---")
+
+    # Carrega histórico de auditoria existente
     caminho_hist = AUDITORIA_DIR / "historico.json"
     historico = carregar_arquivo(caminho_hist) or {}
 
-    # 3. Auditar cada local
+    # Garante estrutura base para todos os locais
     for local_id in LOCAIS:
-        if local_id not in realidade_data: continue
-        
-        real_local = realidade_data[local_id]
-        real_periodos = {p: info["mm"] for p, info in real_local["periodos"].items()}
-        
-        if local_id not in historico: historico[local_id] = {}
-        if data_alvo not in historico[local_id]: historico[local_id][data_alvo] = {}
+        if local_id not in historico:
+            historico[local_id] = {}
 
-        # 4. Verificar cada prazo (1d, 3d, 7d, 15d)
-        for prazo_id, dias in PRAZO_DIAS.items():
-            # Data em que a previsão foi coletada
-            dt_coleta = (datetime.fromisoformat(data_alvo) - timedelta(days=dias)).date().isoformat()
-            
-            # Tenta carregar o snapshot daquela data
-            caminho_snap = PREVISOES_DIR / f"snapshot_{dt_coleta}.json"
-            snapshot = carregar_arquivo(caminho_snap)
-            
-            if not snapshot:
-                # print(f"Aviso: Snapshot de {dt_coleta} não encontrado para auditoria de {prazo_id}.")
-                continue
-                
-            # Extrai as previsões do snapshot para a data alvo
-            # snapshot["locais"][local_id][data_alvo]
-            forecasts_local = snapshot.get("locais", {}).get(local_id, {})
-            forecast_alvo = forecasts_local.get(data_alvo, {})
-            
-            if not forecast_alvo:
+    # Varre TODOS os snapshots disponíveis
+    snapshots = sorted(PREVISOES_DIR.glob("snapshot_*.json"))
+    if not snapshots:
+        print("Nenhum snapshot encontrado. Abortando.")
+        return
+
+    total_auditorias = 0
+
+    for snap_path in snapshots:
+        data_coleta_str = snap_path.stem.replace("snapshot_", "")
+        snapshot = carregar_arquivo(snap_path)
+        if not snapshot:
+            continue
+
+        print(f"\nProcessando snapshot de {data_coleta_str}...")
+
+        locais_snap = snapshot.get("locais", {})
+
+        for local_id in LOCAIS:
+            if local_id not in locais_snap:
                 continue
 
-            if prazo_id not in historico[local_id][data_alvo]:
-                historico[local_id][data_alvo][prazo_id] = {}
+            datas_previstas = locais_snap[local_id]  # { 'YYYY-MM-DD': { 'modelo': {periodos} } }
 
-            # 5. Calcular Score para cada Modelo
-            for m_id in MODELOS:
-                if m_id in forecast_alvo:
+            for data_alvo_str, forecast_alvo in datas_previstas.items():
+                if not forecast_alvo:
+                    continue
+
+                # Calcula o prazo em dias
+                try:
+                    dt_coleta = datetime.fromisoformat(data_coleta_str)
+                    dt_alvo = datetime.fromisoformat(data_alvo_str)
+                    dias_diff = (dt_alvo - dt_coleta).days
+                except ValueError:
+                    continue
+
+                prazo_id = mapear_prazo(dias_diff)
+                if not prazo_id:
+                    continue  # Prazo não é um dos 4 alvos — pula
+
+                # Verifica se há realidade disponível para este dia
+                caminho_real = REALIDADE_DIR / f"realidade_{data_alvo_str}.json"
+                realidade_data = carregar_arquivo(caminho_real)
+                if not realidade_data or local_id not in realidade_data:
+                    continue
+
+                real_local = realidade_data[local_id]
+
+                # ⚠️ Só audita se o status for confiável (não sem_dados)
+                status_real = real_local.get("status", "sem_dados")
+                if status_real == "sem_dados":
+                    print(f"  Pulando {local_id}/{data_alvo_str}: realidade marcada como sem_dados")
+                    continue
+
+                # Extrai mm por período da realidade
+                real_periodos_raw = real_local.get("periodos", {})
+                real_periodos = {}
+                for p, info in real_periodos_raw.items():
+                    mm = info.get("mm")
+                    if mm is None:
+                        real_periodos[p] = 0.0  # sem_dados de período individual → 0 para score
+                    else:
+                        real_periodos[p] = mm
+
+                # Garante estrutura no histórico
+                if data_alvo_str not in historico[local_id]:
+                    historico[local_id][data_alvo_str] = {}
+                if prazo_id not in historico[local_id][data_alvo_str]:
+                    historico[local_id][data_alvo_str][prazo_id] = {}
+
+                # Calcula score para cada modelo
+                for m_id in MODELOS:
+                    if m_id not in forecast_alvo:
+                        continue
+                    if MODELOS[m_id].get("is_baseline") and m_id == "persistencia":
+                        continue  # Persistência não audita (não tem snapshot)
+
                     prev_periodos = forecast_alvo[m_id]
+                    # prev_periodos pode ser {'madrugada': mm, 'manha': mm, ...}
+                    if not isinstance(prev_periodos, dict):
+                        continue
+
                     score = calcular_score_dia(prev_periodos, real_periodos)
-                    
-                    historico[local_id][data_alvo][prazo_id][m_id] = score
-                    # print(f"[{local_id}] Auditoria {prazo_id} - {m_id}: {score}%")
+                    historico[local_id][data_alvo_str][prazo_id][m_id] = score
+                    total_auditorias += 1
+
+                fonte_label = real_local.get("fonte", "?")[:40]
+                print(f"  [OK] [{local_id}] {data_alvo_str} ({prazo_id}) auditado - fonte: {fonte_label}...")
 
     # Salva o histórico atualizado
     with open(caminho_hist, "w", encoding="utf-8") as f:
         json.dump(historico, f, indent=2, ensure_ascii=False)
-        
-    print(f"Auditoria finalizada. Histórico atualizado em {caminho_hist}")
+
+    print(f"\n--- Auditoria finalizada. {total_auditorias} comparações registradas. ---")
+    print(f"Histórico salvo em: {caminho_hist}")
+
 
 if __name__ == "__main__":
     main()

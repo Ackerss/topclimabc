@@ -1,8 +1,26 @@
 {
   "balneario_camboriu": {
-    "2026-04-16": {}
+    "2026-04-16": {},
+    "2026-04-17": {
+      "1_dia": {
+        "ecmwf_ifs025": 81.1,
+        "gfs_seamless": 97.5,
+        "icon_seamless": 81.0,
+        "openweathermap": 89.4,
+        "best_match": 81.1
+      }
+    }
   },
   "itajai": {
-    "2026-04-16": {}
+    "2026-04-16": {},
+    "2026-04-17": {
+      "1_dia": {
+        "ecmwf_ifs025": 81.8,
+        "gfs_seamless": 98.4,
+        "icon_seamless": 81.8,
+        "openweathermap": 89.7,
+        "best_match": 81.8
+      }
+    }
   }
 }

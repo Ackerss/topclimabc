@@ -298,9 +298,10 @@
     <!-- ──── TAB: ESTAÇÕES ──── -->
     <section id="content-estacoes" class="tab-content hidden animate-fade-in">
 
-      <div class="glass rounded-xl p-3 mb-4 text-xs text-slate-400 border-l-4 border-sky-500">
-        <i class="fa-solid fa-shield-check text-sky-400 mr-1.5"></i>
-        <strong class="text-white">Transparência total.</strong> Estes são os pluviômetros físicos do CEMADEN que medem a chuva real nos bairros.
+      <!-- Banner honesto sobre a fonte dos dados -->
+      <div class="glass rounded-xl p-3 mb-4 text-xs border-l-4 border-amber-400">
+        <p class="text-amber-300 font-bold mb-1">⚠️ Fonte: Reanálise ERA5 (ECMWF)</p>
+        <p class="text-slate-400 leading-relaxed">Os dados abaixo são <strong class="text-white">estimativas de satélite/modelo</strong>, não medições de pluviômetros físicos. Pluviômetros CEMADEN estão em integração futura.</p>
       </div>
 
       <div id="lista-estacoes" class="space-y-4"></div>
@@ -1189,11 +1190,23 @@
 
     const badgeLocalStr = STATE.local === 'balneario_camboriu' ? 'BC' : 'Itajaí';
 
+    // Badge de fonte dinâmico
+    const fonteBadge = realidade.status === 'completo'
+      ? `ERA5 ${badgeLocalStr}`
+      : realidade.status === 'provisorio'
+      ? `OM-HIST ${badgeLocalStr}`
+      : `SEM DADOS`;
+    const fonteBadgeColor = realidade.status === 'completo'
+      ? 'bg-emerald-700/50 border-emerald-500/50'
+      : realidade.status === 'provisorio'
+      ? 'bg-amber-700/50 border-amber-500/50'
+      : 'bg-slate-700/50 border-slate-500/50';
+
     document.getElementById('card-realidade').innerHTML = `
       <div class="bg-emerald-900/20 rounded-2xl overflow-hidden shadow-lg shadow-emerald-500/5 border-2 border-emerald-500/80 backdrop-blur-sm">
         <div class="bg-emerald-600/20 px-4 py-3 flex justify-between items-center border-b border-emerald-500/30">
             <span class="font-black text-emerald-400 text-sm tracking-wide flex items-center"><i class="fa-solid fa-check-double mr-2"></i> REALIDADE <span class="hidden sm:inline ml-1"> ${localizeDia}</span></span>
-            <span class="text-[9px] font-bold text-emerald-200 bg-emerald-700/50 px-2 py-1 rounded uppercase tracking-widest border border-emerald-500/50 shadow-sm">CEMADEN ${badgeLocalStr}</span>
+            <span class="text-[9px] font-bold text-emerald-200 px-2 py-1 rounded uppercase tracking-widest border shadow-sm ${fonteBadgeColor}">${fonteBadge}</span>
         </div>
         <div class="p-4">
           <div class="flex justify-between items-start">
@@ -1361,32 +1374,66 @@
 
   // ━━━ HISTÓRICO ━━━
   function renderHistorico() {
-    // Grid de 30 dias simulado
-    const climas = ['seco','seco','garoa','moderada','forte','intensa','seco','garoa','seco','seco',
-                    'moderada','forte','seco','garoa','garoa','seco','seco','moderada','moderada','forte',
-                    'seco','seco','garoa','seco','intensa','moderada','seco','seco','garoa','seco'];
-    const cells = climas.map((c, i) => {
-      const d = new Date(); d.setDate(d.getDate() - (29 - i));
-      return `<div class="day-cell text-center" title="${formatarData(d.toISOString().split('T')[0])} — ${c}">
-        <div class="text-xl">${ICONES[c]}</div>
+    // Grid de 30 dias — usa dados reais de realidade se disponíveis
+    const rawLoc = STATE._dadosRaw?.locais?.[STATE.local];
+    const realidadeMap = rawLoc?.realidade || {};
+
+    const cells30 = Array.from({ length: 30 }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (29 - i));
+      const dStr = d.toISOString().split('T')[0];
+      // Busca nos dados históricos carregados — STATE._dadosRaw não contém 30 dias,
+      // mas o grid mostra ao menos os dias disponíveis com dado real.
+      // Para dias sem dado, exibe '❓' cinza.
+      const realDoDia = STATE._todasRealidades?.[dStr]?.[STATE.local];
+      let icone = '❓';
+      let title = `${formatarData(dStr)} — sem dados`;
+      if (realDoDia) {
+        const total = realDoDia.total_dia;
+        if (total === null || total === undefined) { icone = '❓'; title = `${formatarData(dStr)} — sem dados`; }
+        else if (total === 0)    { icone = ICONES.seco;     title = `${formatarData(dStr)} — Seco (${total}mm)`; }
+        else if (total < 5)      { icone = ICONES.garoa;    title = `${formatarData(dStr)} — Garoa (${total}mm)`; }
+        else if (total < 15)     { icone = ICONES.moderada; title = `${formatarData(dStr)} — Moderada (${total}mm)`; }
+        else if (total < 40)     { icone = ICONES.forte;    title = `${formatarData(dStr)} — Forte (${total}mm)`; }
+        else                     { icone = ICONES.intensa;  title = `${formatarData(dStr)} — Intensa (${total}mm)`; }
+      }
+      return `<div class="day-cell text-center" title="${title}">
+        <div class="text-xl">${icone}</div>
         <div class="text-xs text-slate-600 mt-0.5">${d.getDate()}</div>
       </div>`;
     }).join('');
-    document.getElementById('historico-cells').innerHTML = cells;
+    document.getElementById('historico-cells').innerHTML = cells30;
 
-    // Tabela de scores
-    const modelos = [
-      { nome: 'ECMWF (Windy)', scores: [88.5, 79.2, 65.0, 52.0] },
-      { nome: 'ICON', scores: [85.2, 74.8, 60.3, 47.8] },
-      { nome: 'GFS (Weather.com)', scores: [82.1, 71.0, 62.5, 49.5] },
-      { nome: 'OpenWeatherMap', scores: [78.0, 66.5, 55.0, 43.0] },
-      { nome: 'Open-Meteo Best', scores: [75.5, 64.0, 53.5, 40.5] },
-      { nome: 'Persistência', scores: [48.3, 41.5, 38.0, 35.0], baseline: true },
-    ];
-    const rows = modelos.map(m => {
-      const cols = m.scores.map(s => `<td class="text-center p-3 font-bold ${scoreClass(s)}">${s}</td>`).join('');
-      return `<tr class="border-b border-slate-800 ${m.baseline ? 'opacity-60' : ''}">
-        <td class="p-3 text-xs text-slate-300 font-semibold">${m.baseline ? '─ ' : ''}${m.nome}</td>
+    // Tabela de scores — usa dados reais do ranking.json
+    if (!STATE.ranking) {
+      document.getElementById('historico-tbody').innerHTML = `<tr><td colspan="5" class="text-center p-4 text-slate-500 text-xs">Histórico de scores ainda não disponível. Acumule mais dias de auditoria.</td></tr>`;
+      return;
+    }
+
+    const ordemPrazos = ['1_dia', '3_dias', '7_dias', '15_dias'];
+    const localRanking = STATE.ranking[STATE.local] || {};
+
+    // Coleta todos os modelos que aparecem em pelo menos um prazo
+    const modelosSet = new Set();
+    ordemPrazos.forEach(p => (localRanking[p] || []).forEach(item => modelosSet.add(item.modelo)));
+
+    if (modelosSet.size === 0) {
+      document.getElementById('historico-tbody').innerHTML = `<tr><td colspan="5" class="text-center p-4 text-slate-500 text-xs">Histórico de scores ainda não disponível. Acumule mais dias de auditoria.</td></tr>`;
+      return;
+    }
+
+    const rows = [...modelosSet].map(modeloId => {
+      const isBaseline = modeloId === 'persistencia';
+      const nome = NOMES_MODELOS[modeloId] || modeloId;
+      const cols = ordemPrazos.map(p => {
+        const item = (localRanking[p] || []).find(x => x.modelo === modeloId);
+        const s = item?.score;
+        return s !== undefined
+          ? `<td class="text-center p-3 font-bold ${scoreClass(s)}">${s.toFixed(0)}</td>`
+          : `<td class="text-center p-3 text-slate-600">—</td>`;
+      }).join('');
+      return `<tr class="border-b border-slate-800 ${isBaseline ? 'opacity-60' : ''}">
+        <td class="p-3 text-xs text-slate-300 font-semibold">${isBaseline ? '─ ' : ''}${nome}</td>
         ${cols}
       </tr>`;
     }).join('');
@@ -1396,71 +1443,73 @@
   // ━━━ ESTAÇÕES ━━━
   function renderEstacoes() {
     if (!STATE.estacoes) return;
-    const local = STATE.estacoes.locais?.[STATE.local];
-    if (!local) { document.getElementById('lista-estacoes').innerHTML = `<p class="text-slate-500 text-center py-8">Sem dados de estações para este local.</p>`; return; }
+    const locaisData = STATE.estacoes.locais || {};
+    const localData = locaisData[STATE.local];
 
-    const html = local.estacoes.map(est => {
-      const online = est.status === 'operacional';
-      const statusIcon = online ? '<span class="status-online"><i class="fa-solid fa-circle text-xs mr-1"></i>Operacional</span>' : '<span class="status-offline"><i class="fa-solid fa-circle text-xs mr-1"></i>Offline</span>';
-      const dados = online ? (est.hoje || est.ontem) : null;
-      const labelDado = est.hoje ? 'Hoje' : 'Ontem';
+    if (!localData) {
+      document.getElementById('lista-estacoes').innerHTML = `<p class="text-slate-500 text-center py-8">Sem dados de estações para este local.</p>`;
+      return;
+    }
 
-      let periodsHTML = '';
-      if (dados) {
-        periodsHTML = `<div class="grid grid-cols-4 gap-2 mt-3">
-          ${PERIODOS.map(p => {
-            const pd = dados[p];
-            if (!pd || pd.mm === null) return `<div class="text-center bg-slate-800/40 rounded-lg p-2"><p class="text-xs text-slate-600">${LABEL_PERIODO[p]}</p><p class="text-slate-600 text-sm">—</p></div>`;
-            return `<div class="text-center bg-slate-800/40 rounded-lg p-2">
-              <p class="text-xs text-slate-400">${LABEL_PERIODO[p]}</p>
-              <p class="text-base">${ICONES[pd.classificacao] || '—'}</p>
-              <p class="text-xs font-bold text-white">${pd.mm.toFixed(1)}mm</p>
-            </div>`;
-          }).join('')}
-        </div>`;
+    const meta = STATE.estacoes.meta || {};
+    const atualizadoEm = meta.atualizado_em ? new Date(meta.atualizado_em).toLocaleString('pt-BR') : '—';
+
+    // Card principal da cidade com dados ERA5
+    function renderDadosDia(dadosDia, labelDia) {
+      if (!dadosDia) {
+        return `<div class="mt-3 text-center text-xs text-slate-500 py-4"><i class="fa-solid fa-hourglass-half mr-1"></i>${labelDia}: dado não disponível (ERA5 tem delay de 2-5 dias)</div>`;
       }
+      const status = dadosDia.status_fonte;
+      const statusLabel = status === 'completo' ? '✅ ERA5 Archive' : status === 'provisorio' ? '⚠️ Provisório' : '❌ Sem dado';
+      const total = dadosDia.total_dia;
+      const periodos = dadosDia.periodos || {};
 
-      const total = dados?.total_dia || dados?.total_parcial;
-      const alerta = (est.hoje?.alerta || est.ontem?.alerta) ? `<div class="mt-2 bg-rose-500/10 border border-rose-500/30 rounded-lg px-3 py-2 text-xs text-rose-300">${est.hoje?.alerta || est.ontem?.alerta}</div>` : '';
+      const periodsHTML = `<div class="grid grid-cols-4 gap-2 mt-3">
+        ${PERIODOS.map(p => {
+          const pd = periodos[p];
+          if (!pd || pd.mm === null) return `<div class="text-center bg-slate-800/40 rounded-lg p-2"><p class="text-xs text-slate-600">${LABEL_PERIODO[p]}</p><p class="text-slate-600 text-sm">—</p></div>`;
+          return `<div class="text-center bg-slate-800/40 rounded-lg p-2">
+            <p class="text-xs text-slate-400">${LABEL_PERIODO[p]}</p>
+            <p class="text-base">${ICONES[pd.classificacao] || '—'}</p>
+            <p class="text-xs font-bold text-white">${typeof pd.mm === 'number' ? pd.mm.toFixed(1) : '—'}mm</p>
+          </div>`;
+        }).join('')}
+      </div>`;
 
-      return `<div class="glass rounded-2xl p-4 ${!online ? 'opacity-60' : ''}">
-        <div class="flex items-start justify-between mb-2">
+      return `
+        <div class="flex items-center justify-between mt-2 mb-1">
+          <span class="text-xs text-slate-400 font-bold uppercase">${labelDia}</span>
+          <span class="text-[10px] px-2 py-0.5 rounded-full border ${status === 'completo' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : status === 'provisorio' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-slate-700 text-slate-500 border-slate-600'}">${statusLabel}</span>
+        </div>
+        ${total !== null && total !== undefined ? `<p class="text-xs text-slate-400 mb-1">Total: <span class="text-white font-bold">${total.toFixed(1)}mm</span></p>` : ''}
+        ${periodsHTML}`;
+    }
+
+    const html = `
+      <div class="glass rounded-2xl p-4">
+        <div class="flex items-start justify-between mb-3">
           <div>
-            <p class="font-bold text-white text-sm">${est.nome}</p>
-            <p class="text-xs text-slate-500 mt-0.5">${est.bairro}</p>
+            <p class="font-bold text-white text-sm">${localData.nome}</p>
+            <p class="text-xs text-slate-500 mt-0.5">Ponto central • ${localData.lat}, ${localData.lon}</p>
           </div>
           <div class="text-right">
-            <div class="text-xs font-semibold">${statusIcon}</div>
-            ${total !== undefined ? `<p class="text-xs text-slate-400 mt-1">${labelDado}: <span class="text-white font-bold">${total.toFixed(1)}mm</span></p>` : ''}
+            <span class="text-[10px] px-2 py-1 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/30 font-bold">📡 ERA5 Archive</span>
+            <p class="text-[10px] text-slate-600 mt-1">${atualizadoEm}</p>
           </div>
         </div>
-        ${!online && est.nota_status ? `<p class="text-xs text-rose-400/70 mb-2"><i class="fa-solid fa-triangle-exclamation mr-1"></i>${est.nota_status}</p>` : ''}
-        ${periodsHTML}
-        ${alerta}
-      </div>`;
-    }).join('');
-
-    // Consenso
-    const cons = local.consenso_ontem || local.consenso_hoje;
-    const consHTML = cons ? `
-      <div class="glass rounded-2xl p-4 border border-sky-500/20">
-        <p class="text-xs font-bold text-sky-400 uppercase tracking-wider mb-2"><i class="fa-solid fa-calculator mr-1.5"></i>Consenso Final (${cons.metodo})</p>
-        <p class="text-xs text-slate-400 mb-2">Estações usadas: ${cons.estacoes_usadas.length} • Excluídas: ${cons.estacoes_excluidas?.length || 0}</p>
-        <div class="grid grid-cols-4 gap-2">
-          ${PERIODOS.map(p => {
-            const pd = cons.resultado[p];
-            if (!pd || pd.mm === null) return `<div class="text-center bg-slate-800/40 rounded-lg p-2"><p class="text-xs text-slate-600">${LABEL_PERIODO[p]}</p><p class="text-slate-600">—</p></div>`;
-            return `<div class="text-center bg-slate-800/40 rounded-lg p-2">
-              <p class="text-xs text-slate-400">${LABEL_PERIODO[p]}</p>
-              <p class="text-base">${ICONES[pd.classificacao]}</p>
-              <p class="text-xs font-bold text-white">${pd.mm.toFixed(1)}mm</p>
-            </div>`;
-          }).join('')}
-        </div>
+        ${renderDadosDia(localData.ontem, 'Ontem')}
+        ${localData.hoje ? renderDadosDia(localData.hoje, 'Hoje') : '<p class="text-xs text-slate-600 mt-3"><i class="fa-solid fa-clock mr-1"></i>Hoje: ERA5 só disponível após 2-5 dias</p>'}
       </div>
-    ` : '';
 
-    document.getElementById('lista-estacoes').innerHTML = html + consHTML;
+      <div class="glass rounded-xl p-3 border border-slate-700/50">
+        <p class="text-xs text-slate-500 leading-relaxed">
+          <i class="fa-solid fa-circle-info text-slate-600 mr-1.5"></i>
+          Fonte: <strong class="text-slate-300">ERA5 Archive (ECMWF)</strong> — reanálise definitiva com resolução de ~9km.
+          Atualizado às 09:00 BRT. CEMADEN físico em integração futura.
+        </p>
+      </div>`;
+
+    document.getElementById('lista-estacoes').innerHTML = html;
   }
 
   // ━━━ MODAL ━━━

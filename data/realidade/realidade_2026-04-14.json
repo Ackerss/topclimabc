@@ -1,18 +1,18 @@
 {
   "balneario_camboriu": {
     "status": "completo",
-    "fonte": "Open-Meteo Historical (Reanálise)",
+    "fonte": "ERA5 Archive (ECMWF) + Open-Meteo Historical (distribuição horária)",
     "periodos": {
       "madrugada": {
-        "mm": 0.2,
+        "mm": 0.5,
         "classificacao": "sem_chuva"
       },
       "manha": {
-        "mm": 0.1,
+        "mm": 0.2,
         "classificacao": "sem_chuva"
       },
       "tarde": {
-        "mm": 0.1,
+        "mm": 0.2,
         "classificacao": "sem_chuva"
       },
       "noite": {
@@ -20,19 +20,19 @@
         "classificacao": "sem_chuva"
       }
     },
-    "total_dia": 0.4
+    "total_dia": 1.0
   },
   "itajai": {
     "status": "completo",
-    "fonte": "Open-Meteo Historical (Reanálise)",
+    "fonte": "ERA5 Archive (ECMWF) + Open-Meteo Historical (distribuição horária)",
     "periodos": {
       "madrugada": {
-        "mm": 0.2,
-        "classificacao": "sem_chuva"
+        "mm": 1.4,
+        "classificacao": "fraca"
       },
       "manha": {
-        "mm": 0.1,
-        "classificacao": "sem_chuva"
+        "mm": 0.7,
+        "classificacao": "fraca"
       },
       "tarde": {
         "mm": 0.0,
@@ -43,6 +43,6 @@
         "classificacao": "sem_chuva"
       }
     },
-    "total_dia": 0.3
+    "total_dia": 2.1
   }
 }

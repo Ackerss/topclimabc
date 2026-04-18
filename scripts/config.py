@@ -113,20 +113,31 @@ CLASSIFICACOES = [
 
 # ── APIs Externas ─────────────────────────────────────────────────────────────
 OWM_API_KEY = os.getenv("OWM_API_KEY", "d642bd544942199ff3b862927da91923")
-OPEN_METEO_BASE = "https://api.open-meteo.com/v1/forecast"
-OPEN_METEO_HIST  = "https://historical-forecast-api.open-meteo.com/v1/forecast"
-OWM_BASE         = "https://api.openweathermap.org/data/2.5"
+OPEN_METEO_BASE    = "https://api.open-meteo.com/v1/forecast"
+OPEN_METEO_HIST    = "https://historical-forecast-api.open-meteo.com/v1/forecast"
+OPEN_METEO_ARCHIVE = "https://archive-api.open-meteo.com/v1/archive"
+# ERA5 Archive: dados de reanálise ECMWF definitivos.
+# Datas > 5 dias atrás: 100% confiável.
+# Datas 1-5 dias atrás: tentar ARCHIVE, fallback para HIST.
+# Dados de hoje: sem dados reais disponíveis → marcar como "aguardando".
+OWM_BASE           = "https://api.openweathermap.org/data/2.5"
 
 # ── Fonte de Realidade ────────────────────────────────────────────────────────
 # DECISÃO (2026-04-16): A API oficial CEMADEN (SWS/PED) exige token institucional
-# que não está disponível publicamente. O Mapa Interativo também bloqueou o endpoint PHP.
-# SOLUÇÃO ADOTADA: Usar Open-Meteo Historical como fonte primária de precipitação real.
-# Open-Meteo Historical usa dados ERA5 (reanálise do ECMWF) + dados observacionais
-# combinados — é usado pela comunidade científica como referência de dados climáticos.
-# FALLBACK: INMET A868 (Itajaí) quando responder com dados (HTTP 200 vs 204 atual).
-# Se ambos falharem, o sistema marcará o dia como "sem_dados_realidade" e emitirá alerta.
-FONTE_REALIDADE_PRIMARIA  = "open_meteo_historical"  # ERA5 + observações combinadas
-FONTE_REALIDADE_SECUNDARIA = "inmet"                  # INMET A868 Itajaí
+# que não está disponível publicamente.
+# DECISÃO (2026-04-18): Migração para ERA5 Archive como primária (mais definitivo).
+# HIERARQUIA DE CONFIANÇA:
+#   1. Registro Manual do Usuário (Supabase) — visto com os próprios olhos
+#   2. ERA5 Archive (archive-api.open-meteo.com) — reanálise definitiva ECMWF
+#   3. Open-Meteo Historical Forecast (historical-forecast-api) — provisório
+#   4. sem_dados — NUNCA inferir 0mm sem confirmação explícita da API
+FONTE_REALIDADE_PRIMARIA   = "era5_archive"      # archive-api.open-meteo.com
+FONTE_REALIDADE_SECUNDARIA = "om_hist_forecast"  # historical-forecast-api (provisório)
+FONTE_REALIDADE_STATUS = {
+    "completo":   "ERA5 Archive confirmou dados",
+    "provisorio": "Open-Meteo Historical (ERA5 ainda processando)",
+    "sem_dados":  "Nenhuma fonte retornou dados válidos",
+}
 
 # ── Open-Meteo Historical: parâmetros ────────────────────────────────────────
 # Precipitação: usa a API de reanálise histórica (dados do passado após processamento)
