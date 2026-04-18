@@ -630,6 +630,45 @@
     </div>
   </div>
 
+  <!-- ═══ MODAL DE TOKEN GITHUB (NOVO) ═══ -->
+  <div id="modal-token-overlay" class="fixed inset-0 z-[70] hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div class="glass rounded-2xl w-full max-w-sm p-6 animate-slide-up border border-sky-500/30">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-white flex items-center gap-2">
+          <i class="fa-brands fa-github text-xl"></i> Configurar Acesso
+        </h3>
+        <button onclick="fecharModalToken()" class="text-slate-400 hover:text-white p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      
+      <p class="text-xs text-slate-300 leading-relaxed mb-4">
+        Para rodar a pipeline de recálculo no Backend, insira seu <strong class="text-white">GitHub PAT (Personal Access Token)</strong>.
+        <br><br>
+        <i class="fa-solid fa-link text-sky-400 mr-1"></i> 
+        <a href="https://github.com/settings/tokens/new?scopes=workflow,repo&description=TopClimABC-Sync" target="_blank" 
+           class="text-sky-400 font-bold underline hover:text-sky-300 transition-colors">
+           Clique aqui para Gerar o Token agora
+        </a>
+      </p>
+
+      <div class="mb-5">
+        <p class="text-[10px] text-slate-400 mb-1.5 font-bold uppercase tracking-wider">Seu Token Personalizado</p>
+        <input id="input-token-github" type="password" placeholder="ghp_xxxxxxxxxxxx"
+          class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-sky-500" />
+      </div>
+
+      <div class="flex gap-2">
+        <button onclick="fecharModalToken()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 rounded-xl transition-all text-xs">
+          Cancelar
+        </button>
+        <button onclick="salvarEForcar()" class="flex-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl transition-all text-xs shadow-lg shadow-emerald-900/20">
+          Salvar e Sincronizar
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ MODAL DE VALIDAÇÃO ═══ -->
   <div id="modal-overlay" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
     <div class="glass rounded-2xl w-full max-w-sm p-5 animate-slide-up">
@@ -1720,15 +1759,19 @@
 
   // Aciona Github Actions disparando workflow
   async function forcarRecalculo() {
-      let token = localStorage.getItem('github_token');
+      const token = localStorage.getItem('github_token');
       if (!token) {
-          token = prompt("Para rodar a pipeline de recálculo no Backend, insira seu GitHub PAT (Personal Access Token):\\nIsso só é necessário se você não quiser esperar as 09:00 de amanhã.");
-          if (!token) return;
-          localStorage.setItem('github_token', token);
+          abrirModalToken();
+          return;
       }
       
       const btn = document.getElementById('btn-forcar');
+      if (!btn) return;
+      
+      const originalHTML = btn.innerHTML;
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Sincronizando...';
+      btn.disabled = true;
+
       try {
           const res = await fetch('https://api.github.com/repos/Ackerss/topclimabc/dispatches', {
               method: 'POST',
@@ -1745,17 +1788,47 @@
           if (!res.ok) {
               if(res.status === 401 || res.status === 403 || res.status === 404){
                   localStorage.removeItem('github_token');
-                  throw new Error("Token Invalido");
+                  mostrarToast('Token expirado ou inválido. Tente novamente.', 'rose');
+                  abrirModalToken();
+                  return;
               }
               throw new Error("Erro na API");
           }
           mostrarToast('Recálculo do Ranking Disparado! Retorne em 2 minutos.', 'emerald');
       } catch (err) {
-          mostrarToast('Erro! Token GitHub inválido ou sem permissão.', 'rose');
+          mostrarToast('Erro na conexão com GitHub.', 'rose');
+      } finally {
+          btn.disabled = false;
+          setTimeout(() => {
+              btn.innerHTML = originalHTML;
+          }, 3000);
       }
-      setTimeout(() => {
-          btn.innerHTML = '<i class="fa-solid fa-rotate-right text-emerald-400"></i><span>Forçar Sync</span>';
-      }, 3000);
+  }
+
+  function abrirModalToken() {
+      const overlay = document.getElementById('modal-token-overlay');
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+      const saved = localStorage.getItem('github_token');
+      if (saved) document.getElementById('input-token-github').value = saved;
+  }
+
+  function fecharModalToken() {
+      const overlay = document.getElementById('modal-token-overlay');
+      overlay.classList.add('hidden');
+      overlay.classList.remove('flex');
+  }
+
+  function salvarEForcar() {
+      const input = document.getElementById('input-token-github');
+      const token = input.value.trim();
+      if (!token) {
+          mostrarToast('Insira o token para continuar!', 'amber');
+          return;
+      }
+      localStorage.setItem('github_token', token);
+      fecharModalToken();
+      forcarRecalculo();
   }
 
   async function atualizarListaRegistros() {
