@@ -4,31 +4,31 @@
       {
         "modelo": "gfs_seamless",
         "nome": "GFS NCEP",
-        "score": 97.5,
+        "score": 98.5,
         "amostras": 1
       },
       {
         "modelo": "openweathermap",
         "nome": "OpenWeatherMap",
-        "score": 89.4,
+        "score": 88.6,
         "amostras": 1
       },
       {
         "modelo": "ecmwf_ifs025",
         "nome": "ECMWF IFS",
-        "score": 81.1,
+        "score": 78.1,
         "amostras": 1
       },
       {
         "modelo": "best_match",
         "nome": "Open-Meteo Best",
-        "score": 81.1,
+        "score": 78.1,
         "amostras": 1
       },
       {
         "modelo": "icon_seamless",
         "nome": "ICON DWD",
-        "score": 81.0,
+        "score": 78.0,
         "amostras": 1
       }
     ],
@@ -134,31 +134,31 @@
       {
         "modelo": "gfs_seamless",
         "nome": "GFS NCEP",
-        "score": 98.4,
+        "score": 97.3,
         "amostras": 1
       },
       {
         "modelo": "openweathermap",
         "nome": "OpenWeatherMap",
-        "score": 89.7,
+        "score": 89.4,
         "amostras": 1
       },
       {
         "modelo": "ecmwf_ifs025",
         "nome": "ECMWF IFS",
-        "score": 81.8,
+        "score": 78.5,
         "amostras": 1
       },
       {
         "modelo": "icon_seamless",
         "nome": "ICON DWD",
-        "score": 81.8,
+        "score": 78.5,
         "amostras": 1
       },
       {
         "modelo": "best_match",
         "nome": "Open-Meteo Best",
-        "score": 81.8,
+        "score": 78.5,
         "amostras": 1
       }
     ],

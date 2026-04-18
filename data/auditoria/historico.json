@@ -3,11 +3,11 @@
     "2026-04-16": {},
     "2026-04-17": {
       "1_dia": {
-        "ecmwf_ifs025": 81.1,
-        "gfs_seamless": 97.5,
-        "icon_seamless": 81.0,
-        "openweathermap": 89.4,
-        "best_match": 81.1
+        "ecmwf_ifs025": 78.1,
+        "gfs_seamless": 98.5,
+        "icon_seamless": 78.0,
+        "openweathermap": 88.6,
+        "best_match": 78.1
       }
     }
   },
@@ -15,11 +15,11 @@
     "2026-04-16": {},
     "2026-04-17": {
       "1_dia": {
-        "ecmwf_ifs025": 81.8,
-        "gfs_seamless": 98.4,
-        "icon_seamless": 81.8,
-        "openweathermap": 89.7,
-        "best_match": 81.8
+        "ecmwf_ifs025": 78.5,
+        "gfs_seamless": 97.3,
+        "icon_seamless": 78.5,
+        "openweathermap": 89.4,
+        "best_match": 78.5
       }
     }
   }
