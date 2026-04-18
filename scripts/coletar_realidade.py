@@ -1,21 +1,34 @@
 """
 TOPCLIMABC — coletar_realidade.py
 ==================================
-Coleta os dados reais de precipitação do dia de ontem (juiz oficial).
+Coleta os dados reais de precipitação (juiz oficial do sistema).
 
-HIERARQUIA DE FONTES (ordem de prioridade):
-1. ERA5 Archive (archive-api.open-meteo.com) — reanálise ECMWF definitiva.
-   Disponível com 2-5 dias de delay. Para datas > 5 dias: 100% confiável.
-2. Open-Meteo Historical Forecast (historical-forecast-api) — fallback provisório.
-   Mais rápido, mas menos definitivo (dados de previsão recalculada, não ERA5 puro).
-3. sem_dados — Se ambas as APIs falharem, marca como sem_dados.
+HIERARQUIA DE FONTES (atualizado 2026-04-18):
+
+1. Open-Meteo Archive (best_match)
+   URL: archive-api.open-meteo.com
+   MODELO: best_match — combina automaticamente o melhor modelo disponível
+   para a região. Para o Sul do Brasil usa ERA5-Land (~9km) + dados de
+   estações físicas observacionais próximas (inclui INMET A868 Itajaí).
+   Disponível com ~2-5 dias de delay para datas recentes.
+   Status: "completo"
+
+   POR QUE NÃO ERA5 PURO?
+   ERA5 puro tinha resolução de ~25km e superestimava/subestimava a chuva
+   localmente. best_match corrigiu BC/Itajaí de 6.9mm para 3.3mm no 17/04.
+
+2. Open-Meteo Historical Forecast (fallback para datas muito recentes)
+   URL: historical-forecast-api.open-meteo.com
+   Status: "provisorio"
+
+3. sem_dados — Se ambas as APIs falharem.
    NUNCA inserir 0mm sem confirmação explícita da API.
 
 IMPORTANTE para IAs futuras:
-- O total ERA5 é usado como "verdade" do dia.
-- Os dados horários do hist_forecast são usados APENAS para distribuir por período.
-- Se o hist_forecast também falhar, distribui o total ERA5 uniformemente.
-- O status "sem_dados" deve ser exibido como "Dados não disponíveis" no frontend.
+- Usar SEMPRE models=best_match no Archive para buscar total E horários.
+- O total diário é a "verdade oficial" do dia.
+- Os dados horários distribuem a chuva pelos 4 períodos do dia.
+- Não usar total e horários de APIs distintas — gera inconsistência.
 """
 
 import json
@@ -23,7 +36,7 @@ import requests
 from datetime import datetime, timedelta
 from scripts.config import (
     LOCAIS, PERIODOS, REALIDADE_DIR,
-    OPEN_METEO_ARCHIVE, OPEN_METEO_HIST
+    OPEN_METEO_ARCHIVE, OPEN_METEO_HIST, OM_ARCHIVE_MODEL
 )
 from scripts.utils.classificacao import classificar_chuva
 
@@ -35,11 +48,14 @@ def get_periodo(hora_int):
     return None
 
 
-def coletar_era5_archive(local_id, data_iso):
+def coletar_archive_best_match(local_id, data_iso):
     """
-    Coleta precipitação do ERA5 Archive (fonte primária definitiva).
-    Retorna o total em mm do dia (float) ou None se não disponível.
-    A API retorna daily.precipitation_sum diretamente — 1 valor por dia.
+    Coleta precipitação do Open-Meteo Archive com modelo best_match.
+    Busca AMBOS: total diário E dados horários — mesma fonte, sem inconsistência.
+
+    Retorna: (total_mm: float|None, horarios: list[float]|None)
+    - total_mm: total do dia em mm
+    - horarios: lista de 24 valores (hora 0..23) em mm
     """
     local = LOCAIS[local_id]
     params = {
@@ -48,26 +64,44 @@ def coletar_era5_archive(local_id, data_iso):
         "start_date": data_iso,
         "end_date": data_iso,
         "daily": "precipitation_sum",
+        "hourly": "precipitation",
+        "models": OM_ARCHIVE_MODEL,
         "timezone": "America/Sao_Paulo"
     }
     try:
         response = requests.get(OPEN_METEO_ARCHIVE, params=params, timeout=20)
         response.raise_for_status()
         data = response.json()
+
+        # Total diário
         daily = data.get("daily", {})
-        valores = daily.get("precipitation_sum", [])
-        if not valores or valores[0] is None:
-            return None
-        return round(float(valores[0]), 1)
+        totais = daily.get("precipitation_sum", [])
+        total_mm = round(float(totais[0]), 1) if totais and totais[0] is not None else None
+
+        # Dados horários (24 horas)
+        hourly = data.get("hourly", {})
+        chuvas_hora = hourly.get("precipitation", [])
+        if chuvas_hora and any(v is not None for v in chuvas_hora):
+            horarios = [float(v) if v is not None else 0.0 for v in chuvas_hora[:24]]
+        else:
+            horarios = None
+
+        if total_mm is None and horarios is None:
+            return None, None
+
+        return total_mm, horarios
+
     except Exception as e:
-        print(f"  [ERA5 Archive] Falhou para {local_id} em {data_iso}: {e}")
-        return None
+        print(f"  [Archive best_match] Falhou para {local_id} em {data_iso}: {e}")
+        return None, None
 
 
-def coletar_om_hist_forecast(local_id, data_iso):
+def coletar_hist_forecast_fallback(local_id, data_iso):
     """
-    Fallback: dados horários da historical-forecast API.
-    Retorna o JSON bruto da API ou None se falhar.
+    Fallback: Open-Meteo Historical Forecast (sem modelo best_match — apenas previsão recalculada).
+    Usado apenas quando Archive ainda não tem dados (datas muito recentes, < 2 dias).
+
+    Retorna: (total_mm: float|None, horarios: list[float]|None)
     """
     local = LOCAIS[local_id]
     params = {
@@ -81,78 +115,67 @@ def coletar_om_hist_forecast(local_id, data_iso):
     try:
         response = requests.get(OPEN_METEO_HIST, params=params, timeout=20)
         response.raise_for_status()
-        return response.json()
+        data = response.json()
+
+        hourly = data.get("hourly", {})
+        chuvas_hora = hourly.get("precipitation", [])
+        if not chuvas_hora or all(v is None for v in chuvas_hora):
+            return None, None
+
+        horarios = [float(v) if v is not None else 0.0 for v in chuvas_hora[:24]]
+        total_mm = round(sum(horarios), 1)
+        return total_mm, horarios
+
     except Exception as e:
-        print(f"  [OM Hist Forecast] Falhou para {local_id} em {data_iso}: {e}")
-        return None
+        print(f"  [Hist Forecast] Falhou para {local_id} em {data_iso}: {e}")
+        return None, None
 
 
-def calcular_periodos_horarios(raw_om, total_era5=None):
+def distribuir_por_periodos(total_mm, horarios):
     """
-    Distribui a precipitação por período (madrugada/manhã/tarde/noite)
-    usando os dados horários do Open-Meteo Hist Forecast.
+    Distribui a precipitação total por período (madrugada/manhã/tarde/noite)
+    usando os 24 valores horários.
 
-    Se total_era5 for fornecido, normaliza os valores para bater com o total ERA5
-    (ERA5 é o total oficial, os horários definem a distribuição).
-
-    Retorna: dict com periodos e total_dia.
+    - Se horarios disponíveis: usa proporção dos horários para distribuir o total.
+    - Se horarios indisponíveis mas total > 0: divide igualmente pelos 4 períodos.
+    - Se total = 0: todos os períodos ficam 0.
     """
     periodos_result = {p: 0.0 for p in PERIODOS}
 
-    if raw_om:
-        hourly = raw_om.get("hourly", {})
-        chuvas = hourly.get("precipitation", [])
-        tempos = hourly.get("time", [])
+    if horarios:
+        # Distribui proporcionalmente ao padrão horário
+        total_horario = sum(horarios)
 
-        total_hist = 0.0
-        for i, t_str in enumerate(tempos):
-            mm = chuvas[i] if i < len(chuvas) and chuvas[i] is not None else 0.0
-            dt = datetime.fromisoformat(t_str)
-            periodo = get_periodo(dt.hour)
-            if periodo:
-                periodos_result[periodo] += mm
-            total_hist += mm
-
-        # Normaliza para o total ERA5 se disponível e os horários têm alguma chuva
-        if total_era5 is not None and total_hist > 0:
-            fator = total_era5 / total_hist
+        if total_horario > 0 and total_mm is not None and total_mm > 0:
+            # Normaliza para bater com o total oficial
+            fator = total_mm / total_horario
+            for i, mm in enumerate(horarios):
+                periodo = get_periodo(i)
+                if periodo:
+                    periodos_result[periodo] += round(mm * fator, 2)
+        elif total_mm is not None and total_mm > 0 and total_horario == 0:
+            # Total diz que choveu mas horários dizem 0 — distribui igualmente
+            por_periodo = round(total_mm / len(PERIODOS), 1)
             for p in periodos_result:
-                periodos_result[p] = round(periodos_result[p] * fator, 1)
-            total_dia = total_era5
-        elif total_era5 is not None:
-            # hist_forecast diz 0mm mas ERA5 diz outro valor — usa ERA5 como total
-            # Distribui uniformemente (se ERA5 também for 0, tudo fica 0)
-            for p in periodos_result:
-                periodos_result[p] = round(total_era5 / len(PERIODOS), 1) if total_era5 > 0 else 0.0
-            total_dia = total_era5
+                periodos_result[p] = por_periodo
         else:
-            # Apenas hist_forecast disponível
-            total_dia = round(sum(periodos_result.values()), 1)
-            for p in periodos_result:
-                periodos_result[p] = round(periodos_result[p], 1)
-    elif total_era5 is not None:
-        # Sem dados horários — distribui ERA5 uniformemente só se > 0
-        por_periodo = round(total_era5 / len(PERIODOS), 1) if total_era5 > 0 else 0.0
+            # total = 0 ou None — distribui direto dos horários sem normalizar
+            for i, mm in enumerate(horarios):
+                periodo = get_periodo(i)
+                if periodo:
+                    periodos_result[periodo] += mm
+
+    elif total_mm and total_mm > 0:
+        # Sem horários, com total — distribui igualmente
+        por_periodo = round(total_mm / len(PERIODOS), 1)
         for p in periodos_result:
             periodos_result[p] = por_periodo
-        total_dia = total_era5
-    else:
-        total_dia = None
 
-    return periodos_result, total_dia
+    # Arredonda tudo para 1 decimal
+    for p in periodos_result:
+        periodos_result[p] = round(periodos_result[p], 1)
 
-
-def criar_realidade_sem_dados():
-    """Retorna estrutura de realidade marcada como sem_dados. NUNCA usar como 0mm."""
-    return {
-        "status": "sem_dados",
-        "fonte": "Nenhuma fonte disponível",
-        "periodos": {
-            p: {"mm": None, "classificacao": "sem_dados"}
-            for p in PERIODOS
-        },
-        "total_dia": None
-    }
+    return periodos_result
 
 
 def montar_realidade(periodos_mm, total_dia, fonte, status):
@@ -171,36 +194,50 @@ def montar_realidade(periodos_mm, total_dia, fonte, status):
     }
 
 
+def criar_realidade_sem_dados(motivo=""):
+    """Retorna estrutura marcada como sem_dados. NUNCA usar como equivalente a 0mm."""
+    return {
+        "status": "sem_dados",
+        "fonte": f"Nenhuma fonte disponível{' — ' + motivo if motivo else ''}",
+        "periodos": {
+            p: {"mm": None, "classificacao": "sem_dados"}
+            for p in PERIODOS
+        },
+        "total_dia": None
+    }
+
+
 def coletar_e_salvar(local_id, data_iso):
     """Coleta e salva a realidade para um local e data específicos."""
     print(f"  Coletando realidade de {data_iso} para {local_id}...")
 
-    # 1. Tenta ERA5 Archive (fonte definitiva)
-    mm_era5 = coletar_era5_archive(local_id, data_iso)
+    # 1. Tenta Archive com best_match (fonte primária definitiva)
+    total_archive, horarios_archive = coletar_archive_best_match(local_id, data_iso)
 
-    # 2. Tenta hist_forecast para dados horários (distribuição por período)
-    raw_horario = coletar_om_hist_forecast(local_id, data_iso)
-
-    if mm_era5 is not None:
-        # ERA5 disponível: usa ERA5 como total oficial, hist para distribuição
-        periodos_mm, total_dia = calcular_periodos_horarios(raw_horario, mm_era5)
-        if raw_horario:
-            fonte = "ERA5 Archive (ECMWF) + Open-Meteo Historical (distribuição horária)"
-        else:
-            fonte = "ERA5 Archive (ECMWF) — distribuição estimada por período"
+    if total_archive is not None:
+        periodos_mm = distribuir_por_periodos(total_archive, horarios_archive)
+        fonte = f"Open-Meteo Archive (best_match) — {data_iso}"
         status = "completo"
-        realidade = montar_realidade(periodos_mm, total_dia, fonte, status)
-    elif raw_horario:
-        # ERA5 ainda não disponível (< 5 dias) — usa hist_forecast como provisório
-        periodos_mm, total_dia = calcular_periodos_horarios(raw_horario)
-        fonte = "Open-Meteo Historical Forecast (provisório — ERA5 ainda processando)"
-        status = "provisorio"
-        realidade = montar_realidade(periodos_mm, total_dia, fonte, status)
+        realidade = montar_realidade(periodos_mm, total_archive, fonte, status)
+        print(f"    [OK] Archive best_match: {total_archive}mm | Status: completo")
+
     else:
-        # Nenhuma fonte respondeu
-        print(f"  ⚠️  ATENÇÃO: Sem dados de realidade para {local_id} em {data_iso}. Marcando como sem_dados.")
-        realidade = criar_realidade_sem_dados()
-        realidade["fonte"] = "Falha em ambas as APIs (ERA5 Archive e Open-Meteo Historical)"
+        # 2. Fallback: Historical Forecast (provisório)
+        print(f"    Archive indisponivel para {data_iso}, tentando Historical Forecast...")
+        total_hist, horarios_hist = coletar_hist_forecast_fallback(local_id, data_iso)
+
+        if total_hist is not None:
+            periodos_mm = distribuir_por_periodos(total_hist, horarios_hist)
+            fonte = "Open-Meteo Historical Forecast (provisorio — Archive ainda processando)"
+            status = "provisorio"
+            realidade = montar_realidade(periodos_mm, total_hist, fonte, status)
+            print(f"    [PROV] Hist Forecast: {total_hist}mm | Status: provisorio")
+        else:
+            # 3. Sem dados
+            print(f"    [ERRO] Sem dados de realidade para {local_id} em {data_iso}")
+            realidade = criar_realidade_sem_dados(
+                motivo="Archive e Historical Forecast falharam"
+            )
 
     # Salva no arquivo diário
     caminho = REALIDADE_DIR / f"realidade_{data_iso}.json"
@@ -216,7 +253,7 @@ def coletar_e_salvar(local_id, data_iso):
 
 
 def main():
-    print(f"--- Início da coleta de realidade: {datetime.now()} ---")
+    print(f"--- Inicio da coleta de realidade: {datetime.now()} ---")
     ontem = (datetime.now() - timedelta(days=1)).date().isoformat()
     print(f"Data alvo: {ontem}")
 

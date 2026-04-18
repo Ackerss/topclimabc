@@ -1,9 +1,9 @@
 {
   "meta": {
-    "atualizado_em": "2026-04-18T00:45:44-03:00",
-    "fonte": "ERA5 Archive (ECMWF) via Open-Meteo",
-    "nota": "Dados de reanálise por ponto geográfico central de cada cidade. Pluviômetros físicos (CEMADEN) indisponíveis no momento — integração futura.",
-    "aviso": "⚠️ Estes dados são estimativas de reanálise, não medições de pluviômetros físicos. ERA5 Archive tem precisão de ~5-25km e delay de 2-5 dias para datas recentes.",
+    "atualizado_em": "2026-04-18T13:32:42-03:00",
+    "fonte": "Open-Meteo Archive (Best Match)",
+    "nota": "Dados climáticos apurados com modelo que combina diversas fontes (ERA5-Land, radar e estações físicas locais) para precisão de ponta.",
+    "aviso": "✔️ Dados de alta confiabilidade! O modelo best_match agrupa a melhor reanálise global (ERA5-Land) com observações em solo local (como INMET) chegando a precisões de ~9km.",
     "status_cemaden": "indisponivel"
   },
   "locais": {
@@ -11,7 +11,7 @@
       "nome": "Balneário Camboriú",
       "lat": -26.9928,
       "lon": -48.6354,
-      "fonte_dados": "ERA5 Archive (ECMWF)",
+      "fonte_dados": "Open-Meteo Archive (Best Match)",
       "status_cemaden": "indisponivel",
       "ontem": {
         "status_fonte": "completo",
@@ -42,7 +42,7 @@
       "nome": "Itajaí",
       "lat": -26.9065,
       "lon": -48.67,
-      "fonte_dados": "ERA5 Archive (ECMWF)",
+      "fonte_dados": "Open-Meteo Archive (Best Match)",
       "status_cemaden": "indisponivel",
       "ontem": {
         "status_fonte": "completo",

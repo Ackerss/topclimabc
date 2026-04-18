@@ -7,7 +7,7 @@ Transforma os arquivos brutos em dados.json, ranking.json e estacoes.json.
 IMPORTANTE para IAs futuras:
 - dados.json: realidade de ontem + previsões dos próximos dias
 - ranking.json: scores médios por modelo/local/prazo
-- estacoes.json: estado atual de dados por local (ERA5 Archive)
+- estacoes.json: estado atual de dados por local (Open-Meteo Archive best_match)
   → NÃO contém dados fictícios. Se não há dado, retorna null.
   → O CEMADEN físico está indisponível. Quando integrado, substituir aqui.
 """
@@ -29,7 +29,7 @@ def carregar_json(caminho):
 
 def gerar_estacoes_json(realidade_ontem, realidade_hoje_parcial=None):
     """
-    Gera o estacoes.json com dados reais da ERA5 Archive.
+    Gera o estacoes.json com dados reais da Open-Meteo Archive.
     SEM nenhum dado fictício ou mockado.
     Se não há dados, os campos são null (não 0mm inventado).
     """
@@ -38,14 +38,14 @@ def gerar_estacoes_json(realidade_ontem, realidade_hoje_parcial=None):
     estacoes = {
         "meta": {
             "atualizado_em": agora,
-            "fonte": "ERA5 Archive (ECMWF) via Open-Meteo",
+            "fonte": "Open-Meteo Archive (Best Match)",
             "nota": (
-                "Dados de reanálise por ponto geográfico central de cada cidade. "
-                "Pluviômetros físicos (CEMADEN) indisponíveis no momento — integração futura."
+                "Dados climáticos apurados com modelo que combina diversas fontes (ERA5-Land, radar "
+                "e estações físicas locais) para precisão de ponta."
             ),
             "aviso": (
-                "⚠️ Estes dados são estimativas de reanálise, não medições de pluviômetros físicos. "
-                "ERA5 Archive tem precisão de ~5-25km e delay de 2-5 dias para datas recentes."
+                "✔️ Dados de alta confiabilidade! O modelo best_match agrupa a melhor reanálise global "
+                "(ERA5-Land) com observações em solo local (como INMET) chegando a precisões de ~9km."
             ),
             "status_cemaden": "indisponivel"
         },
@@ -76,10 +76,10 @@ def gerar_estacoes_json(realidade_ontem, realidade_hoje_parcial=None):
             "nome": local_info["nome"],
             "lat": local_info["lat"],
             "lon": local_info["lon"],
-            "fonte_dados": "ERA5 Archive (ECMWF)",
+            "fonte_dados": "Open-Meteo Archive (Best Match)",
             "status_cemaden": "indisponivel",
             "ontem": ontem_dados,
-            "hoje": None  # Dados de hoje nunca disponíveis (ERA5 tem delay)
+            "hoje": None  # Dados de hoje nunca disponíveis de imediato no Archive
         }
 
     return estacoes

@@ -1,8 +1,9 @@
 """
 TOPCLIMABC — reprocessar_historico.py
 ======================================
-Script de bootstrap único: reprocessa dados de realidade históricos
-usando a ERA5 Archive API para todas as datas desde o início do projeto.
+Script de bootstrap: reprocessa dados de realidade históricos
+usando Open-Meteo Archive com modelo best_match (melhor fonte disponível
+para o Sul do Brasil — combina ERA5-Land + estações físicas observacionais).
 
 QUANDO USAR:
 - Ao iniciar o projeto (primeira vez)
@@ -57,7 +58,7 @@ def main():
     print(f"=== Reprocessamento Histórico ===")
     print(f"Periodo: {data_inicio} ate {data_fim} ({len(datas)} dias)")
     print(f"Locais: {list(LOCAIS.keys())}")
-    print(f"Fonte primária: ERA5 Archive (ECMWF)")
+    print(f"Fonte primaria: Open-Meteo Archive (best_match)")
     print()
 
     sucesso = 0
@@ -84,7 +85,7 @@ def main():
                 print(" [SEM DADOS]")
 
     print(f"\n=== Resumo Final ===")
-    print(f"[OK] Completos (ERA5 Archive): {sucesso}")
+    print(f"[OK] Completos (Archive best_match): {sucesso}")
     print(f"[PROVISORIO] Provisorios (hist_forecast): {provisorio}")
     print(f"[SEM DADOS] Sem dados: {sem_dados}")
     print(f"Arquivos salvos em: {REALIDADE_DIR}")

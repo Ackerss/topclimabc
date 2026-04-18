@@ -1,22 +1,22 @@
 {
   "balneario_camboriu": {
     "status": "completo",
-    "fonte": "ERA5 Archive (ECMWF) + Open-Meteo Historical (distribuição horária)",
+    "fonte": "Open-Meteo Archive (best_match) — 2026-04-11",
     "periodos": {
       "madrugada": {
-        "mm": 0.0,
+        "mm": 0.5,
         "classificacao": "sem_chuva"
       },
       "manha": {
-        "mm": 0.0,
+        "mm": 0.1,
         "classificacao": "sem_chuva"
       },
       "tarde": {
-        "mm": 0.0,
+        "mm": 0.5,
         "classificacao": "sem_chuva"
       },
       "noite": {
-        "mm": 2.3,
+        "mm": 1.2,
         "classificacao": "fraca"
       }
     },
@@ -24,10 +24,10 @@
   },
   "itajai": {
     "status": "completo",
-    "fonte": "ERA5 Archive (ECMWF) + Open-Meteo Historical (distribuição horária)",
+    "fonte": "Open-Meteo Archive (best_match) — 2026-04-11",
     "periodos": {
       "madrugada": {
-        "mm": 0.0,
+        "mm": 0.2,
         "classificacao": "sem_chuva"
       },
       "manha": {
@@ -39,7 +39,7 @@
         "classificacao": "sem_chuva"
       },
       "noite": {
-        "mm": 0.5,
+        "mm": 0.3,
         "classificacao": "sem_chuva"
       }
     },

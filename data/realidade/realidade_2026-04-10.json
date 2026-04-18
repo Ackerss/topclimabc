@@ -1,7 +1,7 @@
 {
   "balneario_camboriu": {
     "status": "completo",
-    "fonte": "ERA5 Archive (ECMWF) + Open-Meteo Historical (distribuição horária)",
+    "fonte": "Open-Meteo Archive (best_match) — 2026-04-10",
     "periodos": {
       "madrugada": {
         "mm": 0.0,
@@ -24,7 +24,7 @@
   },
   "itajai": {
     "status": "completo",
-    "fonte": "ERA5 Archive (ECMWF) + Open-Meteo Historical (distribuição horária)",
+    "fonte": "Open-Meteo Archive (best_match) — 2026-04-10",
     "periodos": {
       "madrugada": {
         "mm": 0.0,

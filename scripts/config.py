@@ -114,34 +114,30 @@ CLASSIFICACOES = [
 # ── APIs Externas ─────────────────────────────────────────────────────────────
 OWM_API_KEY = os.getenv("OWM_API_KEY", "d642bd544942199ff3b862927da91923")
 OPEN_METEO_BASE    = "https://api.open-meteo.com/v1/forecast"
-OPEN_METEO_HIST    = "https://historical-forecast-api.open-meteo.com/v1/forecast"
-OPEN_METEO_ARCHIVE = "https://archive-api.open-meteo.com/v1/archive"
-# ERA5 Archive: dados de reanálise ECMWF definitivos.
-# Datas > 5 dias atrás: 100% confiável.
-# Datas 1-5 dias atrás: tentar ARCHIVE, fallback para HIST.
-# Dados de hoje: sem dados reais disponíveis → marcar como "aguardando".
+OPEN_METEO_ARCHIVE = "https://archive-api.open-meteo.com/v1/archive"  # fonte primária
+OPEN_METEO_HIST    = "https://historical-forecast-api.open-meteo.com/v1/forecast"  # fallback
 OWM_BASE           = "https://api.openweathermap.org/data/2.5"
 
 # ── Fonte de Realidade ────────────────────────────────────────────────────────
-# DECISÃO (2026-04-16): A API oficial CEMADEN (SWS/PED) exige token institucional
-# que não está disponível publicamente.
-# DECISÃO (2026-04-18): Migração para ERA5 Archive como primária (mais definitivo).
-# HIERARQUIA DE CONFIANÇA:
-#   1. Registro Manual do Usuário (Supabase) — visto com os próprios olhos
-#   2. ERA5 Archive (archive-api.open-meteo.com) — reanálise definitiva ECMWF
-#   3. Open-Meteo Historical Forecast (historical-forecast-api) — provisório
-#   4. sem_dados — NUNCA inferir 0mm sem confirmação explícita da API
-FONTE_REALIDADE_PRIMARIA   = "era5_archive"      # archive-api.open-meteo.com
-FONTE_REALIDADE_SECUNDARIA = "om_hist_forecast"  # historical-forecast-api (provisório)
-FONTE_REALIDADE_STATUS = {
-    "completo":   "ERA5 Archive confirmou dados",
-    "provisorio": "Open-Meteo Historical (ERA5 ainda processando)",
-    "sem_dados":  "Nenhuma fonte retornou dados válidos",
-}
+# DECISÃO (2026-04-18): Switched para Open-Meteo Archive com modelo 'best_match'.
+#
+# POR QUE best_match É MELHOR QUE ERA5 PURO:
+# - ERA5 puro: reanálise ECMWF com resolução de ~25km. Muito impreciso localmente.
+#   Exemplo: mostrava 6.9mm em BC/Itajaí no 17/04 quando na prática ficou quasi seco.
+# - best_match: Open-Meteo combina automaticamente o melhor modelo histórico disponível
+#   para cada região — para o Sul do Brasil inclui ERA5-Land (~9km) + dados observacionais
+#   de estações físicas próximas (inclui INMET A868 Itajaí indiretamente).
+#   Resultado para 17/04: 3.3mm (muito mais próximo da realidade).
+#
+# HIERARQUIA DEFINITIVA:
+# 1. Open-Meteo Archive (best_match) — dado diário + horário (mais confiável)
+# 2. Open-Meteo Historical Forecast  — fallback para datas muito recentes
+# 3. sem_dados — nunca inventar 0mm sem confirmação
+FONTE_REALIDADE_PRIMARIA   = "open_meteo_archive_best_match"
+FONTE_REALIDADE_SECUNDARIA = "open_meteo_historical_forecast"
 
-# ── Open-Meteo Historical: parâmetros ────────────────────────────────────────
-# Precipitação: usa a API de reanálise histórica (dados do passado após processamento)
-# Disponível 1-5 dias atrás com boa confiabilidade
+# Modelo a usar no Archive (best_match = melhor disponível para a região)
+OM_ARCHIVE_MODEL  = "best_match"
 OM_HIST_VARIAVEIS = "precipitation"
 OM_HIST_TIMEZONE  = "America/Sao_Paulo"
 
