@@ -23,29 +23,29 @@ MM_POR_CLASSIFICACAO = {
 }
 
 
-def buscar_overrides_manuais(data_iso: str = None) -> dict:
+def _fetch_registros_resolvidos(data_iso: str = None):
     """
-    Se data_iso for passado, retorna dict:
-    { "balneario_camboriu": { "madrugada": {...} } }
+    Busca registros da tabela topclimabc_validacoes com resolucao de tombstones.
 
-    Se data_iso = None, busca TODOS e retorna:
-    { "YYYY-MM-DD": { "balneario_camboriu": { "madrugada": {...} } } }
+    Retorna tupla (overrides, tombstones) onde para cada chave (data, local, periodo)
+    apenas o registro mais recente conta:
+    - override=True: vai para overrides
+    - override=False: vai para tombstones (foi apagado via soft-delete no frontend,
+      ja que a RLS do Supabase bloqueia DELETE para role anon)
+
+    Se data_iso e None, as estruturas sao aninhadas por data: { data: { local: {...} } }
+    Se data_iso e especifico, retorna direto: { local: {...} }
     """
     if not SUPABASE_KEY:
-        print("  [Supabase] SUPABASE_ANON_KEY não configurada — pulando overrides manuais.")
-        return {}
+        print("  [Supabase] SUPABASE_ANON_KEY nao configurada — pulando overrides manuais.")
+        return ({}, {})
 
     url = f"{SUPABASE_URL}/rest/v1/topclimabc_validacoes"
     headers = {
         "apikey": SUPABASE_KEY,
         "Authorization": f"Bearer {SUPABASE_KEY}",
     }
-    
-    # Busca TODOS os registros (inclusive tombstones com override=false).
-    # Logica de resolucao: para cada chave (data, local, periodo) o mais recente vence.
-    # Se o vencedor for override=false, o periodo foi apagado pelo usuario via frontend.
-    # Isso existe porque a RLS do Supabase nao permite DELETE para role anon, entao
-    # o frontend usa "soft-delete" inserindo uma linha tombstone.
+
     params = {
         "order": "created_at.desc",
         "select": "data,local,periodo,classificacao,nota,created_at,override",
@@ -58,11 +58,13 @@ def buscar_overrides_manuais(data_iso: str = None) -> dict:
         resp.raise_for_status()
         registros = resp.json()
     except Exception as e:
-        print(f"  [Supabase] Erro ao buscar overrides manuais para {data_iso}: {e}")
-        return {}
+        print(f"  [Supabase] Erro ao buscar registros para {data_iso}: {e}")
+        return ({}, {})
 
-    resultado = {}
+    overrides = {}
+    tombstones = {}
     vistos = set()
+
     for r in registros:
         data_reg = r.get("data")
         local = r.get("local")
@@ -78,28 +80,53 @@ def buscar_overrides_manuais(data_iso: str = None) -> dict:
         vistos.add(chave)
 
         if override is False:
-            continue  # tombstone — periodo foi apagado
+            # tombstone
+            if data_iso:
+                tombstones.setdefault(local, set()).add(periodo)
+            else:
+                tombstones.setdefault(data_reg, {}).setdefault(local, set()).add(periodo)
+            continue
 
-        # Target dict dependendo se data_iso e None ou especifico
+        # override ativo
         if data_iso:
-            target_dict = resultado
+            target = overrides
         else:
-            if data_reg not in resultado:
-                resultado[data_reg] = {}
-            target_dict = resultado[data_reg]
+            target = overrides.setdefault(data_reg, {})
 
-        if local not in target_dict:
-            target_dict[local] = {}
-
-        mm = MM_POR_CLASSIFICACAO.get(classificacao, 0.0)
-        target_dict[local][periodo] = {
+        target.setdefault(local, {})[periodo] = {
             "classificacao": classificacao,
-            "mm": mm,
+            "mm": MM_POR_CLASSIFICACAO.get(classificacao, 0.0),
             "nota": r.get("nota"),
             "timestamp": r.get("created_at"),
             "fonte": "manual",
             "override": True,
         }
+
+    return (overrides, tombstones)
+
+
+def buscar_tombstones(data_iso: str = None) -> dict:
+    """
+    Retorna os periodos 'apagados' via soft-delete no frontend.
+    - data_iso especifico: { local: set([periodos]) }
+    - data_iso None: { data: { local: set([periodos]) } }
+    """
+    _, tombstones = _fetch_registros_resolvidos(data_iso)
+    return tombstones
+
+
+def buscar_overrides_manuais(data_iso: str = None) -> dict:
+    """
+    Se data_iso for passado, retorna dict:
+    { "balneario_camboriu": { "madrugada": {...} } }
+
+    Se data_iso = None, busca TODOS e retorna:
+    { "YYYY-MM-DD": { "balneario_camboriu": { "madrugada": {...} } } }
+
+    Ja descarta tombstones (soft-deletes) — so retorna periodos ativos.
+    """
+    overrides, _ = _fetch_registros_resolvidos(data_iso)
+    resultado = overrides
 
     if resultado:
         count = sum(len(v) for v in resultado.values()) if data_iso else sum(sum(len(loc) for loc in dias.values()) for dias in resultado.values())

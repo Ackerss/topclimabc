@@ -18,7 +18,7 @@ from scripts.config import (
     LOCAIS, MODELOS, PRAZOS, AUDITORIA_DIR,
     PREVISOES_DIR, REALIDADE_DIR, DOCS_DIR
 )
-from scripts.utils.supabase_api import buscar_overrides_manuais
+from scripts.utils.supabase_api import buscar_overrides_manuais, buscar_tombstones
 
 
 def carregar_json(caminho):
@@ -164,7 +164,8 @@ def main():
     # 4.5 Gerar todas_realidades.json (lendo todos os historicos reais)
     todas_realidades = {}
     todos_overrides = buscar_overrides_manuais(data_iso=None)
-    
+    todos_tombstones = buscar_tombstones(data_iso=None)
+
     for filepath in REALIDADE_DIR.glob("realidade_*.json"):
         data_str = filepath.stem.replace("realidade_", "")
         realidade_dia = carregar_json(filepath)
@@ -176,11 +177,26 @@ def main():
             todas_realidades[data_str] = {}
             for loc in LOCAIS:
                 todas_realidades[data_str][loc] = {
-                    "status": "provisorio", 
-                    "fonte": "Misto (Manual)", 
-                    "periodos": {}, 
+                    "status": "provisorio",
+                    "fonte": "Misto (Manual)",
+                    "periodos": {},
                     "total_dia": 0
                 }
+
+    # Remove periodos 'apagados' via tombstone que ficaram gravados em arquivos antigos.
+    # Dias com arquivo realidade_{data}.json ja materializado (escrito dias atras) podem
+    # ter periodos manuais que o usuario desde entao apagou. Aqui aplicamos o tombstone.
+    for data_str, locais_tomb in todos_tombstones.items():
+        if data_str not in todas_realidades:
+            continue
+        for local_id, periodos_apagados in locais_tomb.items():
+            if local_id not in todas_realidades[data_str]:
+                continue
+            periodos = todas_realidades[data_str][local_id].get("periodos") or {}
+            for p in list(periodos_apagados):
+                if p in periodos and periodos[p].get("fonte_periodo") == "manual":
+                    # So remove se o valor atual e manual — nao interfere em dados automaticos
+                    del periodos[p]
 
     # Aplica overrides manuais
     for data_str, overrides_do_dia in todos_overrides.items():
@@ -192,7 +208,7 @@ def main():
                         # Força a existência de "periodos" para não dar erro
                         if "periodos" not in realidade_dia[local_id]:
                             realidade_dia[local_id]["periodos"] = {}
-                            
+
                         realidade_dia[local_id]["periodos"][periodo] = {
                             "mm": override_data["mm"],
                             "classificacao": override_data["classificacao"],
@@ -205,6 +221,19 @@ def main():
                         sum(v.get("mm", 0) for v in realidade_dia[local_id]["periodos"].values() if v.get("mm") is not None), 1
                     )
                     realidade_dia[local_id]["tem_override_manual"] = True
+
+    # Recalcula total_dia tambem nas datas que apenas tiveram tombstone (sem novo override)
+    for data_str, locais_tomb in todos_tombstones.items():
+        if data_str not in todas_realidades:
+            continue
+        for local_id in locais_tomb.keys():
+            if local_id not in todas_realidades[data_str]:
+                continue
+            bloco = todas_realidades[data_str][local_id]
+            periodos = bloco.get("periodos") or {}
+            bloco["total_dia"] = round(
+                sum(v.get("mm", 0) for v in periodos.values() if v.get("mm") is not None), 1
+            )
 
     # 5. Salvar arquivos na pasta docs/
     with open(DOCS_DIR / "todas_realidades.json", "w", encoding="utf-8") as f:

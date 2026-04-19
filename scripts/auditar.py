@@ -26,6 +26,7 @@ from scripts.config import (
     PREVISOES_DIR, REALIDADE_DIR
 )
 from scripts.utils.score import calcular_score_dia
+from scripts.utils.supabase_api import buscar_tombstones
 
 
 def carregar_arquivo(caminho):
@@ -33,6 +34,27 @@ def carregar_arquivo(caminho):
         with open(caminho, "r", encoding="utf-8") as f:
             return json.load(f)
     return None
+
+
+def aplicar_tombstones_na_realidade(realidade_data, data_alvo_str, tombstones_por_data):
+    """
+    Modifica realidade_data IN-PLACE removendo periodos marcados como tombstone
+    (soft-delete) no Supabase. Assim auditoria nao usa valor manual que o usuario
+    apagou depois, mesmo que o arquivo realidade_{data}.json ainda tenha o dado.
+    """
+    if not realidade_data:
+        return realidade_data
+    tomb_data = tombstones_por_data.get(data_alvo_str) or {}
+    if not tomb_data:
+        return realidade_data
+    for local_id, periodos_apagados in tomb_data.items():
+        if local_id not in realidade_data:
+            continue
+        periodos = realidade_data[local_id].get("periodos") or {}
+        for p in list(periodos_apagados):
+            if p in periodos and periodos[p].get("fonte_periodo") == "manual":
+                del periodos[p]
+    return realidade_data
 
 
 def mapear_prazo(dias_diff):
@@ -58,6 +80,18 @@ def main():
     for local_id in LOCAIS:
         if local_id not in historico:
             historico[local_id] = {}
+
+    # Pre-busca todos os tombstones do Supabase uma unica vez.
+    # Tombstones = periodos manuais que o usuario apagou via frontend e que podem
+    # ter ficado "gravados" em arquivos realidade_{data}.json antigos.
+    try:
+        tombstones_por_data = buscar_tombstones(data_iso=None)
+        total_tomb = sum(sum(len(p) for p in locs.values()) for locs in tombstones_por_data.values())
+        if total_tomb:
+            print(f"  [Tombstones] {total_tomb} periodo(s) apagado(s) via soft-delete serao respeitados.")
+    except Exception as e:
+        print(f"  [Tombstones] Falha ao buscar: {e}. Seguindo sem.")
+        tombstones_por_data = {}
 
     # Varre TODOS os snapshots disponíveis
     snapshots = sorted(PREVISOES_DIR.glob("snapshot_*.json"))
@@ -105,6 +139,11 @@ def main():
                 if not realidade_data or local_id not in realidade_data:
                     continue
 
+                # Respeita tombstones: remove periodos manuais apagados via frontend.
+                realidade_data = aplicar_tombstones_na_realidade(
+                    realidade_data, data_alvo_str, tombstones_por_data
+                )
+
                 real_local = realidade_data[local_id]
 
                 # ⚠️ Só audita se o status for confiável (não sem_dados)
@@ -136,10 +175,14 @@ def main():
                     # essa baseline trivial, é inútil.
                     if MODELOS[m_id].get("is_baseline") and m_id == "persistencia":
                         dt_baseline = dt_alvo - timedelta(days=1)
-                        cam_base = REALIDADE_DIR / f"realidade_{dt_baseline.date().isoformat()}.json"
+                        data_base_str = dt_baseline.date().isoformat()
+                        cam_base = REALIDADE_DIR / f"realidade_{data_base_str}.json"
                         base_json = carregar_arquivo(cam_base)
                         if not base_json or local_id not in base_json:
                             continue
+                        base_json = aplicar_tombstones_na_realidade(
+                            base_json, data_base_str, tombstones_por_data
+                        )
                         base_per = base_json[local_id].get("periodos", {})
                         prev_persist = {
                             p: (info.get("mm") or 0.0) for p, info in base_per.items()
