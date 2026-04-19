@@ -683,7 +683,7 @@
       <div class="flex gap-3 mb-4">
         <div class="flex-1">
           <p class="text-[10px] text-slate-400 mb-1.5 font-bold uppercase tracking-wider">Data do Registro</p>
-          <input type="date" id="modal-data" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-2 py-2 text-sm font-semibold text-white focus:outline-none focus:border-sky-500" />
+          <input type="date" id="modal-data" onchange="atualizarListaRegistros()" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-2 py-2 text-sm font-semibold text-white focus:outline-none focus:border-sky-500" />
         </div>
         <div class="flex-1">
           <p class="text-[10px] text-slate-400 mb-1.5 font-bold uppercase tracking-wider">Localidade</p>
@@ -692,6 +692,8 @@
               class="modal-local-btn flex-1 text-sm font-semibold rounded-lg border border-sky-500 bg-sky-500/20 text-sky-300">BC</button>
             <button id="modal-local-itajai" onclick="setModalLocal('itajai')"
               class="modal-local-btn flex-1 text-sm font-semibold rounded-lg border border-slate-600 text-slate-400">ITJ</button>
+            <button id="modal-local-ambas" onclick="setModalLocal('ambas')"
+              class="modal-local-btn flex-1 text-sm font-semibold rounded-lg border border-slate-600 text-slate-400" title="Registrar simultaneamente em BC e Itajaí">BC+ITJ</button>
           </div>
         </div>
       </div>
@@ -743,7 +745,7 @@
       <!-- Registros do dia -->
       <div id="registros-hoje" class="mb-4 hidden">
         <div class="flex items-center justify-between mb-2">
-          <p class="text-xs text-sky-400 font-bold uppercase tracking-wider"><i class="fa-solid fa-users mr-1"></i>Feed em Tempo Real (Hoje)</p>
+          <p id="feed-titulo" class="text-xs text-sky-400 font-bold uppercase tracking-wider"><i class="fa-solid fa-users mr-1"></i>Registros do dia</p>
           <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
@@ -1764,14 +1766,20 @@
   }
   function setModalLocal(local) {
     STATE.modalLocal = local;
-    ['balneario_camboriu', 'itajai'].forEach(l => {
-      const id = l === 'balneario_camboriu' ? 'modal-local-bc' : 'modal-local-itajai';
+    const botoes = {
+      'balneario_camboriu': 'modal-local-bc',
+      'itajai': 'modal-local-itajai',
+      'ambas': 'modal-local-ambas'
+    };
+    Object.entries(botoes).forEach(([l, id]) => {
+      const el = document.getElementById(id);
+      if (!el) return;
       if (l === local) {
-        document.getElementById(id).classList.add('border-sky-500', 'bg-sky-500/20', 'text-sky-300');
-        document.getElementById(id).classList.remove('border-slate-600', 'text-slate-400');
+        el.classList.add('border-sky-500', 'bg-sky-500/20', 'text-sky-300');
+        el.classList.remove('border-slate-600', 'text-slate-400');
       } else {
-        document.getElementById(id).classList.remove('border-sky-500', 'bg-sky-500/20', 'text-sky-300');
-        document.getElementById(id).classList.add('border-slate-600', 'text-slate-400');
+        el.classList.remove('border-sky-500', 'bg-sky-500/20', 'text-sky-300');
+        el.classList.add('border-slate-600', 'text-slate-400');
       }
     });
   }
@@ -1846,7 +1854,7 @@
   async function salvarRegistro() {
     if (!STATE.modalClima) { mostrarToast('Selecione um tipo de clima!', 'amber'); return; }
     if (!STATE.modalPeriodo) { mostrarToast('Selecione o periodo!', 'amber'); return; }
-    
+
     const dataSelecionada = document.getElementById('modal-data').value;
     if (!dataSelecionada) { mostrarToast('Selecione a data!', 'amber'); return; }
 
@@ -1855,19 +1863,23 @@
 
     const agora = new Date();
     const hora = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    
-    const dataObj = {
-      hora: hora,
-      local: STATE.modalLocal,
+    const nota = document.getElementById('modal-nota').value || null;
+
+    const locaisParaSalvar = STATE.modalLocal === 'ambas'
+      ? ['balneario_camboriu', 'itajai']
+      : [STATE.modalLocal];
+
+    const linhas = locaisParaSalvar.map(loc => ({
+      hora, local: loc,
       classificacao: STATE.modalClima,
-      nota: document.getElementById('modal-nota').value || null,
+      nota,
       timestamp: agora.toISOString(),
       periodo: STATE.modalPeriodo,
       data: dataSelecionada,
       override: true
-    };
+    }));
 
-    const { error } = await supabaseClient.from('topclimabc_validacoes').insert([dataObj]);
+    const { error } = await supabaseClient.from('topclimabc_validacoes').insert(linhas);
 
     document.getElementById('btn-salvar-modal').disabled = false;
     document.getElementById('btn-salvar-modal').innerHTML = '<i class="fa-solid fa-check mr-2"></i>Registrar';
@@ -1878,13 +1890,41 @@
       return;
     }
 
-    aplicarOverrideLocal(dataObj.data, dataObj.local, dataObj.periodo, dataObj.classificacao, dataObj.nota);
+    linhas.forEach(r => aplicarOverrideLocal(r.data, r.local, r.periodo, r.classificacao, r.nota));
 
     document.getElementById('modal-nota').value = '';
     STATE.modalClima = null;
     setModalClima(null);
     atualizarListaRegistros();
-    mostrarToast(`${ICONES[dataObj.classificacao]} ${dataObj.periodo} do dia ${formatarData(dataObj.data)} atualizado p/ ${dataObj.classificacao}!`);
+    const sufixoLocais = STATE.modalLocal === 'ambas' ? 'BC+ITJ' : (STATE.modalLocal === 'balneario_camboriu' ? 'BC' : 'ITJ');
+    mostrarToast(`${ICONES[STATE.modalClima || linhas[0].classificacao]} ${linhas[0].periodo} ${formatarData(linhas[0].data)} (${sufixoLocais}) salvo!`);
+  }
+
+  async function deletarRegistro(id, dataStr, local, periodo) {
+    if (!confirm(`Apagar registro de ${periodo} em ${local === 'balneario_camboriu' ? 'BC' : 'ITJ'}?`)) return;
+    const { error } = await supabaseClient.from('topclimabc_validacoes').delete().eq('id', id);
+    if (error) { mostrarToast('Erro ao apagar.', 'rose'); return; }
+    if (STATE._todasRealidades?.[dataStr]?.[local]?.periodos?.[periodo]) {
+      delete STATE._todasRealidades[dataStr][local].periodos[periodo];
+      const obj = STATE._todasRealidades[dataStr][local];
+      if (Object.keys(obj.periodos).length === 0) {
+        delete STATE._todasRealidades[dataStr][local];
+      } else {
+        obj.total_dia = Math.round(
+          Object.values(obj.periodos).reduce((s, p) => s + (typeof p.mm === 'number' ? p.mm : 0), 0) * 10
+        ) / 10;
+      }
+    }
+    if (STATE.dados?.dias) {
+      for (const d of STATE.dados.dias) {
+        if (d.data === dataStr && d.locais?.[local]?.realidade?.periodos?.[periodo]) {
+          delete d.locais[local].realidade.periodos[periodo];
+        }
+      }
+    }
+    atualizarListaRegistros();
+    renderizar();
+    mostrarToast('Registro apagado.', 'emerald');
   }
 
   // Aciona Github Actions disparando workflow
@@ -1964,34 +2004,42 @@
   async function atualizarListaRegistros() {
     const lista = document.getElementById('lista-registros');
     const div = document.getElementById('registros-hoje');
-    
+    const tituloEl = document.getElementById('feed-titulo');
+
     div.classList.remove('hidden');
     lista.innerHTML = '<div class="text-xs text-sky-400 text-center py-2"><i class="fa-solid fa-circle-notch fa-spin"></i> Atualizando...</div>';
 
-    const hoje = new Date().toISOString().split('T')[0];
+    const dataFiltro = document.getElementById('modal-data').value || new Date().toISOString().split('T')[0];
+    if (tituloEl) {
+      const [y, m, d] = dataFiltro.split('-');
+      tituloEl.innerHTML = `<i class="fa-solid fa-users mr-1"></i>Registros do dia ${d}/${m}/${y.slice(2)}`;
+    }
+
     const { data: registros, error } = await supabaseClient
       .from('topclimabc_validacoes')
       .select('*')
-      .eq('data', hoje)
+      .eq('data', dataFiltro)
       .order('timestamp', { ascending: false })
-      .limit(20);
+      .limit(50);
 
-    if (error || !registros || !registros.length) { 
-      lista.innerHTML = '<div class="text-xs text-slate-500 text-center py-2">Nenhum registro hoje ainda. Seja o primeiro!</div>';
-      return; 
+    if (error || !registros || !registros.length) {
+      lista.innerHTML = '<div class="text-xs text-slate-500 text-center py-2">Nenhum registro para esta data. Seja o primeiro!</div>';
+      return;
     }
 
     STATE.registrosHoje = registros;
 
-    lista.innerHTML = registros.map(r =>
-      `<div class="flex items-center gap-2 text-xs bg-slate-800/80 border border-slate-700/50 rounded-lg px-2 py-2 shadow-sm animate-fade-in">
+    lista.innerHTML = registros.map(r => {
+      const notaAttr = (r.nota || '').replace(/"/g, '&quot;');
+      return `<div class="flex items-center gap-2 text-xs bg-slate-800/80 border border-slate-700/50 rounded-lg px-2 py-2 shadow-sm animate-fade-in">
         <span class="text-lg">${ICONES[r.classificacao]}</span>
         <span class="font-bold text-white min-w-[36px]">${r.hora}</span>
         <span class="text-[10px] font-bold text-slate-400 capitalize bg-slate-900/50 px-1.5 py-0.5 rounded border border-slate-700">${r.periodo}</span>
         <span class="text-[10px] font-bold uppercase tracking-wider text-sky-300 bg-sky-900/30 px-1.5 py-0.5 rounded border border-sky-800/50">${r.local === 'balneario_camboriu' ? 'BC' : 'ITJ'}</span>
-        ${r.nota ? `<span class="text-slate-400 text-[10px] italic truncate">${r.nota}</span>` : ''}
-      </div>`
-    ).join('');
+        ${r.nota ? `<span class="text-slate-400 text-[10px] italic truncate flex-1" title="${notaAttr}">${r.nota}</span>` : '<span class="flex-1"></span>'}
+        <button onclick="deletarRegistro('${r.id}', '${r.data}', '${r.local}', '${r.periodo}')" class="text-rose-400/70 hover:text-rose-300 hover:bg-rose-950/40 rounded px-1.5 py-0.5 transition-colors" title="Apagar este registro"><i class="fa-solid fa-trash-can text-[10px]"></i></button>
+      </div>`;
+    }).join('');
   }
 
   // ━━━ TOAST ━━━
