@@ -2,32 +2,6 @@
   "data_coleta": "2026-04-19",
   "locais": {
     "balneario_camboriu": {
-      "2026-04-18": {
-        "ecmwf_ifs025": {
-          "madrugada": 0.5,
-          "manha": 0.0,
-          "tarde": 0.0,
-          "noite": 0.0
-        },
-        "gfs_seamless": {
-          "madrugada": 0.6,
-          "manha": 0.0,
-          "tarde": 0.0,
-          "noite": 0.0
-        },
-        "icon_seamless": {
-          "madrugada": 0.0,
-          "manha": 0.0,
-          "tarde": 0.0,
-          "noite": 0.0
-        },
-        "best_match": {
-          "madrugada": 0.0,
-          "manha": 0.0,
-          "tarde": 0.0,
-          "noite": 0.0
-        }
-      },
       "2026-04-19": {
         "ecmwf_ifs025": {
           "madrugada": 0.0,
@@ -208,6 +182,12 @@
           "noite": 0.2
         },
         "best_match": {
+          "madrugada": 0.0,
+          "manha": 0.0,
+          "tarde": 0.0,
+          "noite": 0.0
+        },
+        "openweathermap": {
           "madrugada": 0.0,
           "manha": 0.0,
           "tarde": 0.0,
@@ -447,20 +427,18 @@
           "tarde": 0.0,
           "noite": 0.0
         }
-      }
-    },
-    "itajai": {
-      "2026-04-18": {
+      },
+      "2026-05-04": {
         "ecmwf_ifs025": {
-          "madrugada": 0.5,
+          "madrugada": 0.0,
           "manha": 0.0,
           "tarde": 0.0,
           "noite": 0.0
         },
         "gfs_seamless": {
-          "madrugada": 0.9,
-          "manha": 0.0,
-          "tarde": 0.0,
+          "madrugada": 0.2,
+          "manha": 2.3,
+          "tarde": 1.4,
           "noite": 0.0
         },
         "icon_seamless": {
@@ -475,7 +453,9 @@
           "tarde": 0.0,
           "noite": 0.0
         }
-      },
+      }
+    },
+    "itajai": {
       "2026-04-19": {
         "ecmwf_ifs025": {
           "madrugada": 0.0,
@@ -656,6 +636,12 @@
           "noite": 0.0
         },
         "best_match": {
+          "madrugada": 0.0,
+          "manha": 0.0,
+          "tarde": 0.0,
+          "noite": 0.0
+        },
+        "openweathermap": {
           "madrugada": 0.0,
           "manha": 0.0,
           "tarde": 0.0,
@@ -881,6 +867,32 @@
           "madrugada": 0.0,
           "manha": 0.0,
           "tarde": 0.0,
+          "noite": 0.0
+        },
+        "icon_seamless": {
+          "madrugada": 0.0,
+          "manha": 0.0,
+          "tarde": 0.0,
+          "noite": 0.0
+        },
+        "best_match": {
+          "madrugada": 0.0,
+          "manha": 0.0,
+          "tarde": 0.0,
+          "noite": 0.0
+        }
+      },
+      "2026-05-04": {
+        "ecmwf_ifs025": {
+          "madrugada": 0.0,
+          "manha": 0.0,
+          "tarde": 0.0,
+          "noite": 0.0
+        },
+        "gfs_seamless": {
+          "madrugada": 0.2,
+          "manha": 2.9,
+          "tarde": 1.7,
           "noite": 0.0
         },
         "icon_seamless": {
