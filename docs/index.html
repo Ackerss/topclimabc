@@ -850,6 +850,36 @@
   }
 
   // ━━━ CARREGAR DADOS ━━━
+  // Busca validações manuais direto do Supabase (em tempo real, sem esperar o GHA rodar).
+  // Retorna dict { "YYYY-MM-DD": { local: { periodo: {...} } } }
+  async function buscarOverridesSupabase() {
+    try {
+      const { data, error } = await supabaseClient
+        .from('topclimabc_validacoes')
+        .select('data,local,periodo,classificacao,nota,created_at')
+        .eq('override', true)
+        .order('created_at', { ascending: false });
+      if (error) { console.warn('[Supabase] erro overrides:', error.message); return {}; }
+
+      const MM_MAP = { seco: 0, garoa: 1.0, moderada: 6.0, forte: 17.0, intensa: 40.0 };
+      const resultado = {};
+      for (const r of (data || [])) {
+        const { data: dataStr, local, periodo, classificacao, nota, created_at } = r;
+        if (!dataStr || !local || !periodo || !classificacao) continue;
+        if (!resultado[dataStr]) resultado[dataStr] = {};
+        if (!resultado[dataStr][local]) resultado[dataStr][local] = {};
+        // Primeiro registro (mais recente) vence — ignora duplicatas posteriores
+        if (!resultado[dataStr][local][periodo]) {
+          resultado[dataStr][local][periodo] = {
+            mm: MM_MAP[classificacao] ?? 0,
+            classificacao, fonte_periodo: 'manual', override: true, nota, timestamp: created_at
+          };
+        }
+      }
+      return resultado;
+    } catch (e) { console.warn('[Supabase] falha overrides:', e); return {}; }
+  }
+
   async function carregarDados() {
     try {
       const cacheBust = new Date().getTime();
@@ -857,6 +887,33 @@
       const respRanking = await fetch('ranking.json?v=' + cacheBust).then(x => x.json());
       const respEstacoes = await fetch('estacoes.json?v=' + cacheBust).then(x => x.json());
       const respRealidades = await fetch('todas_realidades.json?v=' + cacheBust).then(x => x.json()).catch(() => ({}));
+
+      // Overlay: validações manuais do Supabase (tempo real) sobrescrevem o JSON do backend.
+      const overridesSupabase = await buscarOverridesSupabase();
+      for (const [dataStr, locais] of Object.entries(overridesSupabase)) {
+        if (!respRealidades[dataStr]) respRealidades[dataStr] = {};
+        for (const [loc, periodos] of Object.entries(locais)) {
+          if (!respRealidades[dataStr][loc]) {
+            respRealidades[dataStr][loc] = { status: 'completo', fonte: 'Manual', periodos: {}, total_dia: 0 };
+          }
+          const obj = respRealidades[dataStr][loc];
+          if (!obj.periodos) obj.periodos = {};
+          for (const [periodo, info] of Object.entries(periodos)) {
+            obj.periodos[periodo] = info;
+          }
+          obj.tem_override_manual = true;
+          // Recalcula total do dia com base nos períodos conhecidos
+          obj.total_dia = Math.round(
+            Object.values(obj.periodos).reduce((s, p) => s + (typeof p.mm === 'number' ? p.mm : 0), 0) * 10
+          ) / 10;
+          // Injeta no dados.json também (realidade de ontem que vai pro card principal)
+          if (respDados.locais?.[loc]) {
+            if (dataStr === new Date(new Date().getTime() - 86400000).toISOString().split('T')[0]) {
+              respDados.locais[loc].realidade = obj;
+            }
+          }
+        }
+      }
       
       // Adaptar o formato do backend (Python) para o formato esperado pela UI
       let adaptado = { dias: [] };
@@ -1210,7 +1267,7 @@
     renderCardRealidade(localData.realidade, dia.data, dia.label);
 
     // Cards de modelos
-    renderCardsModelos(localData.modelos);
+    renderCardsModelos(localData.modelos, dia.data);
   }
 
   function renderAuditoriaRankingFlash() {
@@ -1319,8 +1376,14 @@
     `;
   }
 
-  function renderCardsModelos(modelos) {
+  function renderCardsModelos(modelos, dataReferencia) {
     if (!modelos) { document.getElementById('cards-modelos').innerHTML = ''; return; }
+
+    let dataFormatada = '';
+    if (dataReferencia) {
+      const [ano, mes, dia] = dataReferencia.split('-');
+      dataFormatada = `${dia}/${mes}/${ano.slice(2)}`;
+    }
 
     const html = Object.entries(modelos).map(([id, modelo]) => {
       const score = modelo.score_1d;
@@ -1382,7 +1445,7 @@
                </div>
                ${apps}
             </div>
-            <span class="text-[9px] font-bold text-sky-300 bg-sky-900/30 px-2 py-1 rounded uppercase tracking-widest border border-sky-700/50 shadow-sm whitespace-nowrap ml-2 text-center leading-tight">PREVISÃO<br class="sm:hidden"> 1 DIA ANTES</span>
+            <span class="text-[9px] font-bold text-sky-300 bg-sky-900/30 px-2 py-1 rounded uppercase tracking-widest border border-sky-700/50 shadow-sm whitespace-nowrap ml-2 text-center leading-tight">PREVISÃO<br class="sm:hidden">${dataFormatada ? ` ${dataFormatada}` : ''} <span class="opacity-70">(1 DIA ANTES)</span></span>
         </div>
         <div class="p-3.5">
           ${periodsHTML}
