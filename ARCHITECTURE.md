@@ -12,17 +12,17 @@
 
 ---
 
-## 📌 STATUS DO PROJETO
+## 📌 STATUS DO PROJETO (auditado 2026-04-19)
 
 | Item | Status |
 |------|--------|
-| Plano de Implementação | ✅ v2 Revisado |
-| Fontes de Dados Pesquisadas | ✅ Completo |
-| Decisões de Arquitetura | ✅ Aprovadas (Usando Open-Meteo Historical) |
-| Frontend | ✅ Finalizada (Spa v1.0) |
-| Backend Python | ✅ Finalizada (Coleta, Auditoria, Sync) |
-| GitHub Actions | ⬜ Não iniciado |
-| Deploy GitHub Pages | ⬜ Não iniciado |
+| Plano de Implementação | ✅ v2 Revisado + Sprint de Correções 2026-04-18 aplicado |
+| Fontes de Dados | ✅ Hierarquia definitiva implementada (ver "Fonte de Realidade") |
+| Frontend | ✅ Funcional (SPA v1.1 pós-correções) |
+| Backend Python | ✅ Funcional (Coleta, Auditoria, Sync, Score 5×5, Persistência baseline) |
+| GitHub Actions | ✅ Rodando diariamente às 12:00 UTC (`.github/workflows/atualizacao_diaria.yml`) |
+| Deploy GitHub Pages | ✅ Publicado em https://ackerss.github.io/topclimabc/ |
+| CEMADEN PED | 🔴 Servidor retorna "Forbidden" — fallback Open-Meteo Archive ativo |
 
 ---
 
@@ -34,9 +34,9 @@
 | Serviço | Tipo | Valor | Onde Usar |
 |---------|------|-------|-----------|
 | OpenWeatherMap | API Key | `d642bd544942199ff3b862927da91923` | GitHub Secret: `OWM_API_KEY` |
-| Supabase (KANBAN) | Project ID | `jfjrzkjzfxnyhexwhoby` | Frontend / GitHub Secret |
-| Open-Meteo | — | Não precisa de chave | Livre |
-| CEMADEN PED | — | Não precisa de chave | Livre |
+| Supabase (KANBAN) | Project ID | `jfjrzkjzfxnyhexwhoby` | Frontend inline + GitHub Secret `SUPABASE_ANON_KEY` |
+| Open-Meteo | — | Não precisa de chave | Livre — 10k calls/dia |
+| CEMADEN PED | Token de cadastro | **EXIGE autenticação** (doc antiga dizia "livre" — era falso) | GitHub Secret: `CEMADEN_TOKEN` (quando obtido) |
 
 > [!CAUTION]
 > **🚨 MEGA ALERTA - SUPABASE (PROJETO EMPRESTADO) 🚨**
@@ -62,16 +62,18 @@ O TOPCLIMABC responde isso com DADOS, não opinião.
 > [!IMPORTANT]
 > Esta é a tabela central do projeto. Cada "modelo" que auditamos corresponde a apps reais que o usuário usa no dia-a-dia. O ranking do TOPCLIMABC dirá, indiretamente, qual app é mais confiável.
 
+> **Fonte de verdade:** `scripts/config.py` dict `MODELOS`. Esta tabela reflete o estado auditado em 2026-04-19.
+
 | ID no Sistema | Modelo Meteorológico | Apps/Sites que Usam | Notas |
 |---------------|---------------------|---------------------|-------|
 | `gfs_seamless` | **GFS** (NOAA, EUA) | 🌐 Weather.com, TWC, maioria dos apps genéricos | Modelo global americano, atualiza 4x/dia, resolução ~25km |
-| `ecmwf_ifs025` | **ECMWF IFS** (Europeu) | 🌐 **Windy** (padrão), Apple Weather, Météo | Considerado o melhor modelo global, resolução ~25km |
+| `ecmwf_ifs025` | **ECMWF IFS** (Europeu) | 🌐 **Windy** (padrão), Apple Weather | Considerado o melhor modelo global, resolução ~25km |
 | `icon_seamless` | **ICON** (DWD, Alemanha) | 🌐 **Windy** (opção), Bright Sky | Excelente para curto prazo, resolução fina |
-| `gem_seamless` | **GEM** (Canadá) | 🌐 Weather.gc.ca, Windy (opção) | Bom complemento global |
 | `best_match` | **Open-Meteo Best Match** | 🌐 Open-Meteo.com | Blend automático do melhor modelo para a região |
-| `openweathermap` | **OWM Proprietário** | 🌐 OpenWeatherMap app, muitos apps pequenos | Usa GFS + dados proprietários |
-| `climatempo` | **CT2W + ECMWF + GFS** (IA) | 🌐 **Climatempo** app e site | Modelo proprietário brasileiro com IA sobre ECMWF/GFS |
-| `persistencia` | **Persistência** (baseline) | — Nenhum | "Amanhã = hoje". Se um modelo perde para isso, é inútil |
+| `openweathermap` | **OWM Proprietário** | 🌐 OpenWeatherMap app, muitos apps pequenos | Coleta via API OWM (não Open-Meteo) |
+| `persistencia` | **Persistência** (baseline) | — Nenhum | "Amanhã = hoje". Linha de corte obrigatória — se um modelo perde para isso, é inútil |
+
+> **Modelos removidos em auditorias anteriores:** `gem_seamless` (GEM/Canadá) e `climatempo` foram listados em documentação antiga mas **nunca foram implementados no código**. Não adicione sem discussão com o dono — cada modelo extra custa chamadas de API e complica o ranking.
 
 ### Como funciona na prática:
 

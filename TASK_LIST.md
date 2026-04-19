@@ -1,47 +1,66 @@
 # ✅ LISTA DE TAREFAS — TOPCLIMABC
 
-Este arquivo resume o que já foi construído e o que ainda falta para o deploy final.
+> **Auditado em 2026-04-19.** Sincronizado com o código real após sprint de correções.
+> Para detalhamento completo do que funciona e do que não funciona, veja `AUDITORIA-IA.md`.
 
 ---
 
-## 🟢 CONCLUÍDO (FASE 1 & 2)
+## 🟢 CONCLUÍDO
 
 ### 🎨 Frontend (SPA Moderna)
 - [x] Interface em Cards (Dark Mode por padrão)
 - [x] Sistema de 4 Abas (Auditoria, Ranking, Histórico, Estações)
 - [x] Seleção dinâmica Balneário Camboriú / Itajaí
 - [x] PWA Ready (instalável no Android/iPhone)
-- [x] Mock de dados iniciais substituído por dados reais do backend
+- [x] Validação manual via modal com persistência no Supabase
+- [x] Banner "Ranking em formação" quando amostras < 7
+- [x] Labels honestos sobre a fonte real dos dados
+- [x] Classes de chuva unificadas (seco/garoa/moderada/forte/intensa)
 
 ### 🐍 Backend Python (Motor de Auditoria)
-- [x] **Coleta Diária:** Busca previsões do Open-Meteo (4 modelos) e OpenWeatherMap.
-- [x] **Juiz da Realidade:** Coleta chuva real medida via Open-Meteo Historical (Reanálise ERA5).
-- [x] **Motor de Pontuação:** Algoritmo que dá notas de 0 a 100% com base no erro de mm e na classe de chuva.
-- [x] **Sincronização:** Atualiza automaticamente os arquivos JSON consumidos pelo site.
-- [x] **Bootstrap:** Carga inicial de 15 dias de dados históricos para o app não começar vazio.
-- [x] **Atalho de Uso:** Arquivo `TOPCLIMABC.bat` para execução local simplificada.
+- [x] **Coleta Diária de Previsões:** Open-Meteo (4 modelos) + OpenWeatherMap
+- [x] **Hierarquia de fontes de realidade** (Manual → CEMADEN → Archive → Hist)
+- [x] **Cliente CEMADEN PED** (`scripts/utils/cemaden.py`) — pronto para quando o serviço voltar
+- [x] **Motor de Pontuação** — Matriz 5×5 gradual + volume −5/mm + peso madrugada 0.5×
+- [x] **Persistência como baseline** (ranking mostra linha de corte "amanhã = hoje")
+- [x] **Sincronização de Frontend** — gera `dados.json`, `ranking.json`, `estacoes.json`, `todas_realidades.json`
+- [x] **Migração de classes** (`scripts/migrar_classes.py`) — one-shot idempotente já executado em 2026-04-18
+- [x] **Timezone correto** — conversões UTC→BRT para OWM
+- [x] **Atalho de Uso:** Arquivo `TOPCLIMABC.bat` para execução local
+
+### ☁️ Cloud / Automação
+- [x] **Supabase integrado** — projeto KANBAN (`jfjrzkjzfxnyhexwhoby`), tabela `topclimabc_validacoes`
+- [x] **Override manual** — frontend envia `override=true`, backend lê e aplica prioridade
+- [x] **GitHub Actions** — `.github/workflows/atualizacao_diaria.yml` roda 12:00 UTC todo dia
+- [x] **GitHub Pages** — `docs/` publicado em https://ackerss.github.io/topclimabc/
+- [x] **Commit automático** de dados atualizados pelo workflow
 
 ---
 
-## 🟡 EM ANDAMENTO / PRÓXIMO (FASE 3)
+## 🟡 OPCIONAL / DESEJÁVEL (NÃO BLOQUEIA O APP)
 
-### ☁️ Nuvem e Banco de Dados (Supabase)
-- [ ] **Restauração do Supabase:** Reativar o projeto "Craquepedia" no painel do Supabase.
-- [ ] **Persistência de Validação:** Trocar o `localStorage` (salvamento no navegador) pelo Supabase para compartilhar registros entre usuários.
+### Fonte primária CEMADEN (quando possível)
+- [ ] Aguardar cadastro do usuário em https://sws.cemaden.gov.br/PED/login (atualmente retorna "Forbidden" — problema do lado do governo)
+- [ ] Quando aprovado, adicionar `CEMADEN_TOKEN` no `.env` local e nos GitHub Secrets
+- [ ] O cliente `scripts/utils/cemaden.py` já está pronto para usar o token — nenhuma mudança de código será necessária
 
-### 🤖 Automação (GitHub Actions)
-- [ ] Criar o workflow para rodar os scripts Python na nuvem todo dia às 03:00 AM.
-- [ ] Publicar no GitHub Pages automaticamente.
+### INMET como fonte adicional
+- [ ] Avaliar integração com `apitempo.inmet.gov.br` (Itajaí tem estação A868 cadastrada)
+- [ ] API INMET deu timeout em testes recentes — acompanhar status antes de integrar
+
+---
+
+## 🚨 BLOQUEIOS ATIVOS
+
+**Nenhum bloqueio crítico.** O app está 100% funcional — com fallback automático para Open-Meteo Archive quando o CEMADEN está fora do ar (que é o estado atual).
 
 ---
 
 ## 📂 ESTRUTURA ATUAL
-- `docs/`: O site (HTML, JS, Dados).
-- `scripts/`: O motor Python.
-- `data/`: O histórico de previsões e chuva real coletado.
+
+- `docs/`: O site (HTML, JS, Dados gerados).
+- `scripts/`: O motor Python (coleta, auditoria, sincronização).
+- `scripts/utils/`: Utilidades (score, classificação, clients API).
+- `data/`: Base de dados local (previsões, realidade, auditoria).
 - `docs-projeto/`: Manuais e guias técnicos.
-
----
-
-## 🚨 BLOQUEIOS
-- [ ] **Supabase Inativo:** Precisamos que o usuário restaure o projeto no dashboard para as validações manuais serem salvas na nuvem.
+- `.github/workflows/`: Automação CI/CD.
