@@ -856,27 +856,31 @@
   // Retorna dict { "YYYY-MM-DD": { local: { periodo: {...} } } }
   async function buscarOverridesSupabase() {
     try {
+      // Busca TODOS os registros (inclusive tombstones com override=false).
+      // Para cada chave (data, local, periodo), o registro mais recente vence.
+      // Se o vencedor for override=false, significa que foi "apagado" via soft-delete.
       const { data, error } = await supabaseClient
         .from('topclimabc_validacoes')
-        .select('data,local,periodo,classificacao,nota,created_at')
-        .eq('override', true)
+        .select('data,local,periodo,classificacao,nota,created_at,override')
         .order('created_at', { ascending: false });
       if (error) { console.warn('[Supabase] erro overrides:', error.message); return {}; }
 
       const MM_MAP = { seco: 0, garoa: 1.0, moderada: 6.0, forte: 17.0, intensa: 40.0 };
       const resultado = {};
+      const vistos = new Set();
       for (const r of (data || [])) {
-        const { data: dataStr, local, periodo, classificacao, nota, created_at } = r;
+        const { data: dataStr, local, periodo, classificacao, nota, created_at, override } = r;
         if (!dataStr || !local || !periodo || !classificacao) continue;
+        const chave = `${dataStr}|${local}|${periodo}`;
+        if (vistos.has(chave)) continue;  // so o mais recente importa
+        vistos.add(chave);
+        if (override === false) continue;  // tombstone — foi apagado
         if (!resultado[dataStr]) resultado[dataStr] = {};
         if (!resultado[dataStr][local]) resultado[dataStr][local] = {};
-        // Primeiro registro (mais recente) vence — ignora duplicatas posteriores
-        if (!resultado[dataStr][local][periodo]) {
-          resultado[dataStr][local][periodo] = {
-            mm: MM_MAP[classificacao] ?? 0,
-            classificacao, fonte_periodo: 'manual', override: true, nota, timestamp: created_at
-          };
-        }
+        resultado[dataStr][local][periodo] = {
+          mm: MM_MAP[classificacao] ?? 0,
+          classificacao, fonte_periodo: 'manual', override: true, nota, timestamp: created_at
+        };
       }
       return resultado;
     } catch (e) { console.warn('[Supabase] falha overrides:', e); return {}; }
@@ -1902,8 +1906,23 @@
 
   async function deletarRegistro(id, dataStr, local, periodo) {
     if (!confirm(`Apagar registro de ${periodo} em ${local === 'balneario_camboriu' ? 'BC' : 'ITJ'}?`)) return;
-    const { error } = await supabaseClient.from('topclimabc_validacoes').delete().eq('id', id);
-    if (error) { mostrarToast('Erro ao apagar.', 'rose'); return; }
+    // Soft-delete: RLS do Supabase bloqueia DELETE para role anon, entao inserimos
+    // uma "tombstone" (override=false). Leitores mais recentes (frontend e backend)
+    // ignoram o periodo se o ultimo registro para a chave (data, local, periodo)
+    // tem override=false.
+    const agora = new Date();
+    const tombstone = {
+      hora: agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+      local,
+      classificacao: 'seco',
+      nota: '[apagado]',
+      timestamp: agora.toISOString(),
+      periodo,
+      data: dataStr,
+      override: false
+    };
+    const { error } = await supabaseClient.from('topclimabc_validacoes').insert([tombstone]);
+    if (error) { console.error(error); mostrarToast('Erro ao apagar.', 'rose'); return; }
     if (STATE._todasRealidades?.[dataStr]?.[local]?.periodos?.[periodo]) {
       delete STATE._todasRealidades[dataStr][local].periodos[periodo];
       const obj = STATE._todasRealidades[dataStr][local];
@@ -2015,14 +2034,26 @@
       tituloEl.innerHTML = `<i class="fa-solid fa-users mr-1"></i>Registros do dia ${d}/${m}/${y.slice(2)}`;
     }
 
-    const { data: registros, error } = await supabaseClient
+    const { data: registrosRaw, error } = await supabaseClient
       .from('topclimabc_validacoes')
       .select('*')
       .eq('data', dataFiltro)
-      .order('timestamp', { ascending: false })
-      .limit(50);
+      .order('created_at', { ascending: false })
+      .limit(100);
 
-    if (error || !registros || !registros.length) {
+    // Remove linhas "apagadas" via tombstone (override=false) e as linhas antigas
+    // que elas invalidam. Para cada chave (local, periodo), so o mais recente conta.
+    const vistos = new Set();
+    const registros = [];
+    for (const r of (registrosRaw || [])) {
+      const chave = `${r.local}|${r.periodo}`;
+      if (vistos.has(chave)) continue;
+      vistos.add(chave);
+      if (r.override === false) continue;
+      registros.push(r);
+    }
+
+    if (error || !registros.length) {
       lista.innerHTML = '<div class="text-xs text-slate-500 text-center py-2">Nenhum registro para esta data. Seja o primeiro!</div>';
       return;
     }

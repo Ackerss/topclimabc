@@ -41,10 +41,14 @@ def buscar_overrides_manuais(data_iso: str = None) -> dict:
         "Authorization": f"Bearer {SUPABASE_KEY}",
     }
     
+    # Busca TODOS os registros (inclusive tombstones com override=false).
+    # Logica de resolucao: para cada chave (data, local, periodo) o mais recente vence.
+    # Se o vencedor for override=false, o periodo foi apagado pelo usuario via frontend.
+    # Isso existe porque a RLS do Supabase nao permite DELETE para role anon, entao
+    # o frontend usa "soft-delete" inserindo uma linha tombstone.
     params = {
-        "override": "eq.true",
         "order": "created_at.desc",
-        "select": "data,local,periodo,classificacao,nota,created_at",
+        "select": "data,local,periodo,classificacao,nota,created_at,override",
     }
     if data_iso:
         params["data"] = f"eq.{data_iso}"
@@ -58,15 +62,25 @@ def buscar_overrides_manuais(data_iso: str = None) -> dict:
         return {}
 
     resultado = {}
+    vistos = set()
     for r in registros:
         data_reg = r.get("data")
         local = r.get("local")
         periodo = r.get("periodo")
         classificacao = r.get("classificacao")
+        override = r.get("override")
         if not all([data_reg, local, periodo, classificacao]):
             continue
-            
-        # Target dict dependendo se data_iso é None ou específico
+
+        chave = (data_reg, local, periodo)
+        if chave in vistos:
+            continue  # ja processamos uma versao mais recente desta chave
+        vistos.add(chave)
+
+        if override is False:
+            continue  # tombstone — periodo foi apagado
+
+        # Target dict dependendo se data_iso e None ou especifico
         if data_iso:
             target_dict = resultado
         else:
@@ -76,17 +90,16 @@ def buscar_overrides_manuais(data_iso: str = None) -> dict:
 
         if local not in target_dict:
             target_dict[local] = {}
-            
-        if periodo not in target_dict[local]:
-            mm = MM_POR_CLASSIFICACAO.get(classificacao, 0.0)
-            target_dict[local][periodo] = {
-                "classificacao": classificacao,
-                "mm": mm,
-                "nota": r.get("nota"),
-                "timestamp": r.get("created_at"),
-                "fonte": "manual",
-                "override": True,
-            }
+
+        mm = MM_POR_CLASSIFICACAO.get(classificacao, 0.0)
+        target_dict[local][periodo] = {
+            "classificacao": classificacao,
+            "mm": mm,
+            "nota": r.get("nota"),
+            "timestamp": r.get("created_at"),
+            "fonte": "manual",
+            "override": True,
+        }
 
     if resultado:
         count = sum(len(v) for v in resultado.values()) if data_iso else sum(sum(len(loc) for loc in dias.values()) for dias in resultado.values())
