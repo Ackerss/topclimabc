@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-04-19 14:45",
+  "atualizado_em": "2026-04-19 19:25",
   "locais": {
     "balneario_camboriu": {
       "realidade": {
@@ -249,7 +249,7 @@
             "noite": 0.0
           },
           "openweathermap": {
-            "madrugada": 0.1,
+            "madrugada": 0.2,
             "manha": 0.0,
             "tarde": 0.0,
             "noite": 0.0
@@ -264,9 +264,9 @@
           },
           "gfs_seamless": {
             "madrugada": 0.0,
-            "manha": 0.2,
-            "tarde": 0.1,
-            "noite": 0.0
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 0.3
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -291,14 +291,14 @@
           "gfs_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
-            "tarde": 0.7,
-            "noite": 2.5
+            "tarde": 0.4,
+            "noite": 0.4
           },
           "icon_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 0.0
+            "tarde": 0.2,
+            "noite": 0.1
           },
           "best_match": {
             "madrugada": 0.0,
@@ -315,10 +315,10 @@
             "noite": 4.0
           },
           "gfs_seamless": {
-            "madrugada": 4.5,
-            "manha": 1.9,
-            "tarde": 1.1,
-            "noite": 0.4
+            "madrugada": 0.1,
+            "manha": 6.1,
+            "tarde": 1.4,
+            "noite": 0.0
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -341,10 +341,10 @@
             "noite": 0.0
           },
           "gfs_seamless": {
-            "madrugada": 1.4,
-            "manha": 4.2,
-            "tarde": 1.9,
-            "noite": 1.6
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 0.0
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -367,9 +367,9 @@
             "noite": 0.8
           },
           "gfs_seamless": {
-            "madrugada": 2.4,
-            "manha": 1.6,
-            "tarde": 0.4,
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
             "noite": 0.0
           },
           "icon_seamless": {
@@ -394,9 +394,9 @@
           },
           "gfs_seamless": {
             "madrugada": 0.0,
-            "manha": 0.2,
-            "tarde": 1.1,
-            "noite": 2.2
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 0.0
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -419,10 +419,10 @@
             "noite": 0.0
           },
           "gfs_seamless": {
-            "madrugada": 0.5,
-            "manha": 2.0,
-            "tarde": 7.0,
-            "noite": 1.7
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 0.3
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -447,8 +447,8 @@
           "gfs_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
-            "tarde": 0.5,
-            "noite": 0.5
+            "tarde": 0.0,
+            "noite": 0.0
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -471,10 +471,10 @@
             "noite": 0.4
           },
           "gfs_seamless": {
-            "madrugada": 1.0,
-            "manha": 0.4,
+            "madrugada": 0.0,
+            "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.5
+            "noite": 0.0
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -497,10 +497,10 @@
             "noite": 0.0
           },
           "gfs_seamless": {
-            "madrugada": 0.3,
-            "manha": 0.4,
-            "tarde": 0.0,
-            "noite": 0.2
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.2,
+            "noite": 0.1
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -625,7 +625,7 @@
             "noite": 0.0
           },
           "icon_seamless": {
-            "madrugada": 0.1,
+            "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
             "noite": 0.0
@@ -754,8 +754,8 @@
           },
           "icon_seamless": {
             "madrugada": 0.0,
-            "manha": 0.0,
-            "tarde": 0.0,
+            "manha": 0.4,
+            "tarde": 0.2,
             "noite": 0.0
           },
           "best_match": {
@@ -765,7 +765,7 @@
             "noite": 0.0
           },
           "openweathermap": {
-            "madrugada": 0.0,
+            "madrugada": 0.2,
             "manha": 0.0,
             "tarde": 0.0,
             "noite": 0.0
@@ -807,14 +807,14 @@
           "gfs_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
-            "tarde": 0.7,
-            "noite": 1.9
+            "tarde": 0.6,
+            "noite": 0.7
           },
           "icon_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 0.0
+            "tarde": 0.7,
+            "noite": 0.2
           },
           "best_match": {
             "madrugada": 0.0,
@@ -831,10 +831,10 @@
             "noite": 4.0
           },
           "gfs_seamless": {
-            "madrugada": 4.2,
-            "manha": 3.2,
-            "tarde": 1.3,
-            "noite": 0.4
+            "madrugada": 0.2,
+            "manha": 6.1,
+            "tarde": 1.4,
+            "noite": 0.0
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -857,10 +857,10 @@
             "noite": 0.0
           },
           "gfs_seamless": {
-            "madrugada": 1.1,
-            "manha": 4.0,
-            "tarde": 2.0,
-            "noite": 1.1
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 0.0
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -883,9 +883,9 @@
             "noite": 0.8
           },
           "gfs_seamless": {
-            "madrugada": 2.8,
-            "manha": 1.8,
-            "tarde": 0.4,
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
             "noite": 0.0
           },
           "icon_seamless": {
@@ -911,8 +911,8 @@
           "gfs_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
-            "tarde": 0.9,
-            "noite": 3.6
+            "tarde": 0.0,
+            "noite": 0.0
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -935,10 +935,10 @@
             "noite": 0.0
           },
           "gfs_seamless": {
-            "madrugada": 1.2,
-            "manha": 2.3,
-            "tarde": 8.1,
-            "noite": 1.6
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 1.4
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -961,10 +961,10 @@
             "noite": 0.0
           },
           "gfs_seamless": {
-            "madrugada": 0.0,
+            "madrugada": 0.1,
             "manha": 0.0,
-            "tarde": 0.5,
-            "noite": 0.5
+            "tarde": 0.0,
+            "noite": 0.0
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -987,10 +987,10 @@
             "noite": 0.4
           },
           "gfs_seamless": {
-            "madrugada": 1.0,
-            "manha": 0.4,
+            "madrugada": 0.0,
+            "manha": 0.0,
             "tarde": 0.0,
-            "noite": 1.0
+            "noite": 0.0
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -1013,10 +1013,10 @@
             "noite": 0.0
           },
           "gfs_seamless": {
-            "madrugada": 0.2,
-            "manha": 0.3,
-            "tarde": 0.0,
-            "noite": 0.0
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.4,
+            "noite": 0.2
           },
           "icon_seamless": {
             "madrugada": 0.0,
