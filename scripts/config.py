@@ -103,12 +103,14 @@ PERIODOS = {
 }
 
 # ── Classificação de Chuva (mm acumulado no período) ────────────────────────
+# NOMES UNIFICADOS em toda a pipeline (backend, Supabase, frontend).
+# Baseado em ARCHITECTURE.md seção "Classificação de Chuva".
 CLASSIFICACOES = [
-    {"nome": "sem_chuva",    "min": 0,    "max": 0.5,  "label": "Sem Chuva"},
-    {"nome": "fraca",        "min": 0.5,  "max": 5.0,  "label": "Fraca"},
-    {"nome": "moderada",     "min": 5.0,  "max": 15.0, "label": "Moderada"},
-    {"nome": "forte",        "min": 15.0, "max": 40.0, "label": "Forte"},
-    {"nome": "muito_forte",  "min": 40.0, "max": 999,  "label": "Muito Forte"},
+    {"nome": "seco",     "min": 0.0,  "max": 0.1,  "label": "Seco"},
+    {"nome": "garoa",    "min": 0.1,  "max": 2.6,  "label": "Garoa"},
+    {"nome": "moderada", "min": 2.6,  "max": 10.1, "label": "Moderada"},
+    {"nome": "forte",    "min": 10.1, "max": 25.1, "label": "Forte"},
+    {"nome": "intensa",  "min": 25.1, "max": 9999, "label": "Intensa"},
 ]
 
 # ── APIs Externas ─────────────────────────────────────────────────────────────
@@ -119,22 +121,28 @@ OPEN_METEO_HIST    = "https://historical-forecast-api.open-meteo.com/v1/forecast
 OWM_BASE           = "https://api.openweathermap.org/data/2.5"
 
 # ── Fonte de Realidade ────────────────────────────────────────────────────────
-# DECISÃO (2026-04-18): Switched para Open-Meteo Archive com modelo 'best_match'.
+# HIERARQUIA DEFINITIVA (sprint de correções 2026-04-18):
 #
-# POR QUE best_match É MELHOR QUE ERA5 PURO:
-# - ERA5 puro: reanálise ECMWF com resolução de ~25km. Muito impreciso localmente.
-#   Exemplo: mostrava 6.9mm em BC/Itajaí no 17/04 quando na prática ficou quasi seco.
-# - best_match: Open-Meteo combina automaticamente o melhor modelo histórico disponível
-#   para cada região — para o Sul do Brasil inclui ERA5-Land (~9km) + dados observacionais
-#   de estações físicas próximas (inclui INMET A868 Itajaí indiretamente).
-#   Resultado para 17/04: 3.3mm (muito mais próximo da realidade).
+# 1. CEMADEN PED API — FONTE PRIMÁRIA (pluviômetros físicos em solo)
+#    → scripts/utils/cemaden.py
+#    Consolidação por mediana entre estações do município (códigos IBGE).
+#    status retornado: "completo"
 #
-# HIERARQUIA DEFINITIVA:
-# 1. Open-Meteo Archive (best_match) — dado diário + horário (mais confiável)
-# 2. Open-Meteo Historical Forecast  — fallback para datas muito recentes
-# 3. sem_dados — nunca inventar 0mm sem confirmação
-FONTE_REALIDADE_PRIMARIA   = "open_meteo_archive_best_match"
-FONTE_REALIDADE_SECUNDARIA = "open_meteo_historical_forecast"
+# 2. Open-Meteo Archive (best_match) — FALLBACK
+#    Reanálise ERA5-Land ~9km + estações observacionais. Não é medição direta.
+#    status retornado: "provisorio_reanalise"
+#
+# 3. Open-Meteo Historical Forecast — último recurso
+#    Previsão recalculada para datas recentes onde o Archive ainda não processou.
+#    status retornado: "provisorio"
+#
+# 4. sem_dados — nunca inventar 0mm sem confirmação
+#
+# REGRA DE OURO: validações manuais do usuário (tabela topclimabc_validacoes no
+# Supabase com override=true) sobrescrevem qualquer fonte automática por período.
+FONTE_REALIDADE_PRIMARIA   = "cemaden_ped"
+FONTE_REALIDADE_SECUNDARIA = "open_meteo_archive_best_match"
+FONTE_REALIDADE_TERCIARIA  = "open_meteo_historical_forecast"
 
 # Modelo a usar no Archive (best_match = melhor disponível para a região)
 OM_ARCHIVE_MODEL  = "best_match"

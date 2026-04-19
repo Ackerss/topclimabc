@@ -9,18 +9,19 @@ from scripts.config import CLASSIFICACOES
 
 def classificar_chuva(mm):
     """
-    Recebe um valor em mm e retorna a chave da classificação (ex: 'fraca', 'moderada').
+    Recebe um valor em mm e retorna a chave da classificação.
+    Classes unificadas: seco, garoa, moderada, forte, intensa.
     """
     if mm is None:
         return "sem_dados"
-    
-    # Itera sobre as classificações definidas na config
+
+    # Intervalos definidos em config: [min, max)  — exclusivo no limite superior
     for c in CLASSIFICACOES:
-        if c["min"] <= mm <= c["max"]:
+        if c["min"] <= mm < c["max"]:
             return c["nome"]
-            
-    # Fallback caso algo dê errado
-    return "sem_chuva"
+
+    # Acima do maior limite = intensa (nunca deveria acontecer com max=9999)
+    return "intensa"
 
 def get_label_classificacao(nome_id):
     """

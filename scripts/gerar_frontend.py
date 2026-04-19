@@ -39,16 +39,15 @@ def gerar_estacoes_json(realidade_ontem, realidade_hoje_parcial=None):
     estacoes = {
         "meta": {
             "atualizado_em": agora,
-            "fonte": "Open-Meteo Archive (Best Match)",
+            "hierarquia_fontes": [
+                "1. CEMADEN PED (pluviômetros físicos em solo) — PRIMÁRIA",
+                "2. Open-Meteo Archive best_match (reanálise ERA5-Land ~9km) — fallback",
+                "3. Open-Meteo Historical Forecast (previsão recalculada) — último recurso",
+            ],
             "nota": (
-                "Dados climáticos apurados com modelo que combina diversas fontes (ERA5-Land, radar "
-                "e estações físicas locais) para precisão de ponta."
+                "A fonte efetivamente usada em cada dia fica em locais.<local>.ontem.fonte. "
+                "Validação manual do usuário tem prioridade absoluta quando presente."
             ),
-            "aviso": (
-                "✔️ Dados de alta confiabilidade! O modelo best_match agrupa a melhor reanálise global "
-                "(ERA5-Land) com observações em solo local (como INMET) chegando a precisões de ~9km."
-            ),
-            "status_cemaden": "indisponivel"
         },
         "locais": {}
     }
@@ -56,18 +55,21 @@ def gerar_estacoes_json(realidade_ontem, realidade_hoje_parcial=None):
     for local_id, local_info in LOCAIS.items():
         real_ontem = realidade_ontem.get(local_id, {}) if realidade_ontem else {}
 
-        # Extrai dados de ontem (só se status for confiável)
         ontem_dados = None
-        if real_ontem.get("status") in ("completo", "provisorio"):
+        status_aceitos = ("completo", "provisorio", "provisorio_reanalise")
+        if real_ontem.get("status") in status_aceitos:
             periodos = real_ontem.get("periodos", {})
             ontem_dados = {
                 "status_fonte": real_ontem.get("status"),
                 "fonte": real_ontem.get("fonte", ""),
                 "total_dia": real_ontem.get("total_dia"),
+                "estacoes_cemaden": real_ontem.get("estacoes_cemaden", []),
+                "tem_override_manual": real_ontem.get("tem_override_manual", False),
                 "periodos": {
                     p: {
                         "mm": info.get("mm"),
-                        "classificacao": info.get("classificacao")
+                        "classificacao": info.get("classificacao"),
+                        "override": info.get("override", False),
                     }
                     for p, info in periodos.items()
                 }
@@ -77,10 +79,9 @@ def gerar_estacoes_json(realidade_ontem, realidade_hoje_parcial=None):
             "nome": local_info["nome"],
             "lat": local_info["lat"],
             "lon": local_info["lon"],
-            "fonte_dados": "Open-Meteo Archive (Best Match)",
-            "status_cemaden": "indisponivel",
+            "ibge": local_info.get("ibge"),
             "ontem": ontem_dados,
-            "hoje": None  # Dados de hoje nunca disponíveis de imediato no Archive
+            "hoje": None,  # coletado só após consolidação do dia (24h)
         }
 
     return estacoes
@@ -100,9 +101,8 @@ def main():
             ranking[local_id][prazo_id] = []
 
             for m_id, m_info in MODELOS.items():
-                if m_info.get("is_baseline") and m_id == "persistencia":
-                    continue  # Persistência não entra no ranking de modelos
-
+                # Persistência ENTRA no ranking — é baseline obrigatório.
+                # Qualquer modelo abaixo dela é considerado inútil.
                 scores = []
                 for data_iso, prazos_data in datas.items():
                     if prazo_id in prazos_data and m_id in prazos_data[prazo_id]:
@@ -114,7 +114,8 @@ def main():
                     "modelo": m_id,
                     "nome": m_info["nome_display"],
                     "score": media,
-                    "amostras": len(scores)
+                    "amostras": len(scores),
+                    "is_baseline": m_info.get("is_baseline", False)
                 })
 
             # Ordena do maior score para o menor

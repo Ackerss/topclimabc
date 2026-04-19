@@ -3,32 +3,29 @@ TOPCLIMABC — coletar_realidade.py
 ==================================
 Coleta os dados reais de precipitação (juiz oficial do sistema).
 
-HIERARQUIA DE FONTES (atualizado 2026-04-18):
+HIERARQUIA DE FONTES (atualizado 2026-04-18, sprint de correções):
 
-1. Open-Meteo Archive (best_match)
+1. CEMADEN PED API  ← FONTE PRIMÁRIA (pluviômetros físicos)
+   URL: sws.cemaden.gov.br/PED/rest
+   Consolida mediana das estações de BC/Itajaí por período.
+   Status: "completo" — é o dado mais fidedigno possível.
+
+2. Open-Meteo Archive (best_match) — FALLBACK
    URL: archive-api.open-meteo.com
-   MODELO: best_match — combina automaticamente o melhor modelo disponível
-   para a região. Para o Sul do Brasil usa ERA5-Land (~9km) + dados de
-   estações físicas observacionais próximas (inclui INMET A868 Itajaí).
-   Disponível com ~2-5 dias de delay para datas recentes.
-   Status: "completo"
+   Usa ERA5-Land (~9km) + obs. locais. Disponível com 2-5 dias de atraso.
+   Status: "provisorio_reanalise" — reanálise, não medição direta.
 
-   POR QUE NÃO ERA5 PURO?
-   ERA5 puro tinha resolução de ~25km e superestimava/subestimava a chuva
-   localmente. best_match corrigiu BC/Itajaí de 6.9mm para 3.3mm no 17/04.
-
-2. Open-Meteo Historical Forecast (fallback para datas muito recentes)
+3. Open-Meteo Historical Forecast — FALLBACK de último recurso
    URL: historical-forecast-api.open-meteo.com
-   Status: "provisorio"
+   Status: "provisorio" — previsão recalculada, não medição.
 
-3. sem_dados — Se ambas as APIs falharem.
-   NUNCA inserir 0mm sem confirmação explícita da API.
+4. sem_dados — Se todas as APIs falharem.
+   NUNCA inserir 0mm sem confirmação explícita.
 
 IMPORTANTE para IAs futuras:
-- Usar SEMPRE models=best_match no Archive para buscar total E horários.
-- O total diário é a "verdade oficial" do dia.
-- Os dados horários distribuem a chuva pelos 4 períodos do dia.
-- Não usar total e horários de APIs distintas — gera inconsistência.
+- Prioridade ABSOLUTA ao override manual (Supabase → tabela topclimabc_validacoes).
+- Os overrides sobrescrevem qualquer fonte automática por período.
+- O total diário é recalculado após aplicar overrides.
 """
 
 import json
@@ -40,6 +37,7 @@ from scripts.config import (
 )
 from scripts.utils.classificacao import classificar_chuva
 from scripts.utils.supabase_api import buscar_overrides_manuais
+from scripts.utils.cemaden import obter_realidade_municipio as cemaden_obter
 
 
 def get_periodo(hora_int):
@@ -209,36 +207,54 @@ def criar_realidade_sem_dados(motivo=""):
 
 
 def coletar_e_salvar(local_id, data_iso):
-    """Coleta e salva a realidade para um local e data específicos."""
+    """Coleta e salva a realidade para um local e data específicos.
+    Hierarquia: CEMADEN → Open-Meteo Archive → Open-Meteo Hist Forecast → sem_dados.
+    """
     print(f"  Coletando realidade de {data_iso} para {local_id}...")
+    local_cfg = LOCAIS[local_id]
+    ibge = local_cfg.get("ibge")
+    realidade = None
 
-    # 1. Tenta Archive com best_match (fonte primária definitiva)
-    total_archive, horarios_archive = coletar_archive_best_match(local_id, data_iso)
+    # 1. FONTE PRIMÁRIA: CEMADEN (pluviômetro físico)
+    if ibge:
+        try:
+            dados_cem = cemaden_obter(ibge, data_iso)
+        except Exception as e:
+            print(f"    [CEMADEN] Erro inesperado: {e}")
+            dados_cem = None
+        if dados_cem and dados_cem.get("periodos"):
+            realidade = montar_realidade(
+                dados_cem["periodos"],
+                dados_cem["total_dia"],
+                dados_cem["fonte"],
+                "completo"
+            )
+            realidade["estacoes_cemaden"] = dados_cem.get("estacoes_usadas", [])
+            print(f"    [OK] CEMADEN: {dados_cem['total_dia']}mm | estações={len(dados_cem.get('estacoes_usadas', []))}")
 
-    if total_archive is not None:
-        periodos_mm = distribuir_por_periodos(total_archive, horarios_archive)
-        fonte = f"Open-Meteo Archive (best_match) — {data_iso}"
-        status = "completo"
-        realidade = montar_realidade(periodos_mm, total_archive, fonte, status)
-        print(f"    [OK] Archive best_match: {total_archive}mm | Status: completo")
+    # 2. FALLBACK: Open-Meteo Archive (reanálise)
+    if realidade is None:
+        total_archive, horarios_archive = coletar_archive_best_match(local_id, data_iso)
+        if total_archive is not None:
+            periodos_mm = distribuir_por_periodos(total_archive, horarios_archive)
+            fonte = f"Open-Meteo Archive (best_match, reanálise) — {data_iso}"
+            realidade = montar_realidade(periodos_mm, total_archive, fonte, "provisorio_reanalise")
+            print(f"    [FALLBACK] Archive best_match: {total_archive}mm | reanálise (CEMADEN indisponível)")
 
-    else:
-        # 2. Fallback: Historical Forecast (provisório)
-        print(f"    Archive indisponivel para {data_iso}, tentando Historical Forecast...")
+    # 3. FALLBACK 2: Historical Forecast
+    if realidade is None:
+        print(f"    Archive indisponivel, tentando Historical Forecast...")
         total_hist, horarios_hist = coletar_hist_forecast_fallback(local_id, data_iso)
-
         if total_hist is not None:
             periodos_mm = distribuir_por_periodos(total_hist, horarios_hist)
-            fonte = "Open-Meteo Historical Forecast (provisorio — Archive ainda processando)"
-            status = "provisorio"
-            realidade = montar_realidade(periodos_mm, total_hist, fonte, status)
+            fonte = "Open-Meteo Historical Forecast (provisorio — previsão recalculada)"
+            realidade = montar_realidade(periodos_mm, total_hist, fonte, "provisorio")
             print(f"    [PROV] Hist Forecast: {total_hist}mm | Status: provisorio")
-        else:
-            # 3. Sem dados
-            print(f"    [ERRO] Sem dados de realidade para {local_id} em {data_iso}")
-            realidade = criar_realidade_sem_dados(
-                motivo="Archive e Historical Forecast falharam"
-            )
+
+    # 4. Sem dados
+    if realidade is None:
+        print(f"    [ERRO] Sem dados de realidade para {local_id} em {data_iso}")
+        realidade = criar_realidade_sem_dados(motivo="CEMADEN, Archive e Hist Forecast falharam")
 
     # --- Aplica overrides manuais (prioridade absoluta) ---
     overrides = buscar_overrides_manuais(data_iso)

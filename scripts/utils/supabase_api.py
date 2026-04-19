@@ -11,12 +11,15 @@ import os
 SUPABASE_URL = os.getenv("SUPABASE_URL", "https://jfjrzkjzfxnyhexwhoby.supabase.co")
 SUPABASE_KEY = os.getenv("SUPABASE_ANON_KEY", "")
 
+# Valor-padrão em mm para cada classe manual.
+# Usado quando o usuário valida pela UI (sem saber o mm exato).
+# Os valores ficam no meio do intervalo de cada classe (ver CLASSIFICACOES em config.py).
 MM_POR_CLASSIFICACAO = {
     "seco":     0.0,
-    "garoa":    2.5,
-    "moderada": 10.0,
-    "forte":    25.0,
-    "intensa":  50.0,
+    "garoa":    1.0,    # meio de [0.1, 2.6)
+    "moderada": 6.0,    # meio de [2.6, 10.1)
+    "forte":    17.0,   # meio de [10.1, 25.1)
+    "intensa":  40.0,   # limiar mínimo de "intensa" (≥ 25.1mm)
 }
 
 

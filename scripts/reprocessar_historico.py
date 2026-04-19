@@ -1,13 +1,17 @@
 """
 TOPCLIMABC — reprocessar_historico.py
 ======================================
-Script de bootstrap: reprocessa dados de realidade históricos
-usando Open-Meteo Archive com modelo best_match (melhor fonte disponível
-para o Sul do Brasil — combina ERA5-Land + estações físicas observacionais).
+Script de bootstrap: reprocessa dados de realidade históricos.
+
+Após o sprint de correções (2026-04-18), a hierarquia é:
+  1. CEMADEN PED (pluviômetros físicos)
+  2. Open-Meteo Archive best_match (reanálise)
+  3. Open-Meteo Historical Forecast (fallback)
 
 QUANDO USAR:
 - Ao iniciar o projeto (primeira vez)
-- Após mudança de fonte de realidade (ex: de hist_forecast para ERA5 Archive)
+- Após mudança na hierarquia de fontes
+- Após mudança nos nomes de classes (reclassificar dados antigos)
 - Quando suspeitar que arquivos de realidade estão incorretos
 
 Este script SOBRESCREVE os arquivos de realidade existentes.
@@ -76,10 +80,10 @@ def main():
 
             if status == "completo":
                 sucesso += 1
-                print(" [OK]")
-            elif status == "provisorio":
+                print(" [OK CEMADEN]")
+            elif status in ("provisorio_reanalise", "provisorio"):
                 provisorio += 1
-                print(" [PROVISORIO]")
+                print(f" [{status.upper()}]")
             else:
                 sem_dados += 1
                 print(" [SEM DADOS]")

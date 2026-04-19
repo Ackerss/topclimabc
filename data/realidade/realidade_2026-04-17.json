@@ -5,15 +5,15 @@
     "periodos": {
       "madrugada": {
         "mm": 0.2,
-        "classificacao": "sem_chuva"
+        "classificacao": "garoa"
       },
       "manha": {
         "mm": 0.2,
-        "classificacao": "sem_chuva"
+        "classificacao": "garoa"
       },
       "tarde": {
         "mm": 1.4,
-        "classificacao": "fraca"
+        "classificacao": "garoa"
       },
       "noite": {
         "mm": 5.1,
@@ -28,15 +28,15 @@
     "periodos": {
       "madrugada": {
         "mm": 0.2,
-        "classificacao": "sem_chuva"
+        "classificacao": "garoa"
       },
       "manha": {
         "mm": 0.3,
-        "classificacao": "sem_chuva"
+        "classificacao": "garoa"
       },
       "tarde": {
         "mm": 0.5,
-        "classificacao": "sem_chuva"
+        "classificacao": "garoa"
       },
       "noite": {
         "mm": 5.6,

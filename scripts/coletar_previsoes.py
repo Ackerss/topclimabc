@@ -8,12 +8,18 @@ Usa Open-Meteo (ECMWF, ICON, GFS, Best Match) e OpenWeatherMap.
 import os
 import json
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
+try:
+    from zoneinfo import ZoneInfo   # Python 3.9+
+except ImportError:
+    from backports.zoneinfo import ZoneInfo  # fallback raríssimo
 from dotenv import load_dotenv
 from scripts.config import (
-    LOCAIS, MODELOS, PERIODOS, PREVISOES_DIR, 
+    LOCAIS, MODELOS, PERIODOS, PREVISOES_DIR,
     OPEN_METEO_BASE, OWM_BASE, OWM_API_KEY
 )
+
+TZ_BRT = ZoneInfo("America/Sao_Paulo")
 
 load_dotenv()
 
@@ -102,12 +108,18 @@ def processar_dados_om(dados_om):
     return processado
 
 def processar_dados_owm(dados_owm):
-    """Organiza os dados do OWM (3h) por data e período."""
+    """
+    Organiza os dados do OWM (3h) por data e período.
+    IMPORTANTE: OWM retorna Unix timestamp em UTC. Convertemos explicitamente
+    para America/Sao_Paulo (BRT) para casar com a lógica de períodos do projeto
+    (que está em horário local). Sem isso, GitHub Actions (UTC) deslocava tudo 3h.
+    """
     if not dados_owm: return {}
-    
+
     processado = {}
     for item in dados_owm.get("list", []):
-        dt = datetime.fromtimestamp(item["dt"])
+        dt_utc = datetime.fromtimestamp(item["dt"], tz=timezone.utc)
+        dt = dt_utc.astimezone(TZ_BRT)
         data_iso = dt.date().isoformat()
         periodo = get_periodo(dt.hour)
         # OWM retorna 'rain' se houver chuva nos últimos 3h

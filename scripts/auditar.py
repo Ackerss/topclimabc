@@ -131,10 +131,28 @@ def main():
 
                 # Calcula score para cada modelo
                 for m_id in MODELOS:
+                    # Persistência: não vem do snapshot, é construída a partir da
+                    # REALIDADE de D-1. "Amanhã = hoje" → se o modelo não bate
+                    # essa baseline trivial, é inútil.
+                    if MODELOS[m_id].get("is_baseline") and m_id == "persistencia":
+                        dt_baseline = dt_alvo - timedelta(days=1)
+                        cam_base = REALIDADE_DIR / f"realidade_{dt_baseline.date().isoformat()}.json"
+                        base_json = carregar_arquivo(cam_base)
+                        if not base_json or local_id not in base_json:
+                            continue
+                        base_per = base_json[local_id].get("periodos", {})
+                        prev_persist = {
+                            p: (info.get("mm") or 0.0) for p, info in base_per.items()
+                        }
+                        if not prev_persist:
+                            continue
+                        score = calcular_score_dia(prev_persist, real_periodos)
+                        historico[local_id][data_alvo_str][prazo_id]["persistencia"] = score
+                        total_auditorias += 1
+                        continue
+
                     if m_id not in forecast_alvo:
                         continue
-                    if MODELOS[m_id].get("is_baseline") and m_id == "persistencia":
-                        continue  # Persistência não audita (não tem snapshot)
 
                     prev_periodos = forecast_alvo[m_id]
                     # prev_periodos pode ser {'madrugada': mm, 'manha': mm, ...}
