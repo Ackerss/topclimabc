@@ -1,38 +1,45 @@
 {
   "meta": {
-    "atualizado_em": "2026-04-18T18:19:19-03:00",
-    "fonte": "Open-Meteo Archive (Best Match)",
-    "nota": "Dados climáticos apurados com modelo que combina diversas fontes (ERA5-Land, radar e estações físicas locais) para precisão de ponta.",
-    "aviso": "✔️ Dados de alta confiabilidade! O modelo best_match agrupa a melhor reanálise global (ERA5-Land) com observações em solo local (como INMET) chegando a precisões de ~9km.",
-    "status_cemaden": "indisponivel"
+    "atualizado_em": "2026-04-19T02:44:09-03:00",
+    "hierarquia_fontes": [
+      "1. CEMADEN PED (pluviômetros físicos em solo) — PRIMÁRIA",
+      "2. Open-Meteo Archive best_match (reanálise ERA5-Land ~9km) — fallback",
+      "3. Open-Meteo Historical Forecast (previsão recalculada) — último recurso"
+    ],
+    "nota": "A fonte efetivamente usada em cada dia fica em locais.<local>.ontem.fonte. Validação manual do usuário tem prioridade absoluta quando presente."
   },
   "locais": {
     "balneario_camboriu": {
       "nome": "Balneário Camboriú",
       "lat": -26.9928,
       "lon": -48.6354,
-      "fonte_dados": "Open-Meteo Archive (Best Match)",
-      "status_cemaden": "indisponivel",
+      "ibge": "4202008",
       "ontem": {
-        "status_fonte": "completo",
-        "fonte": "Open-Meteo Archive (best_match) — 2026-04-17",
-        "total_dia": 6.9,
+        "status_fonte": "provisorio_reanalise",
+        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-18",
+        "total_dia": 0.0,
+        "estacoes_cemaden": [],
+        "tem_override_manual": false,
         "periodos": {
           "madrugada": {
-            "mm": 0.2,
-            "classificacao": "sem_chuva"
+            "mm": 0.0,
+            "classificacao": "seco",
+            "override": false
           },
           "manha": {
-            "mm": 0.2,
-            "classificacao": "sem_chuva"
+            "mm": 0.0,
+            "classificacao": "seco",
+            "override": false
           },
           "tarde": {
-            "mm": 1.4,
-            "classificacao": "fraca"
+            "mm": 0.0,
+            "classificacao": "seco",
+            "override": false
           },
           "noite": {
-            "mm": 5.1,
-            "classificacao": "moderada"
+            "mm": 0.0,
+            "classificacao": "seco",
+            "override": false
           }
         }
       },
@@ -42,28 +49,33 @@
       "nome": "Itajaí",
       "lat": -26.9065,
       "lon": -48.67,
-      "fonte_dados": "Open-Meteo Archive (Best Match)",
-      "status_cemaden": "indisponivel",
+      "ibge": "4208203",
       "ontem": {
-        "status_fonte": "completo",
-        "fonte": "Open-Meteo Archive (best_match) — 2026-04-17",
-        "total_dia": 6.6,
+        "status_fonte": "provisorio_reanalise",
+        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-18",
+        "total_dia": 0.0,
+        "estacoes_cemaden": [],
+        "tem_override_manual": false,
         "periodos": {
           "madrugada": {
-            "mm": 0.2,
-            "classificacao": "sem_chuva"
+            "mm": 0.0,
+            "classificacao": "seco",
+            "override": false
           },
           "manha": {
-            "mm": 0.3,
-            "classificacao": "sem_chuva"
+            "mm": 0.0,
+            "classificacao": "seco",
+            "override": false
           },
           "tarde": {
-            "mm": 0.5,
-            "classificacao": "sem_chuva"
+            "mm": 0.0,
+            "classificacao": "seco",
+            "override": false
           },
           "noite": {
-            "mm": 5.6,
-            "classificacao": "moderada"
+            "mm": 0.0,
+            "classificacao": "seco",
+            "override": false
           }
         }
       },

@@ -10,6 +10,16 @@
         "best_match": 73.4,
         "persistencia": 92.8
       }
+    },
+    "2026-04-18": {
+      "1_dia": {
+        "ecmwf_ifs025": 100.0,
+        "gfs_seamless": 100.0,
+        "icon_seamless": 100.0,
+        "openweathermap": 100.0,
+        "best_match": 100.0,
+        "persistencia": 73.4
+      }
     }
   },
   "itajai": {
@@ -22,6 +32,16 @@
         "openweathermap": 87.5,
         "best_match": 73.6,
         "persistencia": 88.8
+      }
+    },
+    "2026-04-18": {
+      "1_dia": {
+        "ecmwf_ifs025": 100.0,
+        "gfs_seamless": 100.0,
+        "icon_seamless": 100.0,
+        "openweathermap": 100.0,
+        "best_match": 100.0,
+        "persistencia": 73.6
       }
     }
   }

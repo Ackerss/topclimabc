@@ -1,47 +1,47 @@
 {
   "2026-04-12": {
     "balneario_camboriu": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-12",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-12",
       "periodos": {
         "madrugada": {
           "mm": 1.5,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.1,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.1,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 1.7
     },
     "itajai": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-12",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-12",
       "periodos": {
         "madrugada": {
           "mm": 0.8,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.1,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.3,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 1.2
@@ -49,47 +49,47 @@
   },
   "2026-04-04": {
     "balneario_camboriu": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-04",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-04",
       "periodos": {
         "madrugada": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "manha": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "tarde": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "noite": {
           "mm": 2.6,
-          "classificacao": "fraca"
+          "classificacao": "moderada"
         }
       },
       "total_dia": 2.6
     },
     "itajai": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-04",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-04",
       "periodos": {
         "madrugada": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "manha": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "tarde": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "noite": {
           "mm": 1.7,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         }
       },
       "total_dia": 1.7
@@ -97,47 +97,47 @@
   },
   "2026-04-13": {
     "balneario_camboriu": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-13",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-13",
       "periodos": {
         "madrugada": {
           "mm": 1.2,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.6,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.3,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.1,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         }
       },
       "total_dia": 2.2
     },
     "itajai": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-13",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-13",
       "periodos": {
         "madrugada": {
           "mm": 1.1,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.4,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.3,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 1.8
@@ -145,47 +145,47 @@
   },
   "2026-04-14": {
     "balneario_camboriu": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-14",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-14",
       "periodos": {
         "madrugada": {
           "mm": 0.6,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.2,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.2,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 1.0
     },
     "itajai": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-14",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-14",
       "periodos": {
         "madrugada": {
           "mm": 0.9,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.4,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.6,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.2,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         }
       },
       "total_dia": 2.1
@@ -193,20 +193,20 @@
   },
   "2026-04-06": {
     "balneario_camboriu": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-06",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-06",
       "periodos": {
         "madrugada": {
           "mm": 13.4,
-          "classificacao": "moderada"
+          "classificacao": "forte"
         },
         "manha": {
           "mm": 4.8,
-          "classificacao": "fraca"
+          "classificacao": "moderada"
         },
         "tarde": {
           "mm": 11.0,
-          "classificacao": "moderada"
+          "classificacao": "forte"
         },
         "noite": {
           "mm": 7.9,
@@ -216,20 +216,20 @@
       "total_dia": 37.1
     },
     "itajai": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-06",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-06",
       "periodos": {
         "madrugada": {
           "mm": 10.8,
-          "classificacao": "moderada"
+          "classificacao": "forte"
         },
         "manha": {
           "mm": 2.4,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 3.4,
-          "classificacao": "fraca"
+          "classificacao": "moderada"
         },
         "noite": {
           "mm": 5.6,
@@ -241,16 +241,16 @@
   },
   "2026-04-02": {
     "balneario_camboriu": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-02",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-02",
       "periodos": {
         "madrugada": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "manha": {
           "mm": 0.3,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 6.9,
@@ -258,30 +258,30 @@
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 7.2
     },
     "itajai": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-02",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-02",
       "periodos": {
         "madrugada": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "manha": {
           "mm": 0.1,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 14.9,
-          "classificacao": "moderada"
+          "classificacao": "forte"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 15.0
@@ -289,47 +289,47 @@
   },
   "2026-04-11": {
     "balneario_camboriu": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-11",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-11",
       "periodos": {
         "madrugada": {
           "mm": 0.5,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.1,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.5,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 1.2,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         }
       },
       "total_dia": 2.3
     },
     "itajai": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-11",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-11",
       "periodos": {
         "madrugada": {
           "mm": 0.2,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "tarde": {
           "mm": 0.2,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.3,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         }
       },
       "total_dia": 0.7
@@ -337,95 +337,143 @@
   },
   "2026-04-05": {
     "balneario_camboriu": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-05",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-05",
       "periodos": {
         "madrugada": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "manha": {
           "mm": 0.1,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.1,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.9,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         }
       },
       "total_dia": 1.1
     },
     "itajai": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-05",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-05",
       "periodos": {
         "madrugada": {
           "mm": 0.1,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "tarde": {
           "mm": 0.1,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.4,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         }
       },
       "total_dia": 0.6
     }
   },
-  "2026-04-10": {
+  "2026-04-18": {
     "balneario_camboriu": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-10",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-18",
       "periodos": {
         "madrugada": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "manha": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "tarde": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 0.0
     },
     "itajai": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-10",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-18",
       "periodos": {
         "madrugada": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "manha": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "tarde": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
+        }
+      },
+      "total_dia": 0.0
+    }
+  },
+  "2026-04-10": {
+    "balneario_camboriu": {
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-10",
+      "periodos": {
+        "madrugada": {
+          "mm": 0.0,
+          "classificacao": "seco"
+        },
+        "manha": {
+          "mm": 0.0,
+          "classificacao": "seco"
+        },
+        "tarde": {
+          "mm": 0.0,
+          "classificacao": "seco"
+        },
+        "noite": {
+          "mm": 0.0,
+          "classificacao": "seco"
+        }
+      },
+      "total_dia": 0.0
+    },
+    "itajai": {
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-10",
+      "periodos": {
+        "madrugada": {
+          "mm": 0.0,
+          "classificacao": "seco"
+        },
+        "manha": {
+          "mm": 0.0,
+          "classificacao": "seco"
+        },
+        "tarde": {
+          "mm": 0.0,
+          "classificacao": "seco"
+        },
+        "noite": {
+          "mm": 0.0,
+          "classificacao": "seco"
         }
       },
       "total_dia": 0.0
@@ -433,47 +481,47 @@
   },
   "2026-04-01": {
     "balneario_camboriu": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-01",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-01",
       "periodos": {
         "madrugada": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "manha": {
           "mm": 0.4,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.5,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 0.9
     },
     "itajai": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-01",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-01",
       "periodos": {
         "madrugada": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "manha": {
           "mm": 0.7,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.6,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 1.3
@@ -481,47 +529,47 @@
   },
   "2026-04-03": {
     "balneario_camboriu": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-03",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-03",
       "periodos": {
         "madrugada": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "manha": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "tarde": {
           "mm": 0.8,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 0.8
     },
     "itajai": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-03",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-03",
       "periodos": {
         "madrugada": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "manha": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "tarde": {
           "mm": 0.5,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 0.5
@@ -534,15 +582,15 @@
       "periodos": {
         "madrugada": {
           "mm": 0.2,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.2,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 1.4,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 5.1,
@@ -557,15 +605,15 @@
       "periodos": {
         "madrugada": {
           "mm": 0.2,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.3,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.5,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 5.6,
@@ -577,47 +625,47 @@
   },
   "2026-04-08": {
     "balneario_camboriu": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-08",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-08",
       "periodos": {
         "madrugada": {
           "mm": 0.2,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.2,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.7,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 1.1
     },
     "itajai": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-08",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-08",
       "periodos": {
         "madrugada": {
           "mm": 0.3,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.2,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.4,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 0.9
@@ -625,47 +673,47 @@
   },
   "2026-04-15": {
     "balneario_camboriu": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-15",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-15",
       "periodos": {
         "madrugada": {
           "mm": 0.7,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 1.1,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 1.7,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 3.5
     },
     "itajai": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-15",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-15",
       "periodos": {
         "madrugada": {
           "mm": 0.4,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.8,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 1.6,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 2.8
@@ -678,19 +726,19 @@
       "periodos": {
         "madrugada": {
           "mm": 0.6,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.4,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.1,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 0.2,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         }
       },
       "total_dia": 1.3
@@ -701,19 +749,19 @@
       "periodos": {
         "madrugada": {
           "mm": 0.5,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "manha": {
           "mm": 0.1,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "noite": {
           "mm": 0.4,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         }
       },
       "total_dia": 1.0
@@ -721,8 +769,8 @@
   },
   "2026-04-07": {
     "balneario_camboriu": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-07",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-07",
       "periodos": {
         "madrugada": {
           "mm": 10.0,
@@ -730,22 +778,22 @@
         },
         "manha": {
           "mm": 0.4,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.4,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 12.0,
-          "classificacao": "moderada"
+          "classificacao": "forte"
         }
       },
       "total_dia": 22.8
     },
     "itajai": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-07",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-07",
       "periodos": {
         "madrugada": {
           "mm": 6.5,
@@ -753,15 +801,15 @@
         },
         "manha": {
           "mm": 0.4,
-          "classificacao": "sem_chuva"
+          "classificacao": "garoa"
         },
         "tarde": {
           "mm": 0.7,
-          "classificacao": "fraca"
+          "classificacao": "garoa"
         },
         "noite": {
           "mm": 12.3,
-          "classificacao": "moderada"
+          "classificacao": "forte"
         }
       },
       "total_dia": 19.9
@@ -769,47 +817,47 @@
   },
   "2026-04-09": {
     "balneario_camboriu": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-09",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-09",
       "periodos": {
         "madrugada": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "manha": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "tarde": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 0.0
     },
     "itajai": {
-      "status": "completo",
-      "fonte": "Open-Meteo Archive (best_match) — 2026-04-09",
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-04-09",
       "periodos": {
         "madrugada": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "manha": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "tarde": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         },
         "noite": {
           "mm": 0.0,
-          "classificacao": "sem_chuva"
+          "classificacao": "seco"
         }
       },
       "total_dia": 0.0
