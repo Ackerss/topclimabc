@@ -1,6 +1,6 @@
 {
   "meta": {
-    "atualizado_em": "2026-04-19T13:01:58-03:00",
+    "atualizado_em": "2026-04-19T13:24:24-03:00",
     "hierarquia_fontes": [
       "1. CEMADEN PED (pluviômetros físicos em solo) — PRIMÁRIA",
       "2. Open-Meteo Archive best_match (reanálise ERA5-Land ~9km) — fallback",
