@@ -1,18 +1,18 @@
 {
-  "atualizado_em": "2026-05-07 13:45",
+  "atualizado_em": "2026-05-08 13:13",
   "locais": {
     "balneario_camboriu": {
       "realidade": {
         "status": "provisorio_reanalise",
-        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-05-06",
+        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-05-07",
         "periodos": {
           "madrugada": {
             "mm": 0.0,
             "classificacao": "seco"
           },
           "manha": {
-            "mm": 0.0,
-            "classificacao": "seco"
+            "mm": 0.5,
+            "classificacao": "garoa"
           },
           "tarde": {
             "mm": 0.0,
@@ -23,96 +23,64 @@
             "classificacao": "seco"
           }
         },
-        "total_dia": 0.0
+        "total_dia": 0.5
       },
       "previsoes": {
-        "2026-05-06": {
-          "ecmwf_ifs025": {
-            "madrugada": 0.0,
-            "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 0.0,
-            "score_1d": 100.0
-          },
-          "gfs_seamless": {
-            "madrugada": 0.0,
-            "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 0.0,
-            "score_1d": 100.0
-          },
-          "icon_seamless": {
-            "madrugada": 0.0,
-            "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 0.0,
-            "score_1d": 100.0
-          },
-          "best_match": {
-            "madrugada": 0.0,
-            "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 0.0,
-            "score_1d": 100.0
-          },
-          "openweathermap": {
-            "madrugada": 0.0,
-            "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 0.0,
-            "score_1d": 100.0
-          }
-        },
         "2026-05-07": {
           "ecmwf_ifs025": {
             "madrugada": 0.0,
             "manha": 0.2,
             "tarde": 0.1,
-            "noite": 0.0
+            "noite": 0.0,
+            "score_1d": 95.4
           },
           "gfs_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.0
+            "noite": 0.0,
+            "score_1d": 95.4
           },
           "icon_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.0
+            "noite": 0.0,
+            "score_1d": 95.4
           },
           "best_match": {
             "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.0
+            "noite": 0.0,
+            "score_1d": 95.4
           },
           "openweathermap": {
             "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.0
+            "noite": 0.0,
+            "score_1d": 95.4
           }
         },
         "2026-05-08": {
           "ecmwf_ifs025": {
             "madrugada": 0.0,
-            "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 3.7
+            "manha": 0.4,
+            "tarde": 1.0,
+            "noite": 1.9
           },
           "gfs_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 1.5
+            "tarde": 0.2,
+            "noite": 3.8
           },
           "icon_seamless": {
             "madrugada": 0.0,
-            "manha": 0.8,
-            "tarde": 1.8,
-            "noite": 0.7
+            "manha": 0.3,
+            "tarde": 3.3,
+            "noite": 3.8
           },
           "best_match": {
             "madrugada": 0.0,
@@ -124,27 +92,27 @@
             "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.9
+            "noite": 0.5
           }
         },
         "2026-05-09": {
           "ecmwf_ifs025": {
-            "madrugada": 13.9,
-            "manha": 9.6,
-            "tarde": 13.3,
-            "noite": 15.5
+            "madrugada": 4.7,
+            "manha": 4.5,
+            "tarde": 5.6,
+            "noite": 14.2
           },
           "gfs_seamless": {
-            "madrugada": 2.0,
-            "manha": 13.8,
-            "tarde": 18.5,
-            "noite": 17.3
+            "madrugada": 8.5,
+            "manha": 22.2,
+            "tarde": 14.2,
+            "noite": 20.4
           },
           "icon_seamless": {
-            "madrugada": 9.6,
-            "manha": 4.5,
-            "tarde": 4.5,
-            "noite": 6.6
+            "madrugada": 12.2,
+            "manha": 6.4,
+            "tarde": 11.0,
+            "noite": 11.4
           },
           "best_match": {
             "madrugada": 0.0,
@@ -153,27 +121,27 @@
             "noite": 0.0
           },
           "openweathermap": {
-            "madrugada": 2.9,
-            "manha": 10.8,
-            "tarde": 11.4,
-            "noite": 18.9
+            "madrugada": 5.6,
+            "manha": 26.4,
+            "tarde": 19.0,
+            "noite": 12.7
           }
         },
         "2026-05-10": {
           "ecmwf_ifs025": {
-            "madrugada": 13.1,
-            "manha": 0.2,
+            "madrugada": 9.9,
+            "manha": 0.1,
             "tarde": 0.0,
             "noite": 0.0
           },
           "gfs_seamless": {
-            "madrugada": 15.7,
-            "manha": 0.0,
+            "madrugada": 24.3,
+            "manha": 3.3,
             "tarde": 0.0,
             "noite": 0.0
           },
           "icon_seamless": {
-            "madrugada": 2.9,
+            "madrugada": 3.4,
             "manha": 0.0,
             "tarde": 0.0,
             "noite": 0.0
@@ -185,9 +153,9 @@
             "noite": 0.0
           },
           "openweathermap": {
-            "madrugada": 19.7,
-            "manha": 2.7,
-            "tarde": 0.0,
+            "madrugada": 27.9,
+            "manha": 10.9,
+            "tarde": 0.5,
             "noite": 0.0
           }
         },
@@ -279,6 +247,12 @@
             "manha": 0.0,
             "tarde": 0.0,
             "noite": 0.0
+          },
+          "openweathermap": {
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 0.0
           }
         },
         "2026-05-14": {
@@ -298,7 +272,7 @@
             "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.0
+            "noite": 0.4
           },
           "best_match": {
             "madrugada": 0.0,
@@ -311,17 +285,17 @@
           "ecmwf_ifs025": {
             "madrugada": 0.0,
             "manha": 0.0,
-            "tarde": 0.2,
-            "noite": 1.0
+            "tarde": 0.0,
+            "noite": 0.4
           },
           "gfs_seamless": {
-            "madrugada": 0.0,
-            "manha": 0.0,
-            "tarde": 0.0,
+            "madrugada": 1.6,
+            "manha": 6.8,
+            "tarde": 0.3,
             "noite": 0.0
           },
           "icon_seamless": {
-            "madrugada": 0.0,
+            "madrugada": 0.5,
             "manha": 0.0,
             "tarde": 0.0,
             "noite": 0.0
@@ -335,16 +309,16 @@
         },
         "2026-05-16": {
           "ecmwf_ifs025": {
-            "madrugada": 1.4,
-            "manha": 0.6,
-            "tarde": 1.4,
-            "noite": 2.0
+            "madrugada": 1.6,
+            "manha": 6.6,
+            "tarde": 11.6,
+            "noite": 3.6
           },
           "gfs_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 0.0
+            "tarde": 0.6,
+            "noite": 0.3
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -361,16 +335,16 @@
         },
         "2026-05-17": {
           "ecmwf_ifs025": {
-            "madrugada": 0.0,
-            "manha": 0.0,
+            "madrugada": 1.0,
+            "manha": 0.4,
             "tarde": 0.0,
-            "noite": 0.0
+            "noite": 1.2
           },
           "gfs_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.2
+            "noite": 0.0
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -387,14 +361,14 @@
         },
         "2026-05-18": {
           "ecmwf_ifs025": {
-            "madrugada": 0.0,
-            "manha": 0.2,
-            "tarde": 2.4,
-            "noite": 6.4
+            "madrugada": 7.0,
+            "manha": 10.4,
+            "tarde": 2.8,
+            "noite": 0.8
           },
           "gfs_seamless": {
-            "madrugada": 1.8,
-            "manha": 0.7,
+            "madrugada": 0.3,
+            "manha": 0.0,
             "tarde": 0.0,
             "noite": 0.0
           },
@@ -413,10 +387,10 @@
         },
         "2026-05-19": {
           "ecmwf_ifs025": {
-            "madrugada": 4.8,
+            "madrugada": 0.0,
             "manha": 0.2,
-            "tarde": 0.4,
-            "noite": 0.2
+            "tarde": 0.8,
+            "noite": 0.8
           },
           "gfs_seamless": {
             "madrugada": 0.0,
@@ -439,10 +413,10 @@
         },
         "2026-05-20": {
           "ecmwf_ifs025": {
-            "madrugada": 0.4,
-            "manha": 0.4,
-            "tarde": 2.0,
-            "noite": 2.8
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 0.0
           },
           "gfs_seamless": {
             "madrugada": 0.0,
@@ -465,9 +439,9 @@
         },
         "2026-05-21": {
           "ecmwf_ifs025": {
-            "madrugada": 1.0,
-            "manha": 1.8,
-            "tarde": 2.8,
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
             "noite": 0.0
           },
           "gfs_seamless": {
@@ -499,7 +473,33 @@
           "gfs_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
+            "tarde": 0.3,
+            "noite": 0.0
+          },
+          "icon_seamless": {
+            "madrugada": 0.0,
+            "manha": 0.0,
             "tarde": 0.0,
+            "noite": 0.0
+          },
+          "best_match": {
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 0.0
+          }
+        },
+        "2026-05-23": {
+          "ecmwf_ifs025": {
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 0.0
+          },
+          "gfs_seamless": {
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.3,
             "noite": 0.0
           },
           "icon_seamless": {
@@ -520,15 +520,15 @@
     "itajai": {
       "realidade": {
         "status": "provisorio_reanalise",
-        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-05-06",
+        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-05-07",
         "periodos": {
           "madrugada": {
             "mm": 0.0,
             "classificacao": "seco"
           },
           "manha": {
-            "mm": 0.0,
-            "classificacao": "seco"
+            "mm": 0.3,
+            "classificacao": "garoa"
           },
           "tarde": {
             "mm": 0.0,
@@ -539,96 +539,64 @@
             "classificacao": "seco"
           }
         },
-        "total_dia": 0.0
+        "total_dia": 0.3
       },
       "previsoes": {
-        "2026-05-06": {
-          "ecmwf_ifs025": {
-            "madrugada": 0.0,
-            "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 0.0,
-            "score_1d": 100.0
-          },
-          "gfs_seamless": {
-            "madrugada": 0.0,
-            "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 0.0,
-            "score_1d": 100.0
-          },
-          "icon_seamless": {
-            "madrugada": 0.0,
-            "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 0.0,
-            "score_1d": 100.0
-          },
-          "best_match": {
-            "madrugada": 0.0,
-            "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 0.0,
-            "score_1d": 100.0
-          },
-          "openweathermap": {
-            "madrugada": 0.0,
-            "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 0.0,
-            "score_1d": 100.0
-          }
-        },
         "2026-05-07": {
           "ecmwf_ifs025": {
             "madrugada": 0.0,
             "manha": 0.2,
             "tarde": 0.1,
-            "noite": 0.0
+            "noite": 0.0,
+            "score_1d": 95.5
           },
           "gfs_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.0
+            "noite": 0.0,
+            "score_1d": 95.5
           },
           "icon_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.0
+            "noite": 0.0,
+            "score_1d": 95.5
           },
           "best_match": {
             "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.0
+            "noite": 0.0,
+            "score_1d": 95.5
           },
           "openweathermap": {
             "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.0
+            "noite": 0.0,
+            "score_1d": 95.5
           }
         },
         "2026-05-08": {
           "ecmwf_ifs025": {
             "madrugada": 0.0,
-            "manha": 0.0,
-            "tarde": 0.0,
-            "noite": 3.7
+            "manha": 0.4,
+            "tarde": 1.0,
+            "noite": 1.9
           },
           "gfs_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.3
+            "noite": 1.8
           },
           "icon_seamless": {
             "madrugada": 0.0,
-            "manha": 1.1,
-            "tarde": 2.5,
-            "noite": 2.5
+            "manha": 0.2,
+            "tarde": 5.8,
+            "noite": 5.6
           },
           "best_match": {
             "madrugada": 0.0,
@@ -640,27 +608,27 @@
             "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.5
+            "noite": 0.6
           }
         },
         "2026-05-09": {
           "ecmwf_ifs025": {
-            "madrugada": 13.9,
-            "manha": 9.6,
-            "tarde": 13.3,
-            "noite": 15.5
+            "madrugada": 4.7,
+            "manha": 4.5,
+            "tarde": 5.6,
+            "noite": 14.2
           },
           "gfs_seamless": {
-            "madrugada": 2.2,
-            "manha": 9.6,
-            "tarde": 17.6,
-            "noite": 14.7
+            "madrugada": 5.5,
+            "manha": 30.5,
+            "tarde": 11.5,
+            "noite": 20.9
           },
           "icon_seamless": {
-            "madrugada": 10.1,
-            "manha": 6.3,
-            "tarde": 6.7,
-            "noite": 7.5
+            "madrugada": 15.3,
+            "manha": 5.3,
+            "tarde": 15.6,
+            "noite": 13.3
           },
           "best_match": {
             "madrugada": 0.0,
@@ -669,27 +637,27 @@
             "noite": 0.0
           },
           "openweathermap": {
-            "madrugada": 2.5,
-            "manha": 9.4,
-            "tarde": 12.2,
-            "noite": 17.8
+            "madrugada": 5.1,
+            "manha": 22.4,
+            "tarde": 19.8,
+            "noite": 11.5
           }
         },
         "2026-05-10": {
           "ecmwf_ifs025": {
-            "madrugada": 13.1,
-            "manha": 0.2,
+            "madrugada": 9.9,
+            "manha": 0.1,
             "tarde": 0.0,
             "noite": 0.0
           },
           "gfs_seamless": {
-            "madrugada": 12.2,
-            "manha": 0.0,
+            "madrugada": 24.8,
+            "manha": 4.5,
             "tarde": 0.0,
             "noite": 0.0
           },
           "icon_seamless": {
-            "madrugada": 4.1,
+            "madrugada": 4.6,
             "manha": 0.0,
             "tarde": 0.0,
             "noite": 0.0
@@ -701,9 +669,9 @@
             "noite": 0.0
           },
           "openweathermap": {
-            "madrugada": 17.8,
-            "manha": 2.4,
-            "tarde": 0.0,
+            "madrugada": 28.9,
+            "manha": 11.2,
+            "tarde": 0.5,
             "noite": 0.0
           }
         },
@@ -795,6 +763,12 @@
             "manha": 0.0,
             "tarde": 0.0,
             "noite": 0.0
+          },
+          "openweathermap": {
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 0.0
           }
         },
         "2026-05-14": {
@@ -814,7 +788,7 @@
             "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.0
+            "noite": 0.3
           },
           "best_match": {
             "madrugada": 0.0,
@@ -827,13 +801,13 @@
           "ecmwf_ifs025": {
             "madrugada": 0.0,
             "manha": 0.0,
-            "tarde": 0.2,
-            "noite": 1.0
+            "tarde": 0.0,
+            "noite": 0.4
           },
           "gfs_seamless": {
-            "madrugada": 0.0,
-            "manha": 0.0,
-            "tarde": 0.0,
+            "madrugada": 1.3,
+            "manha": 8.0,
+            "tarde": 0.9,
             "noite": 0.0
           },
           "icon_seamless": {
@@ -851,15 +825,15 @@
         },
         "2026-05-16": {
           "ecmwf_ifs025": {
-            "madrugada": 1.4,
-            "manha": 0.6,
-            "tarde": 1.4,
-            "noite": 2.0
+            "madrugada": 1.6,
+            "manha": 6.6,
+            "tarde": 11.6,
+            "noite": 3.6
           },
           "gfs_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
-            "tarde": 0.0,
+            "tarde": 0.6,
             "noite": 0.0
           },
           "icon_seamless": {
@@ -877,16 +851,16 @@
         },
         "2026-05-17": {
           "ecmwf_ifs025": {
-            "madrugada": 0.0,
-            "manha": 0.0,
+            "madrugada": 1.0,
+            "manha": 0.4,
             "tarde": 0.0,
-            "noite": 0.0
+            "noite": 1.2
           },
           "gfs_seamless": {
             "madrugada": 0.0,
             "manha": 0.0,
             "tarde": 0.0,
-            "noite": 0.0
+            "noite": 0.3
           },
           "icon_seamless": {
             "madrugada": 0.0,
@@ -903,14 +877,14 @@
         },
         "2026-05-18": {
           "ecmwf_ifs025": {
-            "madrugada": 0.0,
-            "manha": 0.2,
-            "tarde": 2.4,
-            "noite": 6.4
+            "madrugada": 7.0,
+            "manha": 10.4,
+            "tarde": 2.8,
+            "noite": 0.8
           },
           "gfs_seamless": {
-            "madrugada": 1.1,
-            "manha": 0.4,
+            "madrugada": 0.0,
+            "manha": 0.0,
             "tarde": 0.0,
             "noite": 0.0
           },
@@ -929,10 +903,10 @@
         },
         "2026-05-19": {
           "ecmwf_ifs025": {
-            "madrugada": 4.8,
+            "madrugada": 0.0,
             "manha": 0.2,
-            "tarde": 0.4,
-            "noite": 0.2
+            "tarde": 0.8,
+            "noite": 0.8
           },
           "gfs_seamless": {
             "madrugada": 0.0,
@@ -955,10 +929,10 @@
         },
         "2026-05-20": {
           "ecmwf_ifs025": {
-            "madrugada": 0.4,
-            "manha": 0.4,
-            "tarde": 2.0,
-            "noite": 2.8
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 0.0
           },
           "gfs_seamless": {
             "madrugada": 0.0,
@@ -981,9 +955,9 @@
         },
         "2026-05-21": {
           "ecmwf_ifs025": {
-            "madrugada": 1.0,
-            "manha": 1.8,
-            "tarde": 2.8,
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
             "noite": 0.0
           },
           "gfs_seamless": {
@@ -1006,6 +980,32 @@
           }
         },
         "2026-05-22": {
+          "ecmwf_ifs025": {
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 0.0
+          },
+          "gfs_seamless": {
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 0.0
+          },
+          "icon_seamless": {
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 0.0
+          },
+          "best_match": {
+            "madrugada": 0.0,
+            "manha": 0.0,
+            "tarde": 0.0,
+            "noite": 0.0
+          }
+        },
+        "2026-05-23": {
           "ecmwf_ifs025": {
             "madrugada": 0.0,
             "manha": 0.0,
