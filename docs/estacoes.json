@@ -1,6 +1,6 @@
 {
   "meta": {
-    "atualizado_em": "2026-06-28T13:20:08-03:00",
+    "atualizado_em": "2026-06-29T15:33:16-03:00",
     "hierarquia_fontes": [
       "1. CEMADEN PED (pluviômetros físicos em solo) — PRIMÁRIA",
       "2. Open-Meteo Archive best_match (reanálise ERA5-Land ~9km) — fallback",
@@ -16,14 +16,14 @@
       "ibge": "4202008",
       "ontem": {
         "status_fonte": "provisorio_reanalise",
-        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-06-27",
-        "total_dia": 9.5,
+        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-06-28",
+        "total_dia": 9.3,
         "estacoes_cemaden": [],
         "tem_override_manual": false,
         "periodos": {
           "madrugada": {
-            "mm": 0.0,
-            "classificacao": "seco",
+            "mm": 9.0,
+            "classificacao": "moderada",
             "override": false
           },
           "manha": {
@@ -32,12 +32,12 @@
             "override": false
           },
           "tarde": {
-            "mm": 9.4,
-            "classificacao": "moderada",
+            "mm": 0.0,
+            "classificacao": "seco",
             "override": false
           },
           "noite": {
-            "mm": 0.1,
+            "mm": 0.3,
             "classificacao": "garoa",
             "override": false
           }
@@ -52,14 +52,14 @@
       "ibge": "4208203",
       "ontem": {
         "status_fonte": "provisorio_reanalise",
-        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-06-27",
-        "total_dia": 7.4,
+        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-06-28",
+        "total_dia": 7.1,
         "estacoes_cemaden": [],
         "tem_override_manual": false,
         "periodos": {
           "madrugada": {
-            "mm": 0.0,
-            "classificacao": "seco",
+            "mm": 6.8,
+            "classificacao": "moderada",
             "override": false
           },
           "manha": {
@@ -68,13 +68,13 @@
             "override": false
           },
           "tarde": {
-            "mm": 7.4,
-            "classificacao": "moderada",
+            "mm": 0.0,
+            "classificacao": "seco",
             "override": false
           },
           "noite": {
-            "mm": 0.0,
-            "classificacao": "seco",
+            "mm": 0.3,
+            "classificacao": "garoa",
             "override": false
           }
         }
