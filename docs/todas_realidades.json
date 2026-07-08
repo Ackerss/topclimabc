@@ -239,6 +239,54 @@
       "total_dia": 0.0
     }
   },
+  "2026-07-07": {
+    "balneario_camboriu": {
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-07-07",
+      "periodos": {
+        "madrugada": {
+          "mm": 11.9,
+          "classificacao": "forte"
+        },
+        "manha": {
+          "mm": 0.5,
+          "classificacao": "garoa"
+        },
+        "tarde": {
+          "mm": 0.0,
+          "classificacao": "seco"
+        },
+        "noite": {
+          "mm": 0.0,
+          "classificacao": "seco"
+        }
+      },
+      "total_dia": 12.4
+    },
+    "itajai": {
+      "status": "provisorio_reanalise",
+      "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-07-07",
+      "periodos": {
+        "madrugada": {
+          "mm": 12.5,
+          "classificacao": "forte"
+        },
+        "manha": {
+          "mm": 0.5,
+          "classificacao": "garoa"
+        },
+        "tarde": {
+          "mm": 0.0,
+          "classificacao": "seco"
+        },
+        "noite": {
+          "mm": 0.0,
+          "classificacao": "seco"
+        }
+      },
+      "total_dia": 13.0
+    }
+  },
   "2026-04-12": {
     "balneario_camboriu": {
       "status": "provisorio_reanalise",
