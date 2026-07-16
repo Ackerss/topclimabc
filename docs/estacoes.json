@@ -1,6 +1,6 @@
 {
   "meta": {
-    "atualizado_em": "2026-07-15T13:17:26-03:00",
+    "atualizado_em": "2026-07-16T13:24:21-03:00",
     "hierarquia_fontes": [
       "1. CEMADEN PED (pluviômetros físicos em solo) — PRIMÁRIA",
       "2. Open-Meteo Archive best_match (reanálise ERA5-Land ~9km) — fallback",
@@ -16,8 +16,8 @@
       "ibge": "4202008",
       "ontem": {
         "status_fonte": "provisorio_reanalise",
-        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-07-14",
-        "total_dia": 0.2,
+        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-07-15",
+        "total_dia": 0.0,
         "estacoes_cemaden": [],
         "tem_override_manual": false,
         "periodos": {
@@ -32,8 +32,8 @@
             "override": false
           },
           "tarde": {
-            "mm": 0.2,
-            "classificacao": "garoa",
+            "mm": 0.0,
+            "classificacao": "seco",
             "override": false
           },
           "noite": {
@@ -52,8 +52,8 @@
       "ibge": "4208203",
       "ontem": {
         "status_fonte": "provisorio_reanalise",
-        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-07-14",
-        "total_dia": 0.0,
+        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-07-15",
+        "total_dia": 0.1,
         "estacoes_cemaden": [],
         "tem_override_manual": false,
         "periodos": {
@@ -68,8 +68,8 @@
             "override": false
           },
           "tarde": {
-            "mm": 0.0,
-            "classificacao": "seco",
+            "mm": 0.1,
+            "classificacao": "garoa",
             "override": false
           },
           "noite": {
