@@ -5,42 +5,42 @@
         "modelo": "ecmwf_ifs025",
         "nome": "ECMWF IFS",
         "score": 93.5,
-        "amostras": 92,
+        "amostras": 93,
         "is_baseline": false
       },
       {
         "modelo": "gfs_seamless",
         "nome": "GFS NCEP",
         "score": 93.3,
-        "amostras": 92,
+        "amostras": 93,
         "is_baseline": false
       },
       {
         "modelo": "icon_seamless",
         "nome": "ICON DWD",
         "score": 93.3,
-        "amostras": 92,
+        "amostras": 93,
         "is_baseline": false
       },
       {
         "modelo": "openweathermap",
         "nome": "OpenWeatherMap",
         "score": 92.1,
-        "amostras": 93,
+        "amostras": 94,
         "is_baseline": false
       },
       {
         "modelo": "best_match",
         "nome": "Open-Meteo Best",
-        "score": 89.9,
-        "amostras": 92,
+        "score": 90.0,
+        "amostras": 93,
         "is_baseline": false
       },
       {
         "modelo": "persistencia",
         "nome": "Persistência",
-        "score": 85.1,
-        "amostras": 91,
+        "score": 84.9,
+        "amostras": 92,
         "is_baseline": true
       }
     ],
@@ -49,42 +49,42 @@
         "modelo": "ecmwf_ifs025",
         "nome": "ECMWF IFS",
         "score": 92.9,
-        "amostras": 90,
+        "amostras": 91,
         "is_baseline": false
       },
       {
         "modelo": "icon_seamless",
         "nome": "ICON DWD",
-        "score": 92.0,
-        "amostras": 90,
+        "score": 92.1,
+        "amostras": 91,
         "is_baseline": false
       },
       {
         "modelo": "gfs_seamless",
         "nome": "GFS NCEP",
         "score": 91.2,
-        "amostras": 90,
+        "amostras": 91,
         "is_baseline": false
       },
       {
         "modelo": "openweathermap",
         "nome": "OpenWeatherMap",
-        "score": 91.1,
-        "amostras": 91,
+        "score": 91.0,
+        "amostras": 92,
         "is_baseline": false
       },
       {
         "modelo": "best_match",
         "nome": "Open-Meteo Best",
-        "score": 89.6,
-        "amostras": 90,
+        "score": 89.7,
+        "amostras": 91,
         "is_baseline": false
       },
       {
         "modelo": "persistencia",
         "nome": "Persistência",
-        "score": 84.8,
-        "amostras": 89,
+        "score": 84.5,
+        "amostras": 90,
         "is_baseline": true
       }
     ],
@@ -92,36 +92,36 @@
       {
         "modelo": "best_match",
         "nome": "Open-Meteo Best",
-        "score": 88.9,
-        "amostras": 86,
+        "score": 89.0,
+        "amostras": 87,
         "is_baseline": false
       },
       {
         "modelo": "gfs_seamless",
         "nome": "GFS NCEP",
         "score": 88.7,
-        "amostras": 86,
+        "amostras": 87,
         "is_baseline": false
       },
       {
         "modelo": "icon_seamless",
         "nome": "ICON DWD",
-        "score": 88.3,
-        "amostras": 86,
+        "score": 88.5,
+        "amostras": 87,
         "is_baseline": false
       },
       {
         "modelo": "ecmwf_ifs025",
         "nome": "ECMWF IFS",
-        "score": 86.6,
-        "amostras": 86,
+        "score": 86.3,
+        "amostras": 87,
         "is_baseline": false
       },
       {
         "modelo": "persistencia",
         "nome": "Persistência",
-        "score": 84.2,
-        "amostras": 84,
+        "score": 83.9,
+        "amostras": 85,
         "is_baseline": true
       },
       {
@@ -136,36 +136,36 @@
       {
         "modelo": "ecmwf_ifs025",
         "nome": "ECMWF IFS",
-        "score": 89.4,
-        "amostras": 79,
+        "score": 89.5,
+        "amostras": 80,
         "is_baseline": false
       },
       {
         "modelo": "icon_seamless",
         "nome": "ICON DWD",
-        "score": 89.4,
-        "amostras": 79,
+        "score": 89.5,
+        "amostras": 80,
         "is_baseline": false
       },
       {
         "modelo": "best_match",
         "nome": "Open-Meteo Best",
-        "score": 89.4,
-        "amostras": 79,
+        "score": 89.5,
+        "amostras": 80,
         "is_baseline": false
       },
       {
         "modelo": "gfs_seamless",
         "nome": "GFS NCEP",
-        "score": 87.0,
-        "amostras": 79,
+        "score": 87.2,
+        "amostras": 80,
         "is_baseline": false
       },
       {
         "modelo": "persistencia",
         "nome": "Persistência",
-        "score": 84.9,
-        "amostras": 78,
+        "score": 84.6,
+        "amostras": 79,
         "is_baseline": true
       },
       {
@@ -182,43 +182,43 @@
       {
         "modelo": "ecmwf_ifs025",
         "nome": "ECMWF IFS",
-        "score": 94.0,
-        "amostras": 92,
+        "score": 93.9,
+        "amostras": 93,
         "is_baseline": false
       },
       {
         "modelo": "icon_seamless",
         "nome": "ICON DWD",
-        "score": 93.8,
-        "amostras": 92,
+        "score": 93.9,
+        "amostras": 93,
         "is_baseline": false
       },
       {
         "modelo": "gfs_seamless",
         "nome": "GFS NCEP",
-        "score": 93.1,
-        "amostras": 92,
+        "score": 93.0,
+        "amostras": 93,
         "is_baseline": false
       },
       {
         "modelo": "openweathermap",
         "nome": "OpenWeatherMap",
         "score": 92.3,
-        "amostras": 92,
+        "amostras": 93,
         "is_baseline": false
       },
       {
         "modelo": "best_match",
         "nome": "Open-Meteo Best",
-        "score": 90.1,
-        "amostras": 92,
+        "score": 90.2,
+        "amostras": 93,
         "is_baseline": false
       },
       {
         "modelo": "persistencia",
         "nome": "Persistência",
-        "score": 85.9,
-        "amostras": 91,
+        "score": 85.6,
+        "amostras": 92,
         "is_baseline": true
       }
     ],
@@ -227,42 +227,42 @@
         "modelo": "ecmwf_ifs025",
         "nome": "ECMWF IFS",
         "score": 92.7,
-        "amostras": 90,
+        "amostras": 91,
         "is_baseline": false
       },
       {
         "modelo": "icon_seamless",
         "nome": "ICON DWD",
-        "score": 92.0,
-        "amostras": 90,
+        "score": 92.1,
+        "amostras": 91,
         "is_baseline": false
       },
       {
         "modelo": "openweathermap",
         "nome": "OpenWeatherMap",
-        "score": 91.9,
-        "amostras": 90,
+        "score": 91.8,
+        "amostras": 91,
         "is_baseline": false
       },
       {
         "modelo": "gfs_seamless",
         "nome": "GFS NCEP",
         "score": 91.2,
-        "amostras": 90,
+        "amostras": 91,
         "is_baseline": false
       },
       {
         "modelo": "best_match",
         "nome": "Open-Meteo Best",
-        "score": 89.8,
-        "amostras": 90,
+        "score": 89.9,
+        "amostras": 91,
         "is_baseline": false
       },
       {
         "modelo": "persistencia",
         "nome": "Persistência",
-        "score": 85.3,
-        "amostras": 89,
+        "score": 85.0,
+        "amostras": 90,
         "is_baseline": true
       }
     ],
@@ -270,36 +270,36 @@
       {
         "modelo": "best_match",
         "nome": "Open-Meteo Best",
-        "score": 88.9,
-        "amostras": 86,
+        "score": 89.1,
+        "amostras": 87,
         "is_baseline": false
       },
       {
         "modelo": "gfs_seamless",
         "nome": "GFS NCEP",
-        "score": 88.8,
-        "amostras": 86,
+        "score": 88.7,
+        "amostras": 87,
         "is_baseline": false
       },
       {
         "modelo": "icon_seamless",
         "nome": "ICON DWD",
-        "score": 88.5,
-        "amostras": 86,
+        "score": 88.6,
+        "amostras": 87,
         "is_baseline": false
       },
       {
         "modelo": "ecmwf_ifs025",
         "nome": "ECMWF IFS",
-        "score": 86.7,
-        "amostras": 86,
+        "score": 86.4,
+        "amostras": 87,
         "is_baseline": false
       },
       {
         "modelo": "persistencia",
         "nome": "Persistência",
-        "score": 84.5,
-        "amostras": 84,
+        "score": 84.2,
+        "amostras": 85,
         "is_baseline": true
       },
       {
@@ -314,36 +314,36 @@
       {
         "modelo": "ecmwf_ifs025",
         "nome": "ECMWF IFS",
-        "score": 89.6,
-        "amostras": 79,
+        "score": 89.8,
+        "amostras": 80,
         "is_baseline": false
       },
       {
         "modelo": "icon_seamless",
         "nome": "ICON DWD",
-        "score": 89.6,
-        "amostras": 79,
+        "score": 89.8,
+        "amostras": 80,
         "is_baseline": false
       },
       {
         "modelo": "best_match",
         "nome": "Open-Meteo Best",
-        "score": 89.6,
-        "amostras": 79,
+        "score": 89.8,
+        "amostras": 80,
         "is_baseline": false
       },
       {
         "modelo": "gfs_seamless",
         "nome": "GFS NCEP",
-        "score": 87.1,
-        "amostras": 79,
+        "score": 87.3,
+        "amostras": 80,
         "is_baseline": false
       },
       {
         "modelo": "persistencia",
         "nome": "Persistência",
-        "score": 85.8,
-        "amostras": 78,
+        "score": 85.5,
+        "amostras": 79,
         "is_baseline": true
       },
       {
