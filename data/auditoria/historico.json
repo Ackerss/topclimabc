@@ -3346,6 +3346,38 @@
         "best_match": 76.3,
         "persistencia": 82.4
       }
+    },
+    "2026-08-09": {
+      "15_dias": {
+        "ecmwf_ifs025": 79.4,
+        "gfs_seamless": 79.7,
+        "icon_seamless": 79.4,
+        "best_match": 79.4,
+        "persistencia": 79.4
+      },
+      "7_dias": {
+        "ecmwf_ifs025": 76.9,
+        "gfs_seamless": 80.4,
+        "icon_seamless": 76.7,
+        "best_match": 79.4,
+        "persistencia": 79.4
+      },
+      "3_dias": {
+        "ecmwf_ifs025": 89.9,
+        "gfs_seamless": 76.9,
+        "icon_seamless": 88.5,
+        "openweathermap": 89.9,
+        "best_match": 79.4,
+        "persistencia": 79.4
+      },
+      "1_dia": {
+        "ecmwf_ifs025": 80.7,
+        "gfs_seamless": 87.1,
+        "icon_seamless": 94.8,
+        "openweathermap": 87.4,
+        "best_match": 79.4,
+        "persistencia": 79.4
+      }
     }
   },
   "itajai": {
@@ -6692,6 +6724,38 @@
         "openweathermap": 93.8,
         "best_match": 75.9,
         "persistencia": 81.9
+      }
+    },
+    "2026-08-09": {
+      "15_dias": {
+        "ecmwf_ifs025": 89.1,
+        "gfs_seamless": 98.7,
+        "icon_seamless": 89.1,
+        "best_match": 89.1,
+        "persistencia": 86.1
+      },
+      "7_dias": {
+        "ecmwf_ifs025": 86.7,
+        "gfs_seamless": 87.7,
+        "icon_seamless": 86.7,
+        "best_match": 89.1,
+        "persistencia": 86.1
+      },
+      "3_dias": {
+        "ecmwf_ifs025": 96.7,
+        "gfs_seamless": 90.7,
+        "icon_seamless": 93.8,
+        "openweathermap": 91.3,
+        "best_match": 89.1,
+        "persistencia": 86.1
+      },
+      "1_dia": {
+        "ecmwf_ifs025": 72.7,
+        "gfs_seamless": 81.5,
+        "icon_seamless": 88.8,
+        "openweathermap": 82.6,
+        "best_match": 89.1,
+        "persistencia": 86.1
       }
     }
   }
