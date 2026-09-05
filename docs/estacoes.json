@@ -1,6 +1,6 @@
 {
   "meta": {
-    "atualizado_em": "2026-09-04T15:30:27-03:00",
+    "atualizado_em": "2026-09-05T14:17:57-03:00",
     "hierarquia_fontes": [
       "1. CEMADEN PED (pluviômetros físicos em solo) — PRIMÁRIA",
       "2. Open-Meteo Archive best_match (reanálise ERA5-Land ~9km) — fallback",
@@ -16,8 +16,8 @@
       "ibge": "4202008",
       "ontem": {
         "status_fonte": "provisorio_reanalise",
-        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-09-03",
-        "total_dia": 0.0,
+        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-09-04",
+        "total_dia": 11.7,
         "estacoes_cemaden": [],
         "tem_override_manual": false,
         "periodos": {
@@ -32,13 +32,13 @@
             "override": false
           },
           "tarde": {
-            "mm": 0.0,
-            "classificacao": "seco",
+            "mm": 1.2,
+            "classificacao": "garoa",
             "override": false
           },
           "noite": {
-            "mm": 0.0,
-            "classificacao": "seco",
+            "mm": 10.5,
+            "classificacao": "forte",
             "override": false
           }
         }
@@ -52,8 +52,8 @@
       "ibge": "4208203",
       "ontem": {
         "status_fonte": "provisorio_reanalise",
-        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-09-03",
-        "total_dia": 0.0,
+        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-09-04",
+        "total_dia": 6.9,
         "estacoes_cemaden": [],
         "tem_override_manual": false,
         "periodos": {
@@ -68,13 +68,13 @@
             "override": false
           },
           "tarde": {
-            "mm": 0.0,
-            "classificacao": "seco",
+            "mm": 0.6,
+            "classificacao": "garoa",
             "override": false
           },
           "noite": {
-            "mm": 0.0,
-            "classificacao": "seco",
+            "mm": 6.3,
+            "classificacao": "moderada",
             "override": false
           }
         }
