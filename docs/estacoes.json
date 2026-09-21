@@ -1,6 +1,6 @@
 {
   "meta": {
-    "atualizado_em": "2026-09-20T15:09:40-03:00",
+    "atualizado_em": "2026-09-21T17:31:27-03:00",
     "hierarquia_fontes": [
       "1. CEMADEN PED (pluviômetros físicos em solo) — PRIMÁRIA",
       "2. Open-Meteo Archive best_match (reanálise ERA5-Land ~9km) — fallback",
@@ -16,29 +16,29 @@
       "ibge": "4202008",
       "ontem": {
         "status_fonte": "provisorio_reanalise",
-        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-09-19",
-        "total_dia": 27.6,
+        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-09-20",
+        "total_dia": 13.8,
         "estacoes_cemaden": [],
         "tem_override_manual": false,
         "periodos": {
           "madrugada": {
-            "mm": 1.3,
-            "classificacao": "garoa",
+            "mm": 9.1,
+            "classificacao": "moderada",
             "override": false
           },
           "manha": {
-            "mm": 7.1,
+            "mm": 4.3,
             "classificacao": "moderada",
             "override": false
           },
           "tarde": {
-            "mm": 10.5,
-            "classificacao": "forte",
+            "mm": 0.3,
+            "classificacao": "garoa",
             "override": false
           },
           "noite": {
-            "mm": 8.7,
-            "classificacao": "moderada",
+            "mm": 0.1,
+            "classificacao": "garoa",
             "override": false
           }
         }
@@ -52,29 +52,29 @@
       "ibge": "4208203",
       "ontem": {
         "status_fonte": "provisorio_reanalise",
-        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-09-19",
-        "total_dia": 24.9,
+        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-09-20",
+        "total_dia": 9.6,
         "estacoes_cemaden": [],
         "tem_override_manual": false,
         "periodos": {
           "madrugada": {
-            "mm": 1.2,
-            "classificacao": "garoa",
-            "override": false
-          },
-          "manha": {
             "mm": 6.3,
             "classificacao": "moderada",
             "override": false
           },
-          "tarde": {
-            "mm": 9.8,
+          "manha": {
+            "mm": 2.9,
             "classificacao": "moderada",
             "override": false
           },
+          "tarde": {
+            "mm": 0.4,
+            "classificacao": "garoa",
+            "override": false
+          },
           "noite": {
-            "mm": 7.6,
-            "classificacao": "moderada",
+            "mm": 0.0,
+            "classificacao": "seco",
             "override": false
           }
         }
