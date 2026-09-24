@@ -1,0 +1,48 @@
+{
+  "balneario_camboriu": {
+    "status": "provisorio_reanalise",
+    "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-09-23",
+    "periodos": {
+      "madrugada": {
+        "mm": 1.5,
+        "classificacao": "garoa"
+      },
+      "manha": {
+        "mm": 0.1,
+        "classificacao": "garoa"
+      },
+      "tarde": {
+        "mm": 0.0,
+        "classificacao": "seco"
+      },
+      "noite": {
+        "mm": 0.0,
+        "classificacao": "seco"
+      }
+    },
+    "total_dia": 1.6
+  },
+  "itajai": {
+    "status": "provisorio_reanalise",
+    "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-09-23",
+    "periodos": {
+      "madrugada": {
+        "mm": 2.3,
+        "classificacao": "garoa"
+      },
+      "manha": {
+        "mm": 0.1,
+        "classificacao": "garoa"
+      },
+      "tarde": {
+        "mm": 0.0,
+        "classificacao": "seco"
+      },
+      "noite": {
+        "mm": 0.0,
+        "classificacao": "seco"
+      }
+    },
+    "total_dia": 2.4
+  }
+}
