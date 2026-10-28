@@ -1,6 +1,6 @@
 {
   "meta": {
-    "atualizado_em": "2026-10-27T17:05:58-03:00",
+    "atualizado_em": "2026-10-28T17:42:10-03:00",
     "hierarquia_fontes": [
       "1. CEMADEN PED (pluviômetros físicos em solo) — PRIMÁRIA",
       "2. Open-Meteo Archive best_match (reanálise ERA5-Land ~9km) — fallback",
@@ -16,8 +16,8 @@
       "ibge": "4202008",
       "ontem": {
         "status_fonte": "provisorio_reanalise",
-        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-10-26",
-        "total_dia": 2.0,
+        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-10-27",
+        "total_dia": 0.0,
         "estacoes_cemaden": [],
         "tem_override_manual": false,
         "periodos": {
@@ -27,13 +27,13 @@
             "override": false
           },
           "manha": {
-            "mm": 0.9,
-            "classificacao": "garoa",
+            "mm": 0.0,
+            "classificacao": "seco",
             "override": false
           },
           "tarde": {
-            "mm": 1.1,
-            "classificacao": "garoa",
+            "mm": 0.0,
+            "classificacao": "seco",
             "override": false
           },
           "noite": {
@@ -52,8 +52,8 @@
       "ibge": "4208203",
       "ontem": {
         "status_fonte": "provisorio_reanalise",
-        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-10-26",
-        "total_dia": 4.6,
+        "fonte": "Open-Meteo Archive (best_match, reanálise) — 2026-10-27",
+        "total_dia": 0.0,
         "estacoes_cemaden": [],
         "tem_override_manual": false,
         "periodos": {
@@ -63,13 +63,13 @@
             "override": false
           },
           "manha": {
-            "mm": 0.7,
-            "classificacao": "garoa",
+            "mm": 0.0,
+            "classificacao": "seco",
             "override": false
           },
           "tarde": {
-            "mm": 3.9,
-            "classificacao": "moderada",
+            "mm": 0.0,
+            "classificacao": "seco",
             "override": false
           },
           "noite": {
