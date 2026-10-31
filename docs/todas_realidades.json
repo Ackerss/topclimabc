@@ -143,6 +143,54 @@
       "total_dia": 1.0
     }
   },
+  "2026-10-30": {
+    "balneario_camboriu": {
+      "status": "sem_dados",
+      "fonte": "Nenhuma fonte disponível — CEMADEN, Archive e Hist Forecast falharam",
+      "periodos": {
+        "madrugada": {
+          "mm": null,
+          "classificacao": "sem_dados"
+        },
+        "manha": {
+          "mm": null,
+          "classificacao": "sem_dados"
+        },
+        "tarde": {
+          "mm": null,
+          "classificacao": "sem_dados"
+        },
+        "noite": {
+          "mm": null,
+          "classificacao": "sem_dados"
+        }
+      },
+      "total_dia": null
+    },
+    "itajai": {
+      "status": "sem_dados",
+      "fonte": "Nenhuma fonte disponível — CEMADEN, Archive e Hist Forecast falharam",
+      "periodos": {
+        "madrugada": {
+          "mm": null,
+          "classificacao": "sem_dados"
+        },
+        "manha": {
+          "mm": null,
+          "classificacao": "sem_dados"
+        },
+        "tarde": {
+          "mm": null,
+          "classificacao": "sem_dados"
+        },
+        "noite": {
+          "mm": null,
+          "classificacao": "sem_dados"
+        }
+      },
+      "total_dia": null
+    }
+  },
   "2026-04-25": {
     "balneario_camboriu": {
       "status": "provisorio_reanalise",
